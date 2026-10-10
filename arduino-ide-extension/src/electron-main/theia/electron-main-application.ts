@@ -36,9 +36,11 @@ import {
   appInfoPropertyLiterals,
   CHANNEL_PLOTTER_WINDOW_DID_CLOSE,
   CHANNEL_SCHEDULE_DELETION,
+  CHANNEL_SEND_STARTUP_TASKS,
   CHANNEL_SHOW_PLOTTER_WINDOW,
   isShowPlotterWindowParams,
 } from '../../electron-common/electron-arduino';
+import type { StartupTasks } from '../../electron-common/startup-task';
 import { IsTempSketch } from '../../node/is-temp-sketch';
 import { isAccessibleSketchPath } from '../../node/sketches-service-impl';
 import { ErrnoException } from '../../node/utils/errors';
@@ -538,11 +540,88 @@ export class ElectronMainApplication extends TheiaElectronMainApplication {
     argv: string[],
     cwd: string
   ): Promise<void> {
+    if (await this.openSketchAsTabsInExistingWindow(argv, cwd)) {
+      // The sketch from the second instance became tabs of the already running window.
+      return;
+    }
     if (await this.launchFromArgs({ cwd, secondInstance: true }, argv)) {
       // Application has received a file in its arguments
       return;
     }
     super.onSecondInstance(event, argv, cwd);
+  }
+
+  /**
+   * When a second IDE instance is launched with a sketch, do not open a new window:
+   * hand the sketch over to the first window, where its files open as editor tabs.
+   * Resolves to `false` (nothing was done) when there is no ready window to host the tabs
+   * or the arguments do not contain a sketch, so the default behavior applies.
+   */
+  private async openSketchAsTabsInExistingWindow(
+    argv: string[],
+    cwd: string
+  ): Promise<boolean> {
+    const host = this.findTabsHostWindow();
+    if (!host) {
+      return false;
+    }
+    let sketchFolderPath: string | undefined;
+    for (const maybePath of argv) {
+      const resolvedPath = await this.resolvePath(maybePath, cwd);
+      if (!resolvedPath) {
+        continue;
+      }
+      sketchFolderPath = await isAccessibleSketchPath(resolvedPath, true);
+      if (sketchFolderPath) {
+        break;
+      }
+    }
+    if (!sketchFolderPath) {
+      return false;
+    }
+    if (host.isDestroyed()) {
+      return false;
+    }
+    if (host.isMinimized()) {
+      host.restore();
+    }
+    host.show();
+    host.focus();
+    const tasks: StartupTasks = {
+      tasks: [
+        {
+          command: 'arduino-open-sketch-as-tabs',
+          args: [sketchFolderPath],
+        },
+      ],
+    };
+    console.log(
+      `Second instance: opening the sketch as tabs in window ${host.id}: ${sketchFolderPath}`
+    );
+    host.webContents.send(CHANNEL_SEND_STARTUP_TASKS, tasks);
+    return true;
+  }
+
+  /**
+   * The first window if it is alive and its frontend has finished loading (otherwise the IPC message would be lost),
+   * or any other such window that is not a plotter window.
+   */
+  private findTabsHostWindow(): BrowserWindow | undefined {
+    const plotters = new Set(
+      Array.from(this.plotterWindows.values()).map((w) => w.id)
+    );
+    const isReady = (window: BrowserWindow | null | undefined) =>
+      !!window &&
+      !window.isDestroyed() &&
+      !plotters.has(window.id) &&
+      !window.webContents.isLoading();
+    if (this._firstWindowId !== undefined) {
+      const first = BrowserWindow.fromId(this._firstWindowId);
+      if (isReady(first)) {
+        return first ?? undefined;
+      }
+    }
+    return BrowserWindow.getAllWindows().find((w) => isReady(w));
   }
 
   override async createWindow(

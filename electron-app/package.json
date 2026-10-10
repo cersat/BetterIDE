@@ -125,7 +125,8 @@
       "src-gen",
       "lib",
       "resources/icons/512x512.png",
-      "!**node_modules/**"
+      "!**node_modules/**",
+      "node_modules/node-pty/**"
     ],
     "extraResources": [
       {
@@ -137,7 +138,8 @@
       "target": [
         "msi",
         "nsis",
-        "zip"
+        "zip",
+        "portable"
       ],
       "sign": "./scripts/windowsCustomSign.js",
       "extraFiles": "resources/PATENT_DISCLAIMER"

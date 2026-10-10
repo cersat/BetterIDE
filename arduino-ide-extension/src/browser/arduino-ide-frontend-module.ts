@@ -194,6 +194,8 @@ import {
   SettingsDialogProps,
 } from './dialogs/settings/settings-dialog';
 import { AddFile } from './contributions/add-file';
+import { OpenFileAsTab } from './contributions/open-file-as-tab';
+import { ArduinoCliTerminal } from './contributions/arduino-cli-terminal';
 import { ArchiveSketch } from './contributions/archive-sketch';
 import { OutputToolbarContribution as TheiaOutputToolbarContribution } from '@theia/output/lib/browser/output-toolbar-contribution';
 import { OutputToolbarContribution } from './theia/output/output-toolbar-contribution';
@@ -728,6 +730,8 @@ export default new ContainerModule((bind, unbind, isBound, rebind) => {
   Contribution.configure(bind, OpenRecentSketch);
   Contribution.configure(bind, Help);
   Contribution.configure(bind, AddFile);
+  Contribution.configure(bind, OpenFileAsTab);
+  Contribution.configure(bind, ArduinoCliTerminal);
   Contribution.configure(bind, ArchiveSketch);
   Contribution.configure(bind, AddZipLibrary);
   Contribution.configure(bind, PlotterFrontendContribution);

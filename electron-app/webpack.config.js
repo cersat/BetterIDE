@@ -31,6 +31,13 @@ backend.config.plugins.unshift(
   )
 );
 
+// node-pty is not bundled: its native loader resolves the binaries dynamically, which webpack cannot follow.
+// The package is copied next to the bundle when the portable app is assembled.
+backend.config.externals = {
+	...(backend.config.externals || {}),
+	'node-pty': 'commonjs node-pty',
+};
+
 // Override the default entry from Theia as IDE2 has a customization of the module.
 backend.config.entry['parcel-watcher'] = {
   import: require.resolve(
