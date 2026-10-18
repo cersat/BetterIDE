@@ -285,7 +285,8 @@ export class SketchesServiceClientImpl
   }
 
   /**
-   * `true` if the `uri` is not contained in any of the opened workspaces. Otherwise, `false`.
+   * `true` for the protected files (`sketch.json`, cloud `thingProperties.h`) and for non-local resources outside the opened workspaces.
+   * Regular local files are always editable, so files opened as tabs or dropped into the editor can be modified.
    */
   isReadOnly(uri: URI | monaco.Uri | string): boolean {
     const toCheck = uri instanceof URI ? uri : new URI(uri.toString());
@@ -312,6 +313,9 @@ export class SketchesServiceClientImpl
 
     if (filesToCheck.includes(toCheck?.path?.base)) {
       return true;
+    }
+    if (toCheck.scheme === 'file') {
+      return false;
     }
     const readOnly = !this.workspaceService
       .tryGetRoots()
