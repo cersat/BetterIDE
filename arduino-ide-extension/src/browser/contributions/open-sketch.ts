@@ -1,4 +1,5 @@
 import { nls } from '@theia/core/lib/common/nls';
+import { FileUri } from '@theia/core/lib/common/file-uri';
 import { injectable } from '@theia/core/shared/inversify';
 import { FileService } from '@theia/filesystem/lib/browser/file-service';
 import { LabelProvider } from '@theia/core/lib/browser/label-provider';
@@ -18,6 +19,7 @@ import {
   URI,
 } from './contribution';
 import { DialogService } from '../dialog-service';
+import { OpenFileAsTab } from './open-file-as-tab';
 
 export type SketchLocation = string | URI | SketchRef;
 export namespace SketchLocation {
@@ -78,7 +80,11 @@ export class OpenSketch extends SketchContribution {
       }
       throw err;
     }
-    this.workspaceService.open(uri);
+    // The files of the sketch become tabs of this window instead of opening a new one.
+    await this.commandService.executeCommand(
+      OpenFileAsTab.Commands.OPEN_SKETCH_AS_TABS.id,
+      FileUri.fsPath(uri)
+    );
   }
 
   private async selectSketch(): Promise<Sketch | undefined> {
