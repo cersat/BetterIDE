@@ -3,6 +3,10 @@ name: Build
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'static/**'
   workflow_dispatch:
 
 permissions:
