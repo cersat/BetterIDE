@@ -285,8 +285,9 @@ export class SketchesServiceClientImpl
   }
 
   /**
-   * `true` for the protected files (`sketch.json`, cloud `thingProperties.h`) and for non-local resources outside the opened workspaces.
-   * Regular local files are always editable, so files opened as tabs or dropped into the editor can be modified.
+   * `true` for the protected files (`sketch.json`, cloud `thingProperties.h`) and for resources outside the opened workspaces
+   * that are not regular local files or belong to the CLI data folder (`directories.data`: cores, tools, the index files).
+   * Other local files are editable, so files opened as tabs or dropped into the editor can be modified.
    */
   isReadOnly(uri: URI | monaco.Uri | string): boolean {
     const toCheck = uri instanceof URI ? uri : new URI(uri.toString());
@@ -314,12 +315,25 @@ export class SketchesServiceClientImpl
     if (filesToCheck.includes(toCheck?.path?.base)) {
       return true;
     }
-    if (toCheck.scheme === 'file') {
+    if (toCheck.scheme === 'file' && !this.isInDataDir(toCheck)) {
       return false;
     }
     const readOnly = !this.workspaceService
       .tryGetRoots()
       .some(({ resource }) => resource.isEqualOrParent(toCheck));
     return readOnly;
+  }
+
+  /**
+   * Files of the installed cores and tools (`Go to Definition` opens them) must not be modified by accident.
+   * The cloud sketchbook cache is inside the data folder too, but those are sketches.
+   */
+  private isInDataDir(uri: URI): boolean {
+    const dataDirUri = this.configService.tryGetDataDirUri();
+    return (
+      !!dataDirUri &&
+      dataDirUri.isEqualOrParent(uri) &&
+      !dataDirUri.resolve(REMOTE_SKETCHBOOK_FOLDER).isEqualOrParent(uri)
+    );
   }
 }

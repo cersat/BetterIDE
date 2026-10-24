@@ -25,13 +25,15 @@ export class ProblemManager extends TheiaProblemManager {
   @postConstruct()
   protected override init(): void {
     super.init();
-    this.dataDirUri = this.configService.tryGetDataDirUri();
-    this.configService.onDidChangeDataDirUri((uri) => {
+    const useDataDirUri = (uri: URI | undefined) => {
       this.dataDirUri = uri;
       this.cloudCacheDirUri = this.dataDirUri
         ?.resolve(REMOTE_SKETCHBOOK_FOLDER)
         .resolve(ARDUINO_CLOUD_FOLDER);
-    });
+    };
+    // The config might be already loaded, then no change event comes.
+    useDataDirUri(this.configService.tryGetDataDirUri());
+    this.configService.onDidChangeDataDirUri(useDataDirUri);
   }
 
   override setMarkers(

@@ -106,6 +106,7 @@ export class MonitorSettingsProviderImpl implements MonitorSettingsProvider {
 
     if (!rawJson) {
       this.monitorSettings = {};
+      return;
     }
 
     try {

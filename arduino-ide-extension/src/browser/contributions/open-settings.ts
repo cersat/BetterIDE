@@ -32,7 +32,10 @@ export class OpenSettings extends SketchContribution {
         }
         if (settings) {
           await this.settingsService.update(settings);
-          await this.settingsService.save();
+          const result = await this.settingsService.save();
+          if (result !== true) {
+            this.messageService.error(result);
+          }
         } else {
           await this.settingsService.reset();
         }

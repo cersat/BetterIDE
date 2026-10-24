@@ -401,10 +401,26 @@ export class SettingsService {
       ? Settings.librariesFolder(previous)
       : undefined;
     const newLibraries = Settings.librariesFolder(this._settings);
-    const renamedTo = await this.fileSystemExt.setLibrariesFolder(
-      sketchbookPath,
-      librariesPath
-    );
+    let renamedTo: string | undefined;
+    const librariesChanged =
+      !previous ||
+      previous.sketchbookPath !== sketchbookPath ||
+      previous.librariesPath !== librariesPath;
+    try {
+      if (librariesChanged) {
+        renamedTo = await this.fileSystemExt.setLibrariesFolder(
+          sketchbookPath,
+          librariesPath
+        );
+      }
+    } catch (err) {
+      return nls.localize(
+        'arduino/preferences/libraries.failed',
+        'Could not use "{0}" as the libraries folder: {1}',
+        newLibraries,
+        err instanceof Error ? err.message : String(err)
+      );
+    }
 
     await Promise.all([
       this.savePreference('editor.fontSize', editorFontSize),

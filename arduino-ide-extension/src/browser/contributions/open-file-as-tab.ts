@@ -65,6 +65,8 @@ export class OpenFileAsTab extends SketchContribution {
 			);
 			const { mainFileUri, rootFolderFileUris } = sketch;
 			await this.openFilesAsTabs([mainFileUri, ...rootFolderFileUris]);
+			// No new window opens the sketch, so it has to be added to `Open Recent` here. Temp sketches (examples) are skipped by the service.
+			this.sketchesService.markAsRecentlyOpened(sketch.uri);
 		} catch (err) {
 			this.messageService.error(
 				nls.localize(

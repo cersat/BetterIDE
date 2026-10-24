@@ -168,11 +168,17 @@ export class ConfigServiceImpl
       }
     } catch (err: unknown) {
       this.logger.error('Failed to initialize the CLI configuration.', err);
-      if (err instanceof InvalidConfigError) {
-        this.config.messages = err.errors;
-        this.ready.resolve();
-      }
+      // Any failure (for example, a broken YAML file) must be reported instead of blocking everything that waits for the configuration.
+      this.config.messages =
+        err instanceof InvalidConfigError
+          ? err.errors
+          : [
+              `Could not load the CLI configuration: ${
+                err instanceof Error ? err.message : String(err)
+              }`,
+            ];
     }
+    this.ready.resolve();
   }
 
   private async loadCliConfig(

@@ -48,7 +48,9 @@ export class ArduinoDaemonImpl
   // Backend application lifecycle.
 
   onStart(): void {
-    this.start(); // no await
+    this.start().catch((err) =>
+      this.logger.error('Could not start the CLI daemon.', err)
+    ); // no await
   }
 
   // Daemon API
@@ -64,7 +66,14 @@ export class ArduinoDaemonImpl
     return undefined;
   }
 
+  /**
+   * Tries to start the daemon a few times, then rejects with the last error.
+   */
   async start(): Promise<number> {
+    return retry(() => this.tryStart(), 1_000, 5);
+  }
+
+  private async tryStart(): Promise<number> {
     try {
       this.toDispose.dispose(); // This will `kill` the previously started daemon process, if any.
       const cliPath = this.getExecPath();
@@ -86,14 +95,8 @@ export class ArduinoDaemonImpl
       this.onData('Daemon is running.');
       return port;
     } catch (err) {
-      return retry(
-        () => {
-          this.onError(err);
-          return this.start();
-        },
-        1_000,
-        5
-      );
+      this.onError(err);
+      throw err;
     }
   }
 
@@ -212,6 +215,14 @@ export class ArduinoDaemonImpl
       ready.reject(error ? error : new Error(data.toString().trim()));
     });
     daemon.on('exit', (code, signal) => {
+      if (!grpcServerIsReady) {
+        // The process is gone before it reported its port: do not wait for it forever.
+        ready.reject(
+          new Error(
+            `The CLI daemon exited before it started (exit code: ${code}, signal: ${signal}).`
+          )
+        );
+      }
       if (code === 0 || signal === 'SIGINT' || signal === 'SIGKILL') {
         this.onData('Daemon has stopped.');
       } else {

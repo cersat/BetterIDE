@@ -4,6 +4,7 @@ import {
   app,
   BrowserWindow,
   contentTracing,
+  dialog,
   Event as ElectronEvent,
   ipcMain,
 } from '@theia/core/electron-shared/electron';
@@ -215,10 +216,22 @@ export class ElectronMainApplication extends TheiaElectronMainApplication {
           this._appInfo = updateAppInfo(this._appInfo, this._config);
           this.hookApplicationEvents();
           this.showInitialWindow(undefined);
-          const [port] = await Promise.all([
-            this.startBackend(),
-            app.whenReady(),
-          ]);
+          let port: number;
+          try {
+            [port] = await Promise.all([this.startBackend(), app.whenReady()]);
+          } catch (err) {
+            // Without a backend there is nothing to show; do not leave the splash screen hanging forever.
+            console.error('Could not start the backend process.', err);
+            await app.whenReady();
+            dialog.showErrorBox(
+              `${config.applicationName} could not start`,
+              `The backend process failed to start: ${
+                err instanceof Error ? err.message : String(err)
+              }`
+            );
+            app.exit(1);
+            return;
+          }
           this.startContentTracing();
           this._backendPort.resolve(port);
           await Promise.all([
@@ -689,13 +702,25 @@ export class ElectronMainApplication extends TheiaElectronMainApplication {
       );
       console.log(`Starting backend process. PID: ${backendProcess.pid}`);
       return new Promise((resolve, reject) => {
+        let started = false;
         // The forked backend process sends the resolved http(s) server port via IPC, and forwards the log messages.
         backendProcess.on('message', (arg: unknown) => {
           if (isConsoleLogParams(arg)) {
             const { message, severity } = arg;
             console[severity](message);
           } else if (isAddressInfo(arg)) {
+            started = true;
             resolve(arg.port);
+          }
+        });
+        backendProcess.on('exit', (code, signal) => {
+          if (!started) {
+            // For example, a native module could not be loaded. Otherwise, the IDE would wait for the port forever.
+            reject(
+              new Error(
+                `The backend process exited before it started (exit code: ${code}, signal: ${signal}).`
+              )
+            );
           }
         });
         backendProcess.on('error', (error) => {

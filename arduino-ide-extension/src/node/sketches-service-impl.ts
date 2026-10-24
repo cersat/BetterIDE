@@ -358,11 +358,12 @@ export class SketchesServiceImpl
         }
       }
       if (needsUpdate) {
-        const data = sketches.reduce((acc, curr) => {
-          acc[curr.uri] = curr.mtimeMs;
+        // Keep the timestamps of when the sketches were opened, they define the order of the recent sketches.
+        const updatedData = sketches.reduce((acc, curr) => {
+          acc[curr.uri] = data[curr.uri] ?? curr.mtimeMs;
           return acc;
         }, {} as Record<string, number>);
-        await this.saveRecentSketches(data);
+        await this.saveRecentSketches(updatedData);
         this.notificationService.notifyRecentSketchesDidChange({ sketches });
       }
       this.recentSketches = sketches;
