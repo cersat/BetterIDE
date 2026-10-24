@@ -44,20 +44,57 @@ jobs:
         if: matrix.name == 'windows'
         shell: bash
         run: node -e "const f='electron-app/package.json',p=require('./'+f);p.build.win.target=['zip','portable'];require('fs').writeFileSync(f,JSON.stringify(p,null,2))"
-      - name: Install
-        run: yarn --network-timeout 600000
+      - name: Install dependencies
+        shell: bash
+        timeout-minutes: 20
+        run: yarn --ignore-scripts --network-timeout 600000
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build
-        run: yarn build
+      - name: Download ripgrep
+        shell: bash
+        timeout-minutes: 5
+        run: node node_modules/@vscode/ripgrep/lib/postinstall.js
         env:
-          NODE_OPTIONS: --max-old-space-size=6144
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download CLI, language server, examples, plugins
+        shell: bash
+        timeout-minutes: 20
+        run: |
+          mkdir -p arduino-ide-extension/src/node/resources
+          yarn --cwd arduino-ide-extension prepare
+          # the plugin downloader finishes its work but does not always exit
+          timeout 300 yarn --cwd electron-app prepare || true
+          ls electron-app/plugins
+      - name: Compile the extension
+        shell: bash
+        timeout-minutes: 20
+        run: yarn --cwd arduino-ide-extension build
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
       - name: Rebuild native modules for Electron
+        shell: bash
+        timeout-minutes: 30
         run: yarn --cwd electron-app rebuild
+      - name: Build the ffmpeg addon
+        shell: bash
+        timeout-minutes: 10
+        run: |
+          cd node_modules/@theia/ffmpeg
+          npx node-gyp rebuild
+          mkdir -p build/Debug
+          cp build/Release/ffmpeg.node build/Debug/ffmpeg.node
+      - name: Build the application
+        shell: bash
+        timeout-minutes: 40
+        run: yarn --cwd electron-app build
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
       - name: Package
+        shell: bash
+        timeout-minutes: 30
         run: yarn --cwd electron-app package
         env:
-          NODE_OPTIONS: --max-old-space-size=6144
+          NODE_OPTIONS: --max-old-space-size=4096
       - uses: actions/upload-artifact@v4
         with:
           name: BetterIDE-${{ matrix.name }}
