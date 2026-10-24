@@ -79,6 +79,13 @@ jobs:
         shell: bash
         timeout-minutes: 30
         run: yarn --cwd electron-app rebuild
+      - name: Build the Windows certificate addon
+        if: matrix.name == 'windows'
+        shell: bash
+        timeout-minutes: 10
+        run: |
+          cd node_modules/@vscode/windows-ca-certs
+          npx node-gyp rebuild
       - name: Build the ffmpeg addon
         shell: bash
         timeout-minutes: 10
