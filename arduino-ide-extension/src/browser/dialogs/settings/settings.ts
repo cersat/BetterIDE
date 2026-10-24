@@ -19,7 +19,7 @@ import {
   FileSystemExt,
   Network,
 } from '../../../common/protocol';
-import { CommandService, nls } from '@theia/core/lib/common';
+import { CommandService, MessageService, nls } from '@theia/core/lib/common';
 import {
   AsyncLocalizationProvider,
   LanguageInfo,
@@ -46,6 +46,10 @@ export const COMPILE_WARNINGS_SETTING = `${COMPILE_SETTING}.warnings`;
 export const UPLOAD_VERBOSE_SETTING = `${UPLOAD_SETTING}.verbose`;
 export const UPLOAD_VERIFY_SETTING = `${UPLOAD_SETTING}.verify`;
 export const SHOW_ALL_FILES_SETTING = `${SKETCHBOOK_SETTING}.showAllFiles`;
+export const EDITOR_HOVER_SETTING = `${EDITOR_SETTING}.hover.enabled`;
+export const CHECK_FOR_UPDATES_SETTING = `${ARDUINO_SETTING}.checkForUpdates`;
+export const SHOW_CLOUD_SKETCHES_SETTING = `${ARDUINO_SETTING}.cloud.enabled`;
+export const LIBRARIES_PATH_SETTING = `${ARDUINO_SETTING}.libraries.path`;
 
 export interface Settings {
   editorFontSize: number; // `editor.fontSize`
@@ -63,6 +67,10 @@ export interface Settings {
   verboseOnUpload: boolean; // `arduino.upload.verbose`
   verifyAfterUpload: boolean; // `arduino.upload.verify`
   sketchbookShowAllFiles: boolean; // `arduino.sketchbook.showAllFiles`
+  editorHover: boolean; // `editor.hover.enabled`
+  checkForUpdates: boolean; // `arduino.checkForUpdates`
+  showCloudSketches: boolean; // `arduino.cloud.enabled`
+  librariesPath: string; // `arduino.libraries.path`, empty is the default `<sketchbook>/libraries`
 
   sketchbookPath: string; // CLI
   additionalUrls: AdditionalUrls; // CLI
@@ -71,6 +79,19 @@ export interface Settings {
 export namespace Settings {
   export function belongsToCli<K extends keyof Settings>(key: K): boolean {
     return key === 'sketchbookPath' || key === 'additionalUrls';
+  }
+  /**
+   * The folder libraries are kept in: the chosen one or the default `<sketchbook>/libraries`.
+   */
+  export function librariesFolder(
+    settings: Pick<Settings, 'sketchbookPath' | 'librariesPath'>
+  ): string {
+    if (settings.librariesPath) {
+      return settings.librariesPath;
+    }
+    const { sketchbookPath } = settings;
+    const separator = sketchbookPath.includes('\\') ? '\\' : '/';
+    return `${sketchbookPath.replace(/[\\/]+$/, '')}${separator}libraries`;
   }
   export type AutoSave =
     | 'off'
@@ -105,6 +126,9 @@ export class SettingsService {
   @inject(CommandService)
   protected commandService: CommandService;
 
+  @inject(MessageService)
+  private readonly messageService: MessageService;
+
   @inject(ThemeService)
   private readonly themeService: ThemeService;
 
@@ -115,12 +139,14 @@ export class SettingsService {
 
   protected ready = new Deferred<void>();
   protected _settings: Settings;
+  private loaded: Settings | undefined;
 
   @postConstruct()
   protected init(): void {
     this.appStateService.reachedState('ready').then(async () => {
       const settings = await this.loadSettings();
       this._settings = deepClone(settings);
+      this.loaded = deepClone(settings);
       this.ready.resolve();
     });
     this.preferenceService.onPreferenceChanged(async (event) => {
@@ -152,6 +178,10 @@ export class SettingsService {
       verboseOnUpload,
       verifyAfterUpload,
       sketchbookShowAllFiles,
+      editorHover,
+      checkForUpdates,
+      showCloudSketches,
+      librariesPath,
       cliConfig,
     ] = await Promise.all([
       ['en', ...(await this.localizationProvider.getAvailableLanguages())],
@@ -181,6 +211,10 @@ export class SettingsService {
       this.preferenceService.get<boolean>(UPLOAD_VERBOSE_SETTING, true),
       this.preferenceService.get<boolean>(UPLOAD_VERIFY_SETTING, true),
       this.preferenceService.get<boolean>(SHOW_ALL_FILES_SETTING, false),
+      this.preferenceService.get<boolean>(EDITOR_HOVER_SETTING, true),
+      this.preferenceService.get<boolean>(CHECK_FOR_UPDATES_SETTING, true),
+      this.preferenceService.get<boolean>(SHOW_CLOUD_SKETCHES_SETTING, true),
+      this.preferenceService.get<string>(LIBRARIES_PATH_SETTING, ''),
       this.configService.getConfiguration(),
     ]);
     const {
@@ -207,10 +241,47 @@ export class SettingsService {
       verboseOnUpload,
       verifyAfterUpload,
       sketchbookShowAllFiles,
+      editorHover,
+      checkForUpdates,
+      showCloudSketches,
+      librariesPath,
       additionalUrls,
       sketchbookPath,
       network,
     };
+  }
+
+  /**
+   * Libraries are not moved: if the previous folder had some, they have to be reinstalled or moved by hand.
+   */
+  private async warnAboutOldLibraries(
+    oldFolder: string | undefined,
+    newFolder: string,
+    renamedTo: string | undefined
+  ): Promise<void> {
+    if (!oldFolder || oldFolder === newFolder) {
+      return;
+    }
+    const oldFolderToCheck = renamedTo ?? oldFolder;
+    let hadLibraries = false;
+    try {
+      const stat = await this.fileService.resolve(
+        new URI(await this.fileSystemExt.getUri(oldFolderToCheck))
+      );
+      hadLibraries = !!stat.children?.length;
+    } catch {}
+    if (!hadLibraries) {
+      return;
+    }
+    this.messageService.warn(
+      nls.localize(
+        'arduino/preferences/libraries.moved',
+        'The libraries folder is now "{0}". The libraries that were in "{1}" were not moved: reinstall them or move them by hand.',
+        newFolder,
+        oldFolderToCheck
+      ),
+      'OK'
+    );
   }
 
   async settings(): Promise<Settings> {
@@ -233,6 +304,7 @@ export class SettingsService {
 
   async reset(): Promise<void> {
     const settings = await this.loadSettings();
+    this.loaded = deepClone(settings);
     await this.update(settings, false);
     this.onDidResetEmitter.fire(this._settings);
   }
@@ -297,12 +369,17 @@ export class SettingsService {
       additionalUrls,
       network,
       sketchbookShowAllFiles,
+      editorHover,
+      checkForUpdates,
+      showCloudSketches,
+      librariesPath,
     } = this._settings;
     const [cliConfig, sketchDirUri] = await Promise.all([
       this.configService.getConfiguration(),
       this.fileSystemExt.getUri(sketchbookPath),
     ]);
     const { config } = cliConfig;
+    const previous = this.loaded;
     if (!config) {
       // Do not check for any error messages. The config might has errors (such as invalid directories.user) right before saving the new values.
       return nls.localize(
@@ -319,6 +396,16 @@ export class SettingsService {
       locale: currentLanguage,
     };
 
+    // Libraries must be in place before the CLI is restarted with the new configuration.
+    const oldLibraries = previous
+      ? Settings.librariesFolder(previous)
+      : undefined;
+    const newLibraries = Settings.librariesFolder(this._settings);
+    const renamedTo = await this.fileSystemExt.setLibrariesFolder(
+      sketchbookPath,
+      librariesPath
+    );
+
     await Promise.all([
       this.savePreference('editor.fontSize', editorFontSize),
       this.savePreference('workbench.colorTheme', themeId),
@@ -331,9 +418,15 @@ export class SettingsService {
       this.savePreference(UPLOAD_VERBOSE_SETTING, verboseOnUpload),
       this.savePreference(UPLOAD_VERIFY_SETTING, verifyAfterUpload),
       this.savePreference(SHOW_ALL_FILES_SETTING, sketchbookShowAllFiles),
+      this.savePreference(EDITOR_HOVER_SETTING, editorHover),
+      this.savePreference(CHECK_FOR_UPDATES_SETTING, checkForUpdates),
+      this.savePreference(SHOW_CLOUD_SKETCHES_SETTING, showCloudSketches),
+      this.savePreference(LIBRARIES_PATH_SETTING, librariesPath),
       this.configService.setConfiguration(updatedConfig),
     ]);
     this.onDidChangeEmitter.fire(this._settings);
+    this.loaded = deepClone(this._settings);
+    await this.warnAboutOldLibraries(oldLibraries, newLibraries, renamedTo);
 
     // after saving all the settings, if we need to change the language we need to perform a reload
     // Only reload if the language differs from the current locale. `nls.locale === undefined` signals english as well

@@ -85,6 +85,9 @@ async function getVersion() {
   if (!isRelease) {
     if (isNightly) {
       version = `${version}-nightly-${await timestamp()}`;
+    } else if (process.env.BUILD_NUMBER) {
+      // Increases with every CI build, so the updater can tell which build is newer.
+      version = `${version}-build.${process.env.BUILD_NUMBER}`;
     } else {
       version = `${version}-snapshot-${await currentCommitish()}`;
     }

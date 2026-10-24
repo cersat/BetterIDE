@@ -3,10 +3,6 @@ import {
   RenderContextMenuOptions,
 } from '@theia/core/lib/browser/context-menu-renderer';
 import { FrontendApplication } from '@theia/core/lib/browser/frontend-application';
-import {
-  PreferenceScope,
-  PreferenceService,
-} from '@theia/core/lib/browser/preferences/preference-service';
 import { ApplicationShell } from '@theia/core/lib/browser/shell/application-shell';
 import { WindowService } from '@theia/core/lib/browser/window/window-service';
 import { CommandRegistry } from '@theia/core/lib/common/command';
@@ -19,7 +15,6 @@ import { MenuModelRegistry } from '@theia/core/lib/common/menu';
 import { nls } from '@theia/core/lib/common/nls';
 import { Widget } from '@theia/core/shared/@phosphor/widgets';
 import { inject, injectable } from '@theia/core/shared/inversify';
-import { ArduinoPreferences } from '../../arduino-preferences';
 import { ConfigServiceClient } from '../../config/config-service-client';
 import { CloudSketchContribution } from '../../contributions/cloud-contribution';
 import {
@@ -27,7 +22,7 @@ import {
   TabBarToolbarRegistry,
 } from '../../contributions/contribution';
 import { ShareSketchDialog } from '../../dialogs/cloud-share-sketch-dialog';
-import { ArduinoMenus, PlaceholderMenuNode } from '../../menu/arduino-menus';
+import { PlaceholderMenuNode } from '../../menu/arduino-menus';
 import { CurrentSketch } from '../../sketches-service-client-impl';
 import { ApplicationConnectionStatusContribution } from '../../theia/core/connection-status-service';
 import { SketchbookCommands } from '../sketchbook/sketchbook-commands';
@@ -54,10 +49,6 @@ export class CloudSketchbookContribution extends CloudSketchContribution {
   private readonly commandRegistry: CommandRegistry;
   @inject(WindowService)
   private readonly windowService: WindowService;
-  @inject(ArduinoPreferences)
-  private readonly arduinoPreferences: ArduinoPreferences;
-  @inject(PreferenceService)
-  private readonly preferenceService: PreferenceService;
   @inject(ConfigServiceClient)
   private readonly configServiceClient: ConfigServiceClient;
   @inject(ApplicationConnectionStatusContribution)
@@ -93,14 +84,6 @@ export class CloudSketchbookContribution extends CloudSketchContribution {
     this.toDisposeOnStop.dispose();
   }
 
-  override registerMenus(menus: MenuModelRegistry): void {
-    menus.registerMenuAction(ArduinoMenus.FILE__ADVANCED_SUBMENU, {
-      commandId: CloudSketchbookCommands.TOGGLE_CLOUD_SKETCHBOOK.id,
-      label: CloudSketchbookCommands.TOGGLE_CLOUD_SKETCHBOOK.label,
-      order: '2',
-    });
-  }
-
   override registerToolbarItems(registry: TabBarToolbarRegistry): void {
     registry.registerItem({
       id: CloudSketchbookCommands.PULL_SKETCH__TOOLBAR.id,
@@ -119,16 +102,6 @@ export class CloudSketchbookContribution extends CloudSketchContribution {
   }
 
   override registerCommands(registry: CommandRegistry): void {
-    registry.registerCommand(CloudSketchbookCommands.TOGGLE_CLOUD_SKETCHBOOK, {
-      execute: () => {
-        this.preferenceService.set(
-          'arduino.cloud.enabled',
-          !this.arduinoPreferences['arduino.cloud.enabled'],
-          PreferenceScope.User
-        );
-      },
-    });
-
     registry.registerCommand(CloudSketchbookCommands.PULL_SKETCH, {
       execute: (arg) => arg.model.sketchbookTree().pull(arg),
       isEnabled: (arg) => this.isCloudSketchDirNodeCommandArg(arg),

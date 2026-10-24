@@ -20,14 +20,6 @@ export namespace CloudSketchbookCommands {
     }
   }
 
-  export const TOGGLE_CLOUD_SKETCHBOOK = Command.toLocalizedCommand(
-    {
-      id: 'arduino-cloud-sketchbook--disable',
-      label: 'Show/Hide Cloud Sketchbook',
-    },
-    'arduino/cloud/showHideSketchbook'
-  );
-
   export const PULL_SKETCH = Command.toLocalizedCommand(
     {
       id: 'arduino-cloud-sketchbook--pull-sketch',

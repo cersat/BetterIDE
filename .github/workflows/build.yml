@@ -19,11 +19,13 @@ jobs:
             files: |
               electron-app/dist/*.AppImage
               electron-app/dist/*.zip
+              electron-app/dist/*.yml
           - os: windows-2022
             name: windows
             files: |
               electron-app/dist/*.exe
               electron-app/dist/*.zip
+              electron-app/dist/*.yml
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -40,10 +42,18 @@ jobs:
       - name: Linux dependencies
         if: matrix.name == 'linux'
         run: sudo apt-get update && sudo apt-get install -y libx11-dev libxkbfile-dev libsecret-1-dev libudev-dev libusb-1.0-0-dev libfuse2
-      - name: Windows targets (portable exe and zip)
+      - name: Windows targets (portable exe, zip and an installer that can update itself)
         if: matrix.name == 'windows'
         shell: bash
-        run: node -e "const f='electron-app/package.json',p=require('./'+f);p.build.win.target=['zip','portable'];require('fs').writeFileSync(f,JSON.stringify(p,null,2))"
+        run: |
+          node - <<'EOF'
+          const fs = require('fs');
+          const file = 'electron-app/package.json';
+          const p = JSON.parse(fs.readFileSync(file, 'utf8'));
+          p.build.win.target = ['zip', 'portable', 'nsis'];
+          p.build.nsis = { ...p.build.nsis, artifactName: 'arduino-ide_${version}_Windows_64bit_setup.${ext}' };
+          fs.writeFileSync(file, JSON.stringify(p, null, 2));
+          EOF
       - name: Install dependencies
         shell: bash
         timeout-minutes: 20
@@ -106,6 +116,7 @@ jobs:
         run: yarn --cwd electron-app package
         env:
           NODE_OPTIONS: --max-old-space-size=4096
+          BUILD_NUMBER: ${{ github.run_number }}
       - uses: actions/upload-artifact@v4
         with:
           name: BetterIDE-${{ matrix.name }}
@@ -115,4 +126,5 @@ jobs:
           tag_name: build-${{ github.run_number }}
           name: BetterIDE build ${{ github.run_number }}
           target_commitish: ${{ github.sha }}
+          body: ${{ github.event.head_commit.message }}
           files: ${{ matrix.files }}

@@ -12,10 +12,6 @@ import { interfaces } from '@theia/core/shared/inversify';
 import { serialMonitorWidgetLabel } from '../common/nls';
 import { CompilerWarningLiterals, CompilerWarnings } from '../common/protocol';
 
-export enum UpdateChannel {
-  Stable = 'stable',
-  Nightly = 'nightly',
-}
 export const ErrorRevealStrategyLiterals = [
   /**
    * Scroll vertically as necessary and reveal a line.
@@ -167,21 +163,20 @@ const properties: ArduinoPreferenceSchemaProperties = {
       "Deprecated. Use 'window.zoomLevel' instead."
     ),
   },
-  'arduino.ide.updateChannel': {
-    type: 'string',
-    enum: Object.values(UpdateChannel) as UpdateChannel[],
-    default: UpdateChannel.Stable,
-    description: nls.localize(
-      'arduino/preferences/ide.updateChannel',
-      "Release channel to get updated from. 'stable' is the stable release, 'nightly' is the latest development build."
-    ),
-  },
   'arduino.ide.updateBaseUrl': {
     type: 'string',
-    default: 'https://downloads.arduino.cc/arduino-ide',
+    default: 'https://github.com/cersat/BetterIDE/releases/latest/download',
     description: nls.localize(
       'arduino/preferences/ide.updateBaseUrl',
-      "The base URL where to download updates from. Defaults to 'https://downloads.arduino.cc/arduino-ide'"
+      "The base URL where to download updates from. Defaults to 'https://github.com/cersat/BetterIDE/releases/latest/download'"
+    ),
+  },
+  'arduino.libraries.path': {
+    type: 'string',
+    default: '',
+    description: nls.localize(
+      'arduino/preferences/libraries.path',
+      'The folder where libraries are installed and searched for. Empty means the default: the "libraries" folder inside the sketchbook.'
     ),
   },
   'arduino.board.certificates': {
@@ -333,8 +328,8 @@ export interface ArduinoConfiguration {
   'arduino.upload.verify': boolean;
   'arduino.upload.autoVerify': boolean;
   'arduino.window.autoScale': boolean;
-  'arduino.ide.updateChannel': UpdateChannel;
   'arduino.ide.updateBaseUrl': string;
+  'arduino.libraries.path': string;
   'arduino.board.certificates': string;
   'arduino.sketchbook.showAllFiles': boolean;
   'arduino.cloud.enabled': boolean;

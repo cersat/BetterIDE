@@ -133,6 +133,24 @@ export class SettingsComponent extends React.Component<
             {nls.localize('arduino/preferences/browse', 'Browse')}
           </button>
         </div>
+        {nls.localize(
+          'arduino/preferences/libraries.location',
+          'Libraries folder'
+        ) + ':'}
+        <div className="flex-line">
+          <input
+            className="theia-input stretch"
+            type="text"
+            value={Settings.librariesFolder(this.state)}
+            onChange={this.librariesPathDidChange}
+          />
+          <button
+            className="theia-button shrink"
+            onClick={this.browseLibrariesDidClick}
+          >
+            {nls.localize('arduino/preferences/browse', 'Browse')}
+          </button>
+        </div>
         <label className="flex-line">
           <input
             type="checkbox"
@@ -313,6 +331,39 @@ export class SettingsComponent extends React.Component<
           {nls.localize(
             'arduino/preferences/editorQuickSuggestions',
             'Editor Quick Suggestions'
+          )}
+        </label>
+        <label className="flex-line">
+          <input
+            type="checkbox"
+            checked={this.state.editorHover === true}
+            onChange={this.editorHoverDidChange}
+          />
+          {nls.localize(
+            'arduino/preferences/editorHover',
+            'Show hints when hovering over code'
+          )}
+        </label>
+        <label className="flex-line">
+          <input
+            type="checkbox"
+            checked={this.state.checkForUpdates === true}
+            onChange={this.checkForUpdatesDidChange}
+          />
+          {nls.localize(
+            'arduino/preferences/offerUpdates',
+            'Offer updates on startup'
+          )}
+        </label>
+        <label className="flex-line">
+          <input
+            type="checkbox"
+            checked={this.state.showCloudSketches === true}
+            onChange={this.showCloudSketchesDidChange}
+          />
+          {nls.localize(
+            'arduino/preferences/showCloudSketches',
+            'Show cloud sketches'
           )}
         </label>
         <div className="flex-line">
@@ -575,6 +626,56 @@ export class SettingsComponent extends React.Component<
       const sketchbookPath = await this.props.fileService.fsPath(uri);
       this.setState({ sketchbookPath });
     }
+  };
+
+  protected browseLibrariesDidClick = async (): Promise<void> => {
+    const uri = await this.props.fileDialogService.showOpenDialog({
+      title: nls.localize(
+        'arduino/preferences/newLibrariesLocation',
+        'Select new libraries folder'
+      ),
+      openLabel: nls.localize('arduino/preferences/choose', 'Choose'),
+      canSelectFiles: false,
+      canSelectMany: false,
+      canSelectFolders: true,
+      modal: true,
+    });
+    if (uri) {
+      this.setLibrariesPath(await this.props.fileService.fsPath(uri));
+    }
+  };
+
+  protected librariesPathDidChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    this.setLibrariesPath(event.target.value);
+  };
+
+  /**
+   * The default folder is stored as an empty value, so it follows the sketchbook location.
+   */
+  private setLibrariesPath(librariesPath: string): void {
+    const isDefault =
+      librariesPath === Settings.librariesFolder({ ...this.state, librariesPath: '' });
+    this.setState({ librariesPath: isDefault ? '' : librariesPath });
+  }
+
+  protected editorHoverDidChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    this.setState({ editorHover: event.target.checked });
+  };
+
+  protected checkForUpdatesDidChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    this.setState({ checkForUpdates: event.target.checked });
+  };
+
+  protected showCloudSketchesDidChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    this.setState({ showCloudSketches: event.target.checked });
   };
 
   protected editAdditionalUrlDidClick = async (): Promise<void> => {
