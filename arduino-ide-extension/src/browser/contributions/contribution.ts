@@ -186,7 +186,13 @@ export abstract class SketchContribution extends Contribution {
     if (CurrentSketch.isValid(sketch)) {
       for (const editor of this.editorManager.all) {
         const uri = editor.editor.uri;
-        if (Saveable.isDirty(editor) && Sketch.isInSketch(uri, sketch)) {
+        const isActiveMainFile =
+          editor === this.editorManager.currentEditor &&
+          Sketch.isSketchFile(uri);
+        if (
+          Saveable.isDirty(editor) &&
+          (Sketch.isInSketch(uri, sketch) || isActiveMainFile)
+        ) {
           override[uri.toString()] = editor.editor.document.getText();
         }
       }
@@ -236,6 +242,36 @@ export abstract class CoreServiceContribution extends SketchContribution {
 
   @inject(ApplicationShell)
   private readonly shell: ApplicationShell;
+
+  /**
+   * What to compile, based on the file of the active editor:
+   *  - an `.ino` of the sketch: that file is the main file, plus the `.c`, `.cpp`, `.h` files of the sketch, without the other `.ino` files,
+   *  - an `.ino` outside of the sketch: only that file,
+   *  - anything else (for example, a `.cpp`): the main file of the sketch, but it cannot be uploaded.
+   */
+  protected compileTarget(sketch: Sketch): CompileTarget {
+    const activeUri = this.editorManager.currentEditor?.editor.uri;
+    if (activeUri && activeUri.scheme === 'file' && Sketch.isSketchFile(activeUri)) {
+      const mainFileUri = activeUri.toString();
+      const inSketch =
+        mainFileUri === sketch.mainFileUri ||
+        sketch.otherSketchFileUris.includes(mainFileUri);
+      return { mainFileUri, mainFileOnly: !inSketch, uploadable: true };
+    }
+    return {
+      mainFileUri: sketch.mainFileUri,
+      mainFileOnly: false,
+      uploadable: this.isActiveFileUploadable(),
+    };
+  }
+
+  /**
+   * Only an `.ino` file can be uploaded. When no editor is open, the main file of the sketch is.
+   */
+  protected isActiveFileUploadable(): boolean {
+    const activeUri = this.editorManager.currentEditor?.editor.uri;
+    return !activeUri || Sketch.isSketchFile(activeUri);
+  }
 
   /**
    * This is the internal (Theia) ID of the notification that is currently visible.
@@ -369,4 +405,13 @@ export namespace Contribution {
     bind(TabBarToolbarContribution).toService(serviceIdentifier);
     bind(FrontendApplicationContribution).toService(serviceIdentifier);
   }
+}
+
+export interface CompileTarget {
+  readonly mainFileUri: string;
+  readonly mainFileOnly: boolean;
+  /**
+   * `false` when the active editor is not an `.ino` file (for example, a `.cpp` of the sketch).
+   */
+  readonly uploadable: boolean;
 }

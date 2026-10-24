@@ -5,7 +5,12 @@
   const semver = require('semver');
   const moment = require('moment');
   const downloader = require('./downloader');
-  const { taskBuildFromGit } = require('./utils');
+  const { taskBuildFromGit, exec } = require('./utils');
+
+  const patch = (() => {
+    const pkg = require(path.join(__dirname, '..', 'package.json'));
+    return pkg?.arduino?.['arduino-cli']?.patch;
+  })();
 
   const version = (() => {
     const pkg = require(path.join(__dirname, '..', 'package.json'));
@@ -42,6 +47,11 @@
   );
   const cliName = `arduino-cli${platform === 'win32' ? '.exe' : ''}`;
   const destinationPath = path.join(resourcesFolder, cliName);
+
+  if (typeof version === 'string' && patch) {
+    buildPatchedCli(version, patch, destinationPath);
+    return;
+  }
 
   if (typeof version === 'string') {
     const suffix = (() => {
@@ -91,5 +101,64 @@
     }
   } else {
     taskBuildFromGit(version, destinationPath, 'CLI');
+  }
+
+  /**
+   * Builds the CLI from the sources of the `v${version}` tag with the patch applied. Requires `git` and Go.
+   * @param {string} version
+   * @param {string} patchName the patch file next to this script.
+   * @param {string} destinationPath
+   */
+  function buildPatchedCli(version, patchName, destinationPath) {
+    const fs = require('node:fs');
+    const os = require('node:os');
+    if (fs.existsSync(destinationPath)) {
+      console.log(
+        `Skipping the CLI build because it already exists: ${destinationPath}`
+      );
+      return;
+    }
+    fs.mkdirSync(resourcesFolder, { recursive: true });
+    const repoFolder = fs.mkdtempSync(path.join(os.tmpdir(), 'arduino-cli-'));
+    const tag = `v${version}`;
+    console.log(`🔨  Building the CLI ${tag} with '${patchName}'...`);
+    exec(
+      'git',
+      [
+        'clone',
+        '--depth',
+        '1',
+        '--branch',
+        tag,
+        'https://github.com/arduino/arduino-cli.git',
+        repoFolder,
+      ],
+      { logStdout: true }
+    );
+    exec('git', ['-C', repoFolder, 'apply', path.join(__dirname, patchName)], {
+      logStdout: true,
+    });
+    exec(
+      'go',
+      [
+        'build',
+        '-ldflags',
+        `-X github.com/arduino/arduino-cli/internal/version.versionString=${version}`,
+        '-o',
+        destinationPath,
+        '.',
+      ],
+      {
+        cwd: repoFolder,
+        env: { ...process.env, CGO_ENABLED: '0' },
+        logStdout: true,
+      }
+    );
+    fs.rmSync(repoFolder, { recursive: true, force: true, maxRetries: 5 });
+    if (!fs.existsSync(destinationPath)) {
+      console.log(`Could not build the CLI to ${destinationPath}.`);
+      process.exit(1);
+    }
+    console.log(`Done: ${destinationPath}`);
   }
 })();

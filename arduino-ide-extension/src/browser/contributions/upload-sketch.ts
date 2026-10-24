@@ -26,6 +26,14 @@ export class UploadSketch extends CoreServiceContribution {
   private readonly onDidChange = this.onDidChangeEmitter.event;
   private uploadInProgress = false;
 
+  override onStart(): void {
+    // The upload is not available when a `.cpp` (or anything but an `.ino`) is the active editor.
+    this.editorManager.onCurrentEditorChanged(() => {
+      this.onDidChangeEmitter.fire();
+      this.menuManager.update();
+    });
+  }
+
   override registerCommands(registry: CommandRegistry): void {
     registry.registerCommand(UploadSketch.Commands.UPLOAD_SKETCH, {
       execute: async () => {
@@ -33,7 +41,7 @@ export class UploadSketch extends CoreServiceContribution {
           this.uploadSketch();
         }
       },
-      isEnabled: () => !this.uploadInProgress,
+      isEnabled: () => !this.uploadInProgress && this.isActiveFileUploadable(),
     });
     registry.registerCommand(UploadSketch.Commands.UPLOAD_WITH_CONFIGURATION, {
       execute: async () => {
@@ -41,19 +49,22 @@ export class UploadSketch extends CoreServiceContribution {
           this.uploadSketch();
         }
       },
-      isEnabled: () => !this.uploadInProgress && this.userFields.isRequired(),
+      isEnabled: () =>
+        !this.uploadInProgress &&
+        this.isActiveFileUploadable() &&
+        this.userFields.isRequired(),
     });
     registry.registerCommand(
       UploadSketch.Commands.UPLOAD_SKETCH_USING_PROGRAMMER,
       {
         execute: () => this.uploadSketch(true),
-        isEnabled: () => !this.uploadInProgress,
+        isEnabled: () => !this.uploadInProgress && this.isActiveFileUploadable(),
       }
     );
     registry.registerCommand(UploadSketch.Commands.UPLOAD_SKETCH_TOOLBAR, {
       isVisible: (widget) =>
         ArduinoToolbar.is(widget) && widget.side === 'left',
-      isEnabled: () => !this.uploadInProgress,
+      isEnabled: () => !this.uploadInProgress && this.isActiveFileUploadable(),
       isToggled: () => this.uploadInProgress,
       execute: () =>
         registry.executeCommand(UploadSketch.Commands.UPLOAD_SKETCH.id),

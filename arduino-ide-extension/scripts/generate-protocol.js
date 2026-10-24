@@ -13,6 +13,12 @@
   // https://github.com/YePpHa/node-protoc/pull/10
   const protoc = path.dirname(require('@pingghost/protoc/protoc'));
 
+  // A patch (a file next to this script) applied to the CLI sources. The protos have to come from the patched sources.
+  const cliPatch = (() => {
+    const pkg = require(path.join(__dirname, '..', 'package.json'));
+    return pkg?.arduino?.['arduino-cli']?.patch;
+  })();
+
   const { owner, repo, commitish } = (() => {
     const pkg = require(path.join(__dirname, '..', 'package.json'));
     if (!pkg) {
@@ -147,6 +153,14 @@
       );
     }
 
+    if (cliPatch) {
+      console.log(`>>> Applying '${cliPatch}'...`);
+      exec('git', ['-C', repoFolder, 'apply', path.join(__dirname, cliPatch)], {
+        logStdout: true,
+      });
+      console.log(`<<< Applied '${cliPatch}'.`);
+    }
+
     const rpcFolder = await fs.mkdtemp(
       path.join(os.tmpdir(), 'arduino-cli-rpc')
     );
@@ -218,7 +232,8 @@
     // v1.1.0 does not contains google proto files in zip
     // See https://github.com/arduino/arduino-cli/issues/2755
     const isV110 = eq(new SemVer(version, { loose: true }), '1.1.0');
-    protosFolder = isV110
+    // The released proto files do not contain the changes of the patch.
+    protosFolder = isV110 || cliPatch
       ? await getProtosFromRepo(undefined, version)
       : await getProtosFromZip(version);
   } else if (versionObject.Commit) {

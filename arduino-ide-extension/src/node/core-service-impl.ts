@@ -18,6 +18,7 @@ import {
   Port,
   PortIdentifier,
   resolveDetectedPort,
+  Sketch,
 } from '../common/protocol';
 import {
   CompileSummary,
@@ -120,7 +121,7 @@ export class CoreServiceImpl extends CoreClientAware implements CoreService {
       const parseAndSendErrorResponse = (error: ServiceError) => {
         const compilerErrors = tryParseError({
           content: handler.content,
-          sketch: options.sketch,
+          sketch: sketchWithMainFile(options),
         });
         const message = nls.localize(
           'arduino/compile/error',
@@ -209,6 +210,10 @@ export class CoreServiceImpl extends CoreClientAware implements CoreService {
     }
     if (options.clean) {
       request.setClean(true);
+    }
+    if (options.mainFileUri) {
+      request.setMainFile(FileUri.fsPath(options.mainFileUri));
+      request.setMainFileOnly(Boolean(options.mainFileOnly));
     }
     this.mergeSourceOverrides(request, options);
     return request;
@@ -686,4 +691,18 @@ function updateCompileSummary(
     compileSummary.buildProperties = buildProperties.slice();
   }
   return compileSummary;
+}
+
+/**
+ * The compiled main file can be outside of the sketch folder. The errors in that file have to be reported too.
+ */
+function sketchWithMainFile(options: CoreService.Options.Compile): Sketch {
+  const { sketch, mainFileUri } = options;
+  if (!mainFileUri || Sketch.isInSketch(mainFileUri, sketch)) {
+    return sketch;
+  }
+  return {
+    ...sketch,
+    otherSketchFileUris: [...sketch.otherSketchFileUris, mainFileUri],
+  };
 }

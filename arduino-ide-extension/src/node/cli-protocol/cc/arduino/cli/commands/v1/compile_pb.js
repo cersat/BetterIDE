@@ -266,7 +266,9 @@ proto.cc.arduino.cli.commands.v1.CompileRequest.toObject = function(includeInsta
     encryptKey: jspb.Message.getFieldWithDefault(msg, 27, ""),
     skipLibrariesDiscovery: jspb.Message.getBooleanFieldWithDefault(msg, 28, false),
     doNotExpandBuildProperties: jspb.Message.getBooleanFieldWithDefault(msg, 29, false),
-    buildCacheExtraPathsList: (f = jspb.Message.getRepeatedField(msg, 30)) == null ? undefined : f
+    buildCacheExtraPathsList: (f = jspb.Message.getRepeatedField(msg, 30)) == null ? undefined : f,
+    mainFile: jspb.Message.getFieldWithDefault(msg, 31, ""),
+    mainFileOnly: jspb.Message.getBooleanFieldWithDefault(msg, 32, false)
   };
 
   if (includeInstance) {
@@ -409,6 +411,14 @@ proto.cc.arduino.cli.commands.v1.CompileRequest.deserializeBinaryFromReader = fu
     case 30:
       var value = /** @type {string} */ (reader.readString());
       msg.addBuildCacheExtraPaths(value);
+      break;
+    case 31:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setMainFile(value);
+      break;
+    case 32:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setMainFileOnly(value);
       break;
     default:
       reader.skipField();
@@ -616,6 +626,20 @@ proto.cc.arduino.cli.commands.v1.CompileRequest.serializeBinaryToWriter = functi
   if (f.length > 0) {
     writer.writeRepeatedString(
       30,
+      f
+    );
+  }
+  f = message.getMainFile();
+  if (f.length > 0) {
+    writer.writeString(
+      31,
+      f
+    );
+  }
+  f = message.getMainFileOnly();
+  if (f) {
+    writer.writeBool(
+      32,
       f
     );
   }
@@ -1204,6 +1228,42 @@ proto.cc.arduino.cli.commands.v1.CompileRequest.prototype.addBuildCacheExtraPath
  */
 proto.cc.arduino.cli.commands.v1.CompileRequest.prototype.clearBuildCacheExtraPathsList = function() {
   return this.setBuildCacheExtraPathsList([]);
+};
+
+
+/**
+ * optional string main_file = 31;
+ * @return {string}
+ */
+proto.cc.arduino.cli.commands.v1.CompileRequest.prototype.getMainFile = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 31, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.cc.arduino.cli.commands.v1.CompileRequest} returns this
+ */
+proto.cc.arduino.cli.commands.v1.CompileRequest.prototype.setMainFile = function(value) {
+  return jspb.Message.setProto3StringField(this, 31, value);
+};
+
+
+/**
+ * optional bool main_file_only = 32;
+ * @return {boolean}
+ */
+proto.cc.arduino.cli.commands.v1.CompileRequest.prototype.getMainFileOnly = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 32, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.cc.arduino.cli.commands.v1.CompileRequest} returns this
+ */
+proto.cc.arduino.cli.commands.v1.CompileRequest.prototype.setMainFileOnly = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 32, value);
 };
 
 

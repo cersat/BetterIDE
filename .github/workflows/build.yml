@@ -42,7 +42,7 @@ jobs:
           python-version: '3.11'
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.23'
+          go-version: '1.26'
       - name: Linux dependencies
         if: matrix.name == 'linux'
         run: sudo apt-get update && sudo apt-get install -y libx11-dev libxkbfile-dev libsecret-1-dev libudev-dev libusb-1.0-0-dev libfuse2

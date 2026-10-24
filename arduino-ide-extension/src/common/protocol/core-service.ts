@@ -232,6 +232,15 @@ export namespace CoreService {
       readonly verify: boolean; // TODO: (API) why not optional with false as the default value?
     }
     export interface Compile extends Base, SketchBased {
+      /**
+       * The `.ino` file to compile as the main file of the sketch instead of the one named after the sketch folder.
+       * The other `.ino` files of the sketch are not compiled. It can be outside of the sketch folder.
+       */
+      readonly mainFileUri?: string;
+      /**
+       * Together with `mainFileUri`, compile only that file: not the `.c`, `.cpp`, `.h` files of the sketch either.
+       */
+      readonly mainFileOnly?: boolean;
       readonly optimizeForDebug: boolean; // TODO: (API) make this optional
       readonly sourceOverride: Record<string, string>; // TODO: (API) make this optional
       readonly exportBinaries?: boolean;

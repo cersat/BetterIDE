@@ -250,8 +250,11 @@ export class VerifySketch
     ]);
     const verbose = this.preferences.get('arduino.compile.verbose');
     const compilerWarnings = this.preferences.get('arduino.compile.warnings');
+    const { mainFileUri, mainFileOnly } = this.compileTarget(sketch);
     return {
       sketch,
+      mainFileUri,
+      mainFileOnly,
       fqbn,
       optimizeForDebug: Boolean(optimizeForDebug),
       verbose,

@@ -76,6 +76,10 @@ export class CompileRequest extends jspb.Message {
     getBuildCacheExtraPathsList(): Array<string>;
     setBuildCacheExtraPathsList(value: Array<string>): CompileRequest;
     addBuildCacheExtraPaths(value: string, index?: number): string;
+    getMainFile(): string;
+    setMainFile(value: string): CompileRequest;
+    getMainFileOnly(): boolean;
+    setMainFileOnly(value: boolean): CompileRequest;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): CompileRequest.AsObject;
@@ -116,6 +120,8 @@ export namespace CompileRequest {
         skipLibrariesDiscovery: boolean,
         doNotExpandBuildProperties: boolean,
         buildCacheExtraPathsList: Array<string>,
+        mainFile: string,
+        mainFileOnly: boolean,
     }
 }
 
