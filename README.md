@@ -1,55 +1,49 @@
-<img src="https://content.arduino.cc/website/Arduino_logo_teal.svg" height="100" align="right" />
+# BetterIDE
 
-# Arduino IDE 2.x
+BetterIDE is a fork of the [Arduino IDE 2.x](https://github.com/arduino/arduino-ide) with a few things changed to make everyday work less annoying. It is built on the [Theia](https://theia-ide.org/) framework and [Electron](https://www.electronjs.org/); compilation and uploading are done by [arduino-cli](https://github.com/arduino/arduino-cli) running as a daemon, as in the original.
 
-[![Build status](https://github.com/arduino/arduino-ide/actions/workflows/build.yml/badge.svg)](https://github.com/arduino/arduino-ide/actions/workflows/build.yml)
-[![Check JavaScript status](https://github.com/arduino/arduino-ide/actions/workflows/check-javascript.yml/badge.svg)](https://github.com/arduino/arduino-ide/actions/workflows/check-javascript.yml)
-[![Test JavaScript status](https://github.com/arduino/arduino-ide/actions/workflows/test-javascript.yml/badge.svg)](https://github.com/arduino/arduino-ide/actions/workflows/test-javascript.yml)
+## What is different
 
-This repository contains the source code of the Arduino IDE 2.x. If you're looking for the old IDE, go to the [repository of the 1.x version](https://github.com/arduino/Arduino).
-
-The Arduino IDE 2.x is a major rewrite, sharing no code with the IDE 1.x. It is based on the [Theia IDE](https://theia-ide.org/) framework and built with [Electron](https://www.electronjs.org/). The backend operations such as compilation and uploading are offloaded to an [arduino-cli](https://github.com/arduino/arduino-cli) instance running in daemon mode. This new IDE was developed with the goal of preserving the same interface and user experience of the previous major version in order to provide a frictionless upgrade.
-
-![](static/screenshot.png)
+- **Any file as a tab.** `File → Open File as Tab…` (`Ctrl+Alt+O`) opens any file in place as an editor tab, nothing is copied into the sketch folder.
+- **One window.** Starting the IDE a second time opens its sketch as tabs of the already running window instead of a new window. `File → Open…`, recent sketches, the sketchbook and examples open as tabs too.
+- **Editable local files.** Files outside the open sketch (opened as tabs or dropped into the editor) are no longer read-only. Only `sketch.json` and cloud `thingProperties.h` stay protected.
+- **CLI terminal.** `Tools → Arduino CLI Terminal` (`Ctrl+Alt+T`) opens a terminal in the bottom panel next to the Output, with `arduino-cli` on the `PATH` and the IDE's own CLI configuration.
+- **More settings** in `File → Preferences`:
+  - show or hide the hints that appear when hovering over code;
+  - offer updates on startup (the dialog with the changelog and the update button);
+  - the libraries folder, `<sketchbook>/libraries` by default. Libraries are installed to and searched in the chosen folder. Libraries that were in the previous folder are not moved, the IDE warns you to reinstall or move them by hand;
+  - show cloud sketches (moved here from `File → Advanced`).
+- **Updates from this repository.** The IDE checks the latest [release](../../releases) here instead of the Arduino servers.
 
 ## Download
 
-You can download the latest release version and nightly builds from the [software download page on the Arduino website](https://www.arduino.cc/en/software).
+Builds are published on the [Releases](../../releases) page. Every push to `main` produces a new one.
 
-## Support
+| System | File | Notes |
+| --- | --- | --- |
+| Windows | `…_Windows_64bit.exe` | portable, no installation |
+| Windows | `…_Windows_64bit_setup.exe` | installer, can update itself |
+| Windows | `…_Windows_64bit.zip` | unpack and run `Arduino IDE.exe` |
+| Linux | `…_Linux_64bit.AppImage` | `chmod +x` it and run, add `--no-sandbox` if the sandbox is not set up |
+| Linux | `…_Linux_64bit.zip` | unpack and run `arduino-ide` |
 
-If you need assistance, see the [Help Center](https://support.arduino.cc/hc/en-us/categories/360002212660-Software-and-Downloads) and browse the [forum](https://forum.arduino.cc/index.php?board=150.0).
+The Windows and Linux builds are made by [GitHub Actions](.github/workflows/build.yml). The version looks like `2.3.11-build.N`, where `N` grows with every build.
 
-## Bugs & Issues
+## Building from source
 
-If you want to report an issue, you can submit it to the [issue tracker](https://github.com/arduino/arduino-ide/issues) of this repository.
+Node.js 20 and yarn 1 are needed. The workflow in [`.github/workflows/build.yml`](.github/workflows/build.yml) is the reference for the exact steps and the system packages for each platform. In short:
 
-See [**the issue report guide**](docs/contributor-guide/issues.md#issue-report-guide) for instructions.
+```
+yarn --ignore-scripts
+yarn --cwd arduino-ide-extension prepare
+yarn --cwd arduino-ide-extension build
+yarn --cwd electron-app rebuild
+yarn --cwd electron-app build
+yarn --cwd electron-app package
+```
 
-### Security
-
-If you think you found a vulnerability or other security-related bug in this project, please read our
-[security policy](https://github.com/arduino/arduino-ide/security/policy) and report the bug to our Security Team 🛡️
-Thank you!
-
-e-mail contact: security@arduino.cc
-
-## Contributions and development
-
-Contributions are very welcome! There are several ways to participate in this project, including:
-
-- Fixing bugs
-- Beta testing
-- Translation
-
-See [**the contributor guide**](docs/CONTRIBUTING.md#contributor-guide) for more information.
-
-See the [**development guide**](docs/development.md) for a technical overview of the application and instructions for building the code.
-
-### Support the project
-
-This open source code was written by the Arduino team and is maintained on a daily basis with the help of the community. We invest a considerable amount of time in development, testing and optimization. Please consider [buying original Arduino boards](https://store.arduino.cc/) to support our work on the project.
+The workflow also installs the Electron binary and `ripgrep`, builds the `@theia/ffmpeg` addon (and `@vscode/windows-ca-certs` on Windows), and limits the memory of the webpack step. The technical overview of the application is in the [development guide](docs/development.md).
 
 ## License
 
-The code contained in this repository and the executable distributions are licensed under the terms of the GNU AGPLv3. The executable distributions contain third-party code licensed under other compatible licenses such as GPLv2, MIT and BSD-3. If you have questions about licensing please contact us at [license@arduino.cc](mailto:license@arduino.cc).
+The code in this repository is licensed under the terms of the GNU AGPLv3, like the Arduino IDE it is based on. The executable distributions contain third-party code licensed under other compatible licenses such as GPLv2, MIT and BSD-3. BetterIDE is not made or supported by Arduino. Arduino is a trademark of its owner.
