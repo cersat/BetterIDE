@@ -2,10 +2,12 @@
  * FastPins: digitalWrite, digitalRead and pinMode for pin numbers known at compile time,
  * each compiled to one or two instructions instead of the table lookups of the Arduino functions.
  *
- * Supported: the AVR boards of the Arduino AVR core (Uno, Nano, Mega, Leonardo, Micro, ...).
+ * Supported: the AVR boards of the Arduino AVR core (Uno, Nano, Mega, Leonardo, Micro, ...), the ESP32 chips of the
+ * arduino-esp32 core and the RP2040/RP2350 boards of the arduino-pico core.
  * On any other board, everything falls back to the standard Arduino functions, so sketches stay portable.
  *
- * Unlike digitalWrite, the fast functions do not turn off a PWM output (analogWrite) on the pin.
+ * Unlike digitalWrite, the fast functions do not turn off a PWM output (analogWrite) on the pin, and the pin has to be
+ * set up as an output first (with fastPinMode, pinMode or Pin<N>::output()).
  *
  * License: LGPL-2.1-or-later, like the Arduino AVR core the pin tables come from.
  */
@@ -13,12 +15,27 @@
 
 #include <Arduino.h>
 
+#if defined(ARDUINO_ARCH_ESP32)
+#include "soc/gpio_reg.h"
+#include "soc/soc_caps.h"
+#elif defined(ARDUINO_ARCH_RP2040)
+#include "hardware/structs/sio.h"
+#endif
+
+#define FASTPINS_INLINE inline __attribute__((always_inline))
+
+// The types of the values of digitalWrite and pinMode: `int` on the AVR core, the `PinStatus` and `PinMode` enums
+// on the cores built on ArduinoCore-API (mbed, SAMD, Renesas, arduino-pico, ...).
+#define FASTPINS_PIN_STATUS(value) static_cast<decltype(HIGH)>(value)
+#define FASTPINS_PIN_MODE(value) static_cast<decltype(OUTPUT)>(value)
+
 namespace fastpins {
 namespace detail {
 
 #if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_DUEMILANOVE) || defined(ARDUINO_AVR_NANO) || defined(ARDUINO_AVR_MINI) || defined(ARDUINO_AVR_FIO) || defined(ARDUINO_AVR_BT) || defined(ARDUINO_AVR_PRO) || defined(ARDUINO_AVR_LILYPAD) || defined(ARDUINO_AVR_NG) || defined(ARDUINO_AVR_UNO_WIFI_DEV_ED)
 // Uno, Nano, Mini, Pro, Duemilanove and other ATmega328P/168 boards ("standard" variant)
 #define FASTPINS_SUPPORTED 1
+#define FASTPINS_AVR 1
 	// Arduino port numbers (PA = 1, PB = 2, ... PL = 12) of the digital pins, from the core's pins_arduino.h.
 	constexpr uint8_t kPort[] = {
 		4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 3, 3,
@@ -32,6 +49,7 @@ namespace detail {
 #elif defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_ADK)
 // Mega 2560, Mega 1280, Mega ADK ("mega" variant)
 #define FASTPINS_SUPPORTED 1
+#define FASTPINS_AVR 1
 	// Arduino port numbers (PA = 1, PB = 2, ... PL = 12) of the digital pins, from the core's pins_arduino.h.
 	constexpr uint8_t kPort[] = {
 		5, 5, 5, 5, 7, 5, 8, 8, 8, 8, 2, 2, 2, 2, 10, 10,
@@ -51,6 +69,7 @@ namespace detail {
 #elif defined(ARDUINO_AVR_LEONARDO) || defined(ARDUINO_AVR_LEONARDO_ETH) || defined(ARDUINO_AVR_MICRO) || defined(ARDUINO_AVR_ESPLORA) || defined(ARDUINO_AVR_LILYPAD_USB) || defined(ARDUINO_AVR_YUN) || defined(ARDUINO_AVR_YUNMINI) || defined(ARDUINO_AVR_INDUSTRIAL101) || defined(ARDUINO_AVR_LININO_ONE)
 // Leonardo, Micro, Esplora, Yún and other ATmega32U4 boards ("leonardo" variant)
 #define FASTPINS_SUPPORTED 1
+#define FASTPINS_AVR 1
 	// Arduino port numbers (PA = 1, PB = 2, ... PL = 12) of the digital pins, from the core's pins_arduino.h.
 	constexpr uint8_t kPort[] = {
 		4, 4, 4, 4, 4, 3, 4, 5, 2, 2, 2, 2, 4, 3, 2, 2,
@@ -63,11 +82,9 @@ namespace detail {
 	};
 #endif
 
-#ifdef FASTPINS_SUPPORTED
+#ifdef FASTPINS_AVR
 
 constexpr uint8_t kPinCount = sizeof(kPort);
-
-#define FASTPINS_INLINE inline __attribute__((always_inline))
 
 // The registers of an Arduino port number. With a constant port number the switch disappears.
 FASTPINS_INLINE volatile uint8_t &outputRegister(uint8_t port) {
@@ -260,7 +277,111 @@ FASTPINS_INLINE void mode(uint8_t pin, uint8_t pinMode) {
 	}
 }
 
-#endif // FASTPINS_SUPPORTED
+#endif // FASTPINS_AVR
+
+#if !defined(FASTPINS_SUPPORTED) && defined(ARDUINO_ARCH_ESP32) && \
+	!(defined(BOARD_HAS_PIN_REMAP) && !defined(BOARD_USES_HW_GPIO_NUMBERS))
+// ESP32 (all the chips of the arduino-esp32 core). The pin numbers are the GPIO numbers.
+// Boards that number the pins differently (BOARD_HAS_PIN_REMAP, such as the Arduino Nano ESP32) use the fallback.
+#define FASTPINS_SUPPORTED 1
+#define FASTPINS_ESP32 1
+
+constexpr uint8_t kPinCount = SOC_GPIO_PIN_COUNT;
+
+FASTPINS_INLINE volatile uint32_t &reg(uint32_t address) {
+	return *reinterpret_cast<volatile uint32_t *>(address);
+}
+
+// The W1TS ("write 1 to set") and W1TC ("write 1 to clear") registers change only the given bits,
+// with a single store that cannot be interrupted.
+FASTPINS_INLINE void write(uint8_t pin, uint8_t value) {
+	if (pin < 32) {
+		reg(value == LOW ? GPIO_OUT_W1TC_REG : GPIO_OUT_W1TS_REG) = 1UL << pin;
+	}
+#ifdef GPIO_OUT1_W1TS_REG
+	else {
+		reg(value == LOW ? GPIO_OUT1_W1TC_REG : GPIO_OUT1_W1TS_REG) = 1UL << (pin - 32);
+	}
+#endif
+}
+
+FASTPINS_INLINE int read(uint8_t pin) {
+	if (pin < 32) {
+		return (reg(GPIO_IN_REG) >> pin) & 1 ? HIGH : LOW;
+	}
+#ifdef GPIO_IN1_REG
+	return (reg(GPIO_IN1_REG) >> (pin - 32)) & 1 ? HIGH : LOW;
+#else
+	return LOW;
+#endif
+}
+
+FASTPINS_INLINE void toggle(uint8_t pin) {
+	if (pin < 32) {
+		write(pin, (reg(GPIO_OUT_REG) >> pin) & 1 ? LOW : HIGH);
+	}
+#ifdef GPIO_OUT1_REG
+	else {
+		write(pin, (reg(GPIO_OUT1_REG) >> (pin - 32)) & 1 ? LOW : HIGH);
+	}
+#endif
+}
+
+// The pin mode is set up rarely: the core function also routes the pin to the GPIO matrix.
+FASTPINS_INLINE void mode(uint8_t pin, uint8_t pinMode) {
+	::pinMode(pin, FASTPINS_PIN_MODE(pinMode));
+}
+#endif // ESP32
+
+#if !defined(FASTPINS_SUPPORTED) && defined(ARDUINO_ARCH_RP2040)
+// RP2040 and RP2350 (the arduino-pico core). The pin numbers are the GPIO numbers.
+#define FASTPINS_SUPPORTED 1
+#define FASTPINS_RP2040 1
+
+constexpr uint8_t kPinCount = __GPIOCNT;
+
+// The SIO set, clear and toggle registers change only the given bits, with a single store.
+FASTPINS_INLINE void write(uint8_t pin, uint8_t value) {
+	if (pin < 32) {
+		if (value == LOW) {
+			sio_hw->gpio_clr = 1UL << pin;
+		} else {
+			sio_hw->gpio_set = 1UL << pin;
+		}
+	}
+#if __GPIOCNT > 32
+	else if (value == LOW) {
+		sio_hw->gpio_hi_clr = 1UL << (pin - 32);
+	} else {
+		sio_hw->gpio_hi_set = 1UL << (pin - 32);
+	}
+#endif
+}
+
+FASTPINS_INLINE int read(uint8_t pin) {
+#if __GPIOCNT > 32
+	if (pin >= 32) {
+		return (sio_hw->gpio_hi_in >> (pin - 32)) & 1 ? HIGH : LOW;
+	}
+#endif
+	return (sio_hw->gpio_in >> pin) & 1 ? HIGH : LOW;
+}
+
+FASTPINS_INLINE void toggle(uint8_t pin) {
+#if __GPIOCNT > 32
+	if (pin >= 32) {
+		sio_hw->gpio_hi_togl = 1UL << (pin - 32);
+		return;
+	}
+#endif
+	sio_hw->gpio_togl = 1UL << pin;
+}
+
+// The pin mode is set up rarely: the core function also selects the SIO function and the pads.
+FASTPINS_INLINE void mode(uint8_t pin, uint8_t pinMode) {
+	::pinMode(pin, FASTPINS_PIN_MODE(pinMode));
+}
+#endif // RP2040
 
 } // namespace detail
 
@@ -283,7 +404,7 @@ struct Pin {
 #ifdef FASTPINS_SUPPORTED
 		detail::mode(Number, pinMode);
 #else
-		::pinMode(Number, pinMode);
+		::pinMode(Number, FASTPINS_PIN_MODE(pinMode));
 #endif
 	}
 
@@ -291,7 +412,7 @@ struct Pin {
 #ifdef FASTPINS_SUPPORTED
 		detail::write(Number, value);
 #else
-		::digitalWrite(Number, value);
+		::digitalWrite(Number, FASTPINS_PIN_STATUS(value));
 #endif
 	}
 
@@ -302,7 +423,7 @@ struct Pin {
 #ifdef FASTPINS_SUPPORTED
 		detail::toggle(Number);
 #else
-		::digitalWrite(Number, !::digitalRead(Number));
+		::digitalWrite(Number, ::digitalRead(Number) == HIGH ? LOW : HIGH);
 #endif
 	}
 
@@ -331,10 +452,10 @@ struct Pin {
 #define fastPinMode(pin, pinModeValue) \
 	(FASTPINS_IS_FAST(pin) ? fastpins::detail::mode((pin), (pinModeValue)) : ::pinMode((pin), (pinModeValue)))
 #define fastDigitalToggle(pin) \
-	(FASTPINS_IS_FAST(pin) ? fastpins::detail::toggle(pin) : ::digitalWrite((pin), !::digitalRead(pin)))
+	(FASTPINS_IS_FAST(pin) ? fastpins::detail::toggle(pin) : ::digitalWrite((pin), ::digitalRead(pin) == HIGH ? LOW : HIGH))
 #else
 #define fastDigitalWrite(pin, value) ::digitalWrite((pin), (value))
 #define fastDigitalRead(pin) ::digitalRead(pin)
 #define fastPinMode(pin, pinModeValue) ::pinMode((pin), (pinModeValue))
-#define fastDigitalToggle(pin) ::digitalWrite((pin), !::digitalRead(pin))
+#define fastDigitalToggle(pin) ::digitalWrite((pin), ::digitalRead(pin) == HIGH ? LOW : HIGH)
 #endif
