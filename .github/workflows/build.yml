@@ -121,6 +121,10 @@ jobs:
         env:
           NODE_OPTIONS: --max-old-space-size=4096
           BUILD_NUMBER: ${{ github.run_number }}
+      - name: Package the FastPins library
+        if: matrix.name == 'linux'
+        shell: bash
+        run: cd libraries && zip -r ../electron-app/dist/FastPins.zip FastPins
       - uses: actions/upload-artifact@v4
         with:
           name: BetterIDE-${{ matrix.name }}
