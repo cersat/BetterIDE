@@ -30,3 +30,6 @@ export const arduinoPlotterWebAppPath = path.join(
 
 // examples
 export const examplesPath = path.join(resourcesPath, 'Examples');
+
+// libraries bundled with the IDE, such as FastPins. They are copied into the CLI's `directories.builtin.libraries` (see `bundled-libraries.ts`).
+export const builtinLibrariesPath = path.join(resourcesPath, 'libraries');

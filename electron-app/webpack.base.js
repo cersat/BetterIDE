@@ -64,6 +64,15 @@ function createCopyArduinoResourcesPlugins(targetPath, baseDir = __dirname) {
           ignore: ['**/i18n/**'],
         },
       },
+      // libraries bundled with the IDE, copied into the CLI's `directories.builtin.libraries` on startup
+      {
+        from: path.join(
+          resolvePackagePath('arduino-ide-extension', baseDir),
+          '..',
+          'libraries'
+        ),
+        to: path.resolve(targetPath, 'libraries'),
+      },
       // plotter app
       {
         from: path.join(

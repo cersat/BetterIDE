@@ -16,7 +16,8 @@ import { ArduinoDaemon, NotificationServiceServer } from '../common/protocol';
 import { CLI_CONFIG } from './cli-config';
 import { SettingsReader } from './settings-reader';
 import { ProcessUtils } from '@theia/core/lib/node/process-utils';
-import { arduinoCliPath } from './resources';
+import { arduinoCliPath, builtinLibrariesPath } from './resources';
+import { builtinLibrariesDir, installBundledLibraries } from './bundled-libraries';
 
 @injectable()
 export class ArduinoDaemonImpl
@@ -142,6 +143,29 @@ export class ArduinoDaemonImpl
     return args;
   }
 
+  /**
+   * The CLI's `directories.builtin.libraries`, with the libraries bundled with the IDE copied into it.
+   * `undefined` if it cannot be set up: the daemon still starts, without the bundled libraries.
+   */
+  protected async prepareBuiltinLibraries(): Promise<string | undefined> {
+    try {
+      const librariesDir = builtinLibrariesDir(
+        FileUri.fsPath(await this.envVariablesServer.getConfigDirUri())
+      );
+      const copied = await installBundledLibraries(
+        builtinLibrariesPath,
+        librariesDir
+      );
+      if (copied.length) {
+        this.onData(`Installed the bundled libraries: ${copied.join(', ')}.`);
+      }
+      return librariesDir;
+    } catch (err) {
+      this.onError(err);
+      return undefined;
+    }
+  }
+
   private async debugDaemon(): Promise<boolean> {
     const settings = await this.settingsReader.read();
     if (settings) {
@@ -158,8 +182,16 @@ export class ArduinoDaemonImpl
     const args = await this.getSpawnArgs();
     const cliPath = this.getExecPath();
     const ready = new Deferred<{ daemon: ChildProcess; port: number }>();
+    // The bundled libraries must be in place before the daemon loads the libraries.
+    const librariesDir = await this.prepareBuiltinLibraries();
     const options = {
-      env: { ...deepClone(process.env), NO_COLOR: String(true) },
+      env: {
+        ...deepClone(process.env),
+        NO_COLOR: String(true),
+        ...(librariesDir
+          ? { ARDUINO_DIRECTORIES_BUILTIN_LIBRARIES: librariesDir }
+          : {}),
+      },
     };
     const daemon = spawn(cliPath, args, options);
 

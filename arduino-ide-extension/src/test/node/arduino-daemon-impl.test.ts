@@ -19,6 +19,10 @@ class SilentArduinoDaemonImpl extends ArduinoDaemonImpl {
     // NOOP
   }
 
+  protected override async prepareBuiltinLibraries(): Promise<undefined> {
+    return undefined; // The test daemon is not set up like the IDE's, it runs without the bundled libraries.
+  }
+
   override async spawnDaemonProcess(): Promise<{
     daemon: ChildProcess;
     port: number;
