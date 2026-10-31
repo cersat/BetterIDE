@@ -162,6 +162,12 @@
     "compile": {
       "error": "Compilation error: {0}"
     },
+    "compileTarget": {
+      "moreFiles": "{0} files",
+      "onlyThisFile": "(only this file)",
+      "tooltip": "Verify and Upload compile:",
+      "uploadUnavailable": "Upload is not available: open an .ino file to upload it."
+    },
     "component": {
       "boardsIncluded": "Boards included in this package:",
       "by": "by",

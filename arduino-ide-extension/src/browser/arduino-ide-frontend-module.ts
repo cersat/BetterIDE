@@ -196,6 +196,8 @@ import {
 import { AddFile } from './contributions/add-file';
 import { OpenFileAsTab } from './contributions/open-file-as-tab';
 import { ArduinoCliTerminal } from './contributions/arduino-cli-terminal';
+import { CompileTargetStatus } from './contributions/compile-target-status';
+import { BoardPerFile } from './contributions/board-per-file';
 import { ArchiveSketch } from './contributions/archive-sketch';
 import { OutputToolbarContribution as TheiaOutputToolbarContribution } from '@theia/output/lib/browser/output-toolbar-contribution';
 import { OutputToolbarContribution } from './theia/output/output-toolbar-contribution';
@@ -732,6 +734,8 @@ export default new ContainerModule((bind, unbind, isBound, rebind) => {
   Contribution.configure(bind, AddFile);
   Contribution.configure(bind, OpenFileAsTab);
   Contribution.configure(bind, ArduinoCliTerminal);
+  Contribution.configure(bind, CompileTargetStatus);
+  Contribution.configure(bind, BoardPerFile);
   Contribution.configure(bind, ArchiveSketch);
   Contribution.configure(bind, AddZipLibrary);
   Contribution.configure(bind, PlotterFrontendContribution);

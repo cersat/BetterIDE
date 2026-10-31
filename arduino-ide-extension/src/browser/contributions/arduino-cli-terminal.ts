@@ -1,6 +1,6 @@
 import { FileUri } from '@theia/core/lib/common/file-uri';
 import { nls } from '@theia/core/lib/common/nls';
-import { isWindows } from '@theia/core/lib/common/os';
+import { isOSX, isWindows } from '@theia/core/lib/common/os';
 import { inject, injectable } from '@theia/core/shared/inversify';
 import { TerminalService } from '@theia/terminal/lib/browser/base/terminal-service';
 import { ExecutableService } from '../../common/protocol/executable-service';
@@ -50,7 +50,8 @@ export class ArduinoCliTerminal extends SketchContribution {
 	override registerKeybindings(registry: KeybindingRegistry): void {
 		registry.registerKeybinding({
 			command: ArduinoCliTerminal.Commands.OPEN_ARDUINO_CLI_TERMINAL.id,
-			keybinding: 'CtrlCmd+Alt+T',
+			// On Linux, the desktop takes Ctrl+Alt+T to open its own terminal: the IDE never receives it.
+			keybinding: isWindows || isOSX ? 'CtrlCmd+Alt+T' : 'CtrlCmd+Alt+J',
 		});
 	}
 
