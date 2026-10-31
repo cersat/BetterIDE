@@ -39,6 +39,24 @@ describe('isAccessibleSketchPath', () => {
     expect(actual).to.be.equal(mainSketchFilePath);
   });
 
+  it('should be accessible by a .pde main sketch file', async () => {
+    const sketchFolderPath = join(testDirPath, 'my_sketch');
+    const mainSketchFilePath = join(sketchFolderPath, 'my_sketch.pde');
+    await fs.mkdir(sketchFolderPath, { recursive: true });
+    await fs.writeFile(mainSketchFilePath, '', { encoding: 'utf8' });
+    const actual = await isAccessibleSketchPath(mainSketchFilePath);
+    expect(actual).to.be.equal(mainSketchFilePath);
+  });
+
+  it('should be accessible by the sketch folder of a .pde sketch', async () => {
+    const sketchFolderPath = join(testDirPath, 'my_sketch');
+    const mainSketchFilePath = join(sketchFolderPath, 'my_sketch.pde');
+    await fs.mkdir(sketchFolderPath, { recursive: true });
+    await fs.writeFile(mainSketchFilePath, '', { encoding: 'utf8' });
+    const actual = await isAccessibleSketchPath(sketchFolderPath);
+    expect(actual).to.be.equal(mainSketchFilePath);
+  });
+
   it('should be accessible by the sketch folder', async () => {
     const sketchFolderPath = join(testDirPath, 'my_sketch');
     const mainSketchFilePath = join(sketchFolderPath, 'my_sketch.ino');

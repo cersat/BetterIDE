@@ -797,12 +797,15 @@ export async function isAccessibleSketchPath(
   if (!stats) {
     return undefined;
   }
+  // `.pde` is a valid main sketch file too (the CLI and the `File > Open` dialog accept it).
+  const isMainSketchFile = (name: string) =>
+    Sketch.Extensions.MAIN.some((ext) => name.endsWith(ext));
   if (stats.isFile()) {
-    return path.endsWith('.ino') ? path : undefined;
+    return isMainSketchFile(path) ? path : undefined;
   }
   const entries = await fs.readdir(path, { withFileTypes: true });
   const sketchFilename = entries
-    .filter((entry) => entry.isFile() && entry.name.endsWith('.ino'))
+    .filter((entry) => entry.isFile() && isMainSketchFile(entry.name))
     .map(({ name }) => name)
     // A folder might contain multiple sketches. It's OK to pick the first one as IDE2 cannot do much,
     // but ensure a deterministic behavior as `readdir(3)` does not guarantee an order. Sort them.
