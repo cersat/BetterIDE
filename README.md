@@ -9,7 +9,7 @@ BetterIDE is a fork of the [Arduino IDE 2.x](https://github.com/arduino/arduino-
 - **Editable local files.** Files outside the open sketch (opened as tabs or dropped into the editor) are no longer read-only. Only `sketch.json` and cloud `thingProperties.h` stay protected.
 - **Compile the active tab.** Verify and Upload compile the `.ino` of the active tab with the `.c`, `.cpp` and `.h` files of the sketch, without the other `.ino` files. An `.ino` outside of the sketch is compiled alone. When a non-`.ino` file is active, Upload is not available. The status bar shows what will be compiled. This needs a patched `arduino-cli` ([`arduino-cli-betteride.patch`](arduino-ide-extension/scripts/arduino-cli-betteride.patch), built by `download-cli`; adds `--main-file` and `--main-file-only` to `arduino-cli compile`).
 - **A board for every `.ino`.** The selected board and port are remembered for every `.ino` file and selected again when its tab becomes active.
-- **CLI terminal.** `Tools → Arduino CLI Terminal` (`Ctrl+Alt+T`, `Ctrl+Alt+J` on Linux) opens a terminal in the bottom panel next to the Output, with `arduino-cli` on the `PATH` and the IDE's own CLI configuration.
+- **CLI terminal.** `Tools → Arduino CLI Terminal` (`Ctrl+Alt+J`) opens a terminal in the bottom panel next to the Output, with `arduino-cli` on the `PATH` and the IDE's own CLI configuration.
 - **More settings** in `File → Preferences`:
   - show or hide the hints that appear when hovering over code;
   - show suggestions after special characters (`.`, `->`);
@@ -17,6 +17,8 @@ BetterIDE is a fork of the [Arduino IDE 2.x](https://github.com/arduino/arduino-
   - offer updates on startup (the dialog with the changelog and the update button);
   - the libraries folder, `<sketchbook>/libraries` by default. Libraries are installed to and searched in the chosen folder. Libraries that were in the previous folder are not moved, the IDE warns you to reinstall or move them by hand;
   - show cloud sketches.
+- **Serial Monitor:** a filter that shows only the lines containing a text, *Save Output* to a file, and *Copy Output* and *Save Output* keep the timestamps when they are shown.
+- **Built-in libraries folder.** The CLI's built-in libraries folder is `~/.arduinoIDE/libraries` (the Arduino IDE leaves it unset, so the `Arduino_BuiltIn` library it installs on the first startup could never be installed). FastPins comes with the IDE there.
 - **No `Advanced` submenu.** `Keyboard Shortcuts` is in the `File` menu.
 - **Updates from this repository.** The IDE checks the latest [release](../../releases) here instead of the Arduino servers.
 
@@ -36,7 +38,7 @@ The Windows and Linux builds are made by [GitHub Actions](.github/workflows/buil
 
 ## FastPins
 
-[`libraries/FastPins`](libraries/FastPins) is a library of fast `digitalWrite`, `digitalRead` and `pinMode` for pins known at compile time: one or two instructions on the AVR boards, the standard functions elsewhere. `FastPins.zip` is attached to every release.
+[`libraries/FastPins`](libraries/FastPins) is a library of fast `digitalWrite`, `digitalRead` and `pinMode` for pins known at compile time: one or two instructions on the AVR boards, the ESP32 chips and the RP2040/RP2350 boards, the standard functions elsewhere. It comes with BetterIDE (`#include <FastPins.h>` works without installing anything), and `FastPins.zip` is attached to every release for other IDEs.
 
 ## Building from source
 
