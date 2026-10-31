@@ -3,6 +3,8 @@ import {
   messagesToLines,
   truncateLines,
   joinLines,
+  formatLines,
+  filterLines,
 } from '../../browser/serial/monitor/monitor-utils';
 import { Line } from '../../browser/serial/monitor/serial-monitor-send-output';
 import { set, reset } from 'mockdate';
@@ -177,5 +179,46 @@ describe('Monitor Utils', () => {
         }
       });
     });
+  });
+});
+
+describe('formatLines', () => {
+  const at = (hours: number, minutes: number) => new Date(2026, 9, 31, hours, minutes, 5, 7);
+  const lines: Line[] = [
+    { message: 'first\n', timestamp: at(21, 3), lineLen: 6 },
+    { message: 'second', timestamp: at(22, 45), lineLen: 6 },
+  ];
+
+  it('should join the messages without timestamps', () => {
+    expect(formatLines(lines, false)).to.be.equal('first\nsecond');
+  });
+
+  it('should prefix every line with its 24-hour timestamp', () => {
+    expect(formatLines(lines, true)).to.be.equal(
+      '21:03:05.007 -> first\n22:45:05.007 -> second'
+    );
+  });
+});
+
+describe('filterLines', () => {
+  const lines: Line[] = [
+    { message: 'Temperature: 21\n', lineLen: 16 },
+    { message: 'humidity: 40\n', lineLen: 13 },
+    { message: 'TEMPERATURE: 22\n', lineLen: 16 },
+  ];
+
+  it('should keep all the lines when the filter is empty', () => {
+    expect(filterLines(lines, '')).to.be.equal(lines);
+  });
+
+  it('should keep the lines containing the filter, ignoring the case', () => {
+    expect(filterLines(lines, 'temp').map(({ message }) => message)).to.be.deep.equal([
+      'Temperature: 21\n',
+      'TEMPERATURE: 22\n',
+    ]);
+  });
+
+  it('should keep no lines when nothing matches', () => {
+    expect(filterLines(lines, 'pressure')).to.be.deep.equal([]);
   });
 });

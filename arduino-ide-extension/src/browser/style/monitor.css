@@ -72,6 +72,13 @@
     margin-left: 3px;
 }
 
+.serial-monitor .head .config .filter {
+    margin-left: 3px;
+    width: 140px;
+    height: 27px;
+    box-sizing: border-box;
+}
+
 .serial-monitor .body {
     overflow: auto;
     flex: 1;

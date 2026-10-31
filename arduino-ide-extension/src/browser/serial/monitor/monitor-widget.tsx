@@ -29,6 +29,12 @@ import { MonitorModel } from '../../monitor-model';
 import { FrontendApplicationStateService } from '@theia/core/lib/browser/frontend-application-state';
 import { serialMonitorWidgetLabel } from '../../../common/nls';
 import { ClipboardService } from '@theia/core/lib/browser/clipboard-service';
+import { EnvVariablesServer } from '@theia/core/lib/common/env-variables';
+import URI from '@theia/core/lib/common/uri';
+import { FileService } from '@theia/filesystem/lib/browser/file-service';
+import dateFormat from 'dateformat';
+import { FileSystemExt } from '../../../common/protocol/filesystem-ext';
+import { DialogService } from '../../dialog-service';
 
 @injectable()
 export class MonitorWidget extends ReactWidget {
@@ -49,6 +55,11 @@ export class MonitorWidget extends ReactWidget {
   protected closing = false;
   protected readonly clearOutputEmitter = new Emitter<void>();
   protected readonly copyOutputEmitter = new Emitter<void>();
+  protected readonly saveOutputEmitter = new Emitter<void>();
+  /**
+   * Only the lines containing this text are shown.
+   */
+  protected filter = '';
 
   @inject(MonitorModel)
   private readonly monitorModel: MonitorModel;
@@ -60,6 +71,14 @@ export class MonitorWidget extends ReactWidget {
   private readonly appStateService: FrontendApplicationStateService;
   @inject(ClipboardService)
   private readonly clipboardService: ClipboardService;
+  @inject(DialogService)
+  private readonly dialogService: DialogService;
+  @inject(FileSystemExt)
+  private readonly fileSystemExt: FileSystemExt;
+  @inject(FileService)
+  private readonly fileService: FileService;
+  @inject(EnvVariablesServer)
+  private readonly envVariablesServer: EnvVariablesServer;
 
   private readonly toDisposeOnReset: DisposableCollection;
 
@@ -71,7 +90,11 @@ export class MonitorWidget extends ReactWidget {
     this.title.closable = true;
     this.scrollOptions = undefined;
     this.toDisposeOnReset = new DisposableCollection();
-    this.toDispose.push(this.clearOutputEmitter);
+    this.toDispose.pushAll([
+      this.clearOutputEmitter,
+      this.copyOutputEmitter,
+      this.saveOutputEmitter,
+    ]);
   }
 
   @postConstruct()
@@ -110,6 +133,44 @@ export class MonitorWidget extends ReactWidget {
   copyOutput(): void {
     this.copyOutputEmitter.fire();
   }
+
+  saveOutput(): void {
+    this.saveOutputEmitter.fire();
+  }
+
+  private readonly onSaveOutput = (text: string): Promise<void> =>
+    this.doSaveOutput(text);
+  private async doSaveOutput(text: string): Promise<void> {
+    const homeDirUri = new URI(await this.envVariablesServer.getHomeDirUri());
+    const defaultPath = await this.fileService.fsPath(
+      homeDirUri.resolve(`serial-${dateFormat(new Date(), 'yyyymmdd-HHMMss')}.txt`)
+    );
+    const { filePath, canceled } = await this.dialogService.showSaveDialog({
+      title: nls.localize('arduino/serial/saveOutput', 'Save Output'),
+      defaultPath,
+    });
+    if (!filePath || canceled) {
+      return;
+    }
+    const uri = new URI(await this.fileSystemExt.getUri(filePath));
+    await this.fileService.write(uri, text);
+  }
+
+  protected readonly onFilterChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    this.filter = event.target.value;
+    this.update();
+  };
+
+  protected readonly onFilterKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ): void => {
+    if (event.key === 'Escape') {
+      this.filter = '';
+      this.update();
+    }
+  };
 
   override dispose(): void {
     this.toDisposeOnReset.dispose();
@@ -229,6 +290,18 @@ export class MonitorWidget extends ReactWidget {
             />
           </div>
           <div className="config">
+            <input
+              type="text"
+              className="theia-input filter"
+              value={this.filter}
+              placeholder={nls.localize('arduino/serial/filter', 'Filter')}
+              title={nls.localize(
+                'arduino/serial/filterTitle',
+                'Show only the lines containing this text (Esc to clear)'
+              )}
+              onChange={this.onFilterChange}
+              onKeyDown={this.onFilterKeyDown}
+            />
             <div className="select">
               <ArduinoSelect
                 maxMenuHeight={this.widgetHeight - 40}
@@ -256,7 +329,10 @@ export class MonitorWidget extends ReactWidget {
             monitorManagerProxy={this.monitorManagerProxy}
             clearConsoleEvent={this.clearOutputEmitter.event}
             copyOutputEvent={this.copyOutputEmitter.event}
+            saveOutputEvent={this.saveOutputEmitter.event}
+            onSaveOutput={this.onSaveOutput}
             clipboardService={this.clipboardService}
+            filter={this.filter}
             height={Math.floor(this.widgetHeight - 50)}
           />
         </div>

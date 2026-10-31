@@ -55,6 +55,9 @@ export namespace SerialMonitor {
     export const COPY_OUTPUT = {
       id: 'serial-monitor-copy-output',
     };
+    export const SAVE_OUTPUT = {
+      id: 'serial-monitor-save-output',
+    };
   }
 }
 
@@ -158,6 +161,12 @@ export class MonitorViewContribution
       icon: codicon('copy'),
       tooltip: nls.localize('arduino/serial/copyOutput', 'Copy Output'),
     });
+    registry.registerItem({
+      id: SerialMonitor.Commands.SAVE_OUTPUT.id,
+      command: SerialMonitor.Commands.SAVE_OUTPUT.id,
+      icon: codicon('save'),
+      tooltip: nls.localize('arduino/serial/saveOutput', 'Save Output'),
+    });
   }
 
   override registerCommands(commands: CommandRegistry): void {
@@ -176,6 +185,15 @@ export class MonitorViewContribution
       execute: (widget) => {
         if (widget instanceof MonitorWidget) {
           widget.copyOutput();
+        }
+      },
+    });
+    commands.registerCommand(SerialMonitor.Commands.SAVE_OUTPUT, {
+      isEnabled: (widget) => widget instanceof MonitorWidget,
+      isVisible: (widget) => widget instanceof MonitorWidget,
+      execute: (widget) => {
+        if (widget instanceof MonitorWidget) {
+          widget.saveOutput();
         }
       },
     });

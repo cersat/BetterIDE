@@ -2,8 +2,13 @@ import React from '@theia/core/shared/react';
 import { Event } from '@theia/core/lib/common/event';
 import { DisposableCollection } from '@theia/core/lib/common/disposable';
 import { areEqual, FixedSizeList as List } from 'react-window';
-import dateFormat from 'dateformat';
-import { messagesToLines, truncateLines, joinLines } from './monitor-utils';
+import {
+  messagesToLines,
+  truncateLines,
+  formatLines,
+  formatTimestamp,
+  filterLines,
+} from './monitor-utils';
 import { MonitorManagerProxyClient } from '../../../common/protocol';
 import { MonitorModel } from '../../monitor-model';
 import { ClipboardService } from '@theia/core/lib/browser/clipboard-service';
@@ -31,15 +36,16 @@ export class SerialMonitorOutput extends React.Component<
   }
 
   override render(): React.ReactNode {
+    const lines = filterLines(this.state.lines, this.props.filter);
     return (
       <List
         className="serial-monitor-messages"
         height={this.props.height}
         itemData={{
-          lines: this.state.lines,
+          lines,
           timestamp: this.state.timestamp,
         }}
-        itemCount={this.state.lines.length}
+        itemCount={lines.length}
         itemSize={18}
         width={'100%'}
         style={{ whiteSpace: 'nowrap' }}
@@ -75,12 +81,12 @@ export class SerialMonitorOutput extends React.Component<
       this.props.clearConsoleEvent(() =>
         this.setState({ lines: [], charCount: 0 })
       ),
-      this.props.copyOutputEvent(() => {
-        const text = joinLines(this.state.lines);
-        // Replace null characters with a visible symbol
-        const safe = text.replace(/\u0000/g, '\u25A1');
-        this.props.clipboardService.writeText(safe);
-      }),
+      this.props.copyOutputEvent(() =>
+        this.props.clipboardService.writeText(this.outputText())
+      ),
+      this.props.saveOutputEvent(() =>
+        this.props.onSaveOutput(this.outputText())
+      ),
       this.props.monitorModel.onChange(({ property }) => {
         if (property === 'timestamp') {
           const { timestamp } = this.props.monitorModel;
@@ -96,6 +102,16 @@ export class SerialMonitorOutput extends React.Component<
   override componentWillUnmount(): void {
     // TODO: "Your preferred browser's local storage is almost full." Discard `content` before saving layout?
     this.toDisposeBeforeUnmount.dispose();
+  }
+
+  /**
+   * The filtered output, with the timestamps when they are shown. Null characters are replaced with a visible symbol.
+   */
+  private outputText(): string {
+    return formatLines(
+      filterLines(this.state.lines, this.props.filter),
+      this.state.timestamp
+    ).replace(/\u0000/g, '\u25A1');
   }
 
   private readonly scrollToBottom = () => {
@@ -114,10 +130,9 @@ const _Row = ({
   style: any;
   data: { lines: Line[]; timestamp: boolean };
 }) => {
-  const timestamp =
-    (data.timestamp &&
-      `${dateFormat(data.lines[index].timestamp, 'HH:MM:ss.l')} -> `) ||
-    '';
+  const timestamp = data.timestamp
+    ? formatTimestamp(data.lines[index].timestamp)
+    : '';
   return (
     (data.lines[index].lineLen && (
       <div style={style}>
@@ -138,7 +153,13 @@ export namespace SerialMonitorOutput {
     readonly monitorManagerProxy: MonitorManagerProxyClient;
     readonly clearConsoleEvent: Event<void>;
     readonly copyOutputEvent: Event<void>;
+    readonly saveOutputEvent: Event<void>;
+    readonly onSaveOutput: (text: string) => void;
     readonly clipboardService: ClipboardService;
+    /**
+     * Only the lines containing this text are shown, copied and saved.
+     */
+    readonly filter: string;
     readonly height: number;
   }
 

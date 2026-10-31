@@ -1,3 +1,4 @@
+import dateFormat from 'dateformat';
 import { Line, SerialMonitorOutput } from './serial-monitor-send-output';
 
 export function messagesToLines(
@@ -70,4 +71,31 @@ export function truncateLines(
 
 export function joinLines(lines: Line[]): string {
   return lines.map((line: Line) => line.message).join('');
+}
+
+/**
+ * The output as text, with the timestamps when they are shown.
+ */
+export function formatLines(lines: Line[], timestamp: boolean): string {
+  if (!timestamp) {
+    return joinLines(lines);
+  }
+  return lines
+    .map((line: Line) => `${formatTimestamp(line.timestamp)}${line.message}`)
+    .join('');
+}
+
+export function formatTimestamp(timestamp: Date | undefined): string {
+  return timestamp ? `${dateFormat(timestamp, 'HH:MM:ss.l')} -> ` : '';
+}
+
+/**
+ * The lines containing the filter text, ignoring the case. All the lines when the filter is empty.
+ */
+export function filterLines(lines: Line[], filter: string): Line[] {
+  const text = filter.toLowerCase();
+  if (!text) {
+    return lines;
+  }
+  return lines.filter((line) => line.message.toLowerCase().includes(text));
 }
