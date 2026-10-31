@@ -4,6 +4,8 @@ import {
   postConstruct,
 } from '@theia/core/shared/inversify';
 import URI from '@theia/core/lib/common/uri';
+import { FileUri } from '@theia/core/lib/common/file-uri';
+import { OpenFileAsTab } from '../../contributions/open-file-as-tab';
 import { FileNode, FileTreeModel } from '@theia/filesystem/lib/browser';
 import { FileService } from '@theia/filesystem/lib/browser/file-service';
 import { ConfigServiceClient } from './../../config/config-service-client';
@@ -15,7 +17,6 @@ import {
   SelectableTreeNode,
   TreeNode,
 } from '@theia/core/lib/browser/tree';
-import { SketchbookCommands } from './sketchbook-commands';
 import { OpenerService, open } from '@theia/core/lib/browser';
 import {
   CurrentSketch,
@@ -290,13 +291,18 @@ export class SketchbookTreeModel extends FileTreeModel {
   }
 
   protected override async doOpenNode(node: TreeNode): Promise<void> {
-    // if it's a sketch dir, or a file from another sketch, open in new window
+    // A file of another sketch opens as a tab, a sketch folder opens its files as tabs in this window.
+    // A new window is opened only with the explicit "Open in New Window" context menu item.
     if (!(await this.isFileInsideCurrentSketch(node))) {
+      if (FileNode.is(node)) {
+        this.open(node.uri);
+        return;
+      }
       const sketchRoot = this.recursivelyFindSketchRoot(node);
-      if (sketchRoot) {
+      if (sketchRoot && SketchbookTree.SketchDirNode.is(sketchRoot)) {
         this.commandRegistry.executeCommand(
-          SketchbookCommands.OPEN_NEW_WINDOW.id,
-          { node: sketchRoot }
+          OpenFileAsTab.Commands.OPEN_SKETCH_AS_TABS.id,
+          FileUri.fsPath(sketchRoot.uri)
         );
       }
       return;

@@ -1,9 +1,10 @@
 import { nls } from '@theia/core/lib/common';
+import { FileUri } from '@theia/core/lib/common/file-uri';
 import { injectable } from '@theia/core/shared/inversify';
+import { OpenFileAsTab } from './open-file-as-tab';
 import { ArduinoMenus } from '../menu/arduino-menus';
 import {
   SketchContribution,
-  URI,
   Command,
   CommandRegistry,
   MenuModelRegistry,
@@ -36,7 +37,11 @@ export class NewSketch extends SketchContribution {
   async newSketch(): Promise<void> {
     try {
       const sketch = await this.sketchesService.createNewSketch();
-      this.workspaceService.open(new URI(sketch.uri));
+      // The new sketch opens as tabs of this window instead of a new window.
+      await this.commandService.executeCommand(
+        OpenFileAsTab.Commands.OPEN_SKETCH_AS_TABS.id,
+        FileUri.fsPath(sketch.uri)
+      );
     } catch (e) {
       await this.messageService.error(e.toString());
     }
