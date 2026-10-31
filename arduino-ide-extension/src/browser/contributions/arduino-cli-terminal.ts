@@ -1,6 +1,6 @@
 import { FileUri } from '@theia/core/lib/common/file-uri';
 import { nls } from '@theia/core/lib/common/nls';
-import { isOSX, isWindows } from '@theia/core/lib/common/os';
+import { isWindows } from '@theia/core/lib/common/os';
 import { inject, injectable } from '@theia/core/shared/inversify';
 import { TerminalService } from '@theia/terminal/lib/browser/base/terminal-service';
 import { ExecutableService } from '../../common/protocol/executable-service';
@@ -20,6 +20,10 @@ import {
  * The same name is used by the backend, but that module cannot be imported from the browser code.
  */
 const CLI_CONFIG = 'arduino-cli.yaml';
+/**
+ * Same as `BUILTIN_LIBRARIES_FOLDER` of the backend.
+ */
+const BUILTIN_LIBRARIES_FOLDER = 'libraries';
 
 /**
  * A terminal in the bottom panel (next to the `Output`) which is the command line version of the IDE:
@@ -50,8 +54,8 @@ export class ArduinoCliTerminal extends SketchContribution {
 	override registerKeybindings(registry: KeybindingRegistry): void {
 		registry.registerKeybinding({
 			command: ArduinoCliTerminal.Commands.OPEN_ARDUINO_CLI_TERMINAL.id,
-			// On Linux, the desktop takes Ctrl+Alt+T to open its own terminal: the IDE never receives it.
-			keybinding: isWindows || isOSX ? 'CtrlCmd+Alt+T' : 'CtrlCmd+Alt+J',
+			// Not Ctrl+Alt+T: Linux desktops take it to open their own terminal, and Theia uses it to close the other tabs.
+			keybinding: 'CtrlCmd+Alt+J',
 		});
 	}
 
@@ -87,6 +91,10 @@ export class ArduinoCliTerminal extends SketchContribution {
 				[pathName]: path,
 				ARDUINO_CONFIG_FILE: FileUri.fsPath(
 					new URI(configDirUri).resolve(CLI_CONFIG)
+				),
+				// The same built-in libraries folder as the IDE's CLI daemon (see `bundled-libraries.ts`).
+				ARDUINO_DIRECTORIES_BUILTIN_LIBRARIES: FileUri.fsPath(
+					new URI(configDirUri).resolve(BUILTIN_LIBRARIES_FOLDER)
 				),
 			},
 			destroyTermOnClose: true,
