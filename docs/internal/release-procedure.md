@@ -70,8 +70,6 @@ The checks run by the continuous integration system might provide an indication 
 
 The "**Arduino IDE**" workflow run that was triggered by the branch creation will contain artifacts that can be used for beta testing.
 
-[More information about beta testing](../contributor-guide/beta-testing.md)
-
 ### 6. 🚢 Create the release on GitHub
 
 Then, you need to **create and push the new tag** and wait for the release to appear on [the "**Releases**" page](https://github.com/arduino/arduino-ide/releases).

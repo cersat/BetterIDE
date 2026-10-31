@@ -56,7 +56,7 @@ This repository contains the main code, but two more repositories are included d
 
 ---
 
-**ⓘ** If you only want to test an existing version of the project, automatically generated builds are available for download without building from source. See the instructions in the [**beta testing guide**](contributor-guide/beta-testing.md#beta-testing-guide).
+**ⓘ** If you only want to test an existing version of the project, automatically generated builds are available for download without building from source. See the [**Releases**](https://github.com/cersat/BetterIDE/releases) page.
 
 ---
 

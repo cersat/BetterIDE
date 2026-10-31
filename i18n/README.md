@@ -7,5 +7,3 @@ This folder contains the [localization](https://en.wikipedia.org/wiki/Internatio
 - **en.json** - edit the string in [the source code](../arduino-ide-extension/src)
 - **All other files** - the localization is done on **Transifex**:<br />
   https://explore.transifex.com/arduino-1/ide2/
-
-For more information on translating Arduino IDE, see [the **Translator Guide**](../docs/contributor-guide/translation.md).
