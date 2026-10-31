@@ -109,7 +109,7 @@ export class ExamplesServiceImpl implements ExamplesService {
         user.push(container);
       } else if (
         location === LibraryLocation.PLATFORM_BUILTIN ||
-        LibraryLocation.REFERENCED_PLATFORM_BUILTIN
+        location === LibraryLocation.REFERENCED_PLATFORM_BUILTIN
       ) {
         current.push(container);
       } else {
