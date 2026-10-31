@@ -47,6 +47,9 @@ export const UPLOAD_VERBOSE_SETTING = `${UPLOAD_SETTING}.verbose`;
 export const UPLOAD_VERIFY_SETTING = `${UPLOAD_SETTING}.verify`;
 export const SHOW_ALL_FILES_SETTING = `${SKETCHBOOK_SETTING}.showAllFiles`;
 export const EDITOR_HOVER_SETTING = `${EDITOR_SETTING}.hover.enabled`;
+export const SUGGEST_ON_TRIGGER_CHARACTERS_SETTING = `${EDITOR_SETTING}.suggestOnTriggerCharacters`;
+export const AUTO_CLOSING_BRACKETS_SETTING = `${EDITOR_SETTING}.autoClosingBrackets`;
+export const AUTO_CLOSING_QUOTES_SETTING = `${EDITOR_SETTING}.autoClosingQuotes`;
 export const CHECK_FOR_UPDATES_SETTING = `${ARDUINO_SETTING}.checkForUpdates`;
 export const SHOW_CLOUD_SKETCHES_SETTING = `${ARDUINO_SETTING}.cloud.enabled`;
 export const LIBRARIES_PATH_SETTING = `${ARDUINO_SETTING}.libraries.path`;
@@ -68,6 +71,8 @@ export interface Settings {
   verifyAfterUpload: boolean; // `arduino.upload.verify`
   sketchbookShowAllFiles: boolean; // `arduino.sketchbook.showAllFiles`
   editorHover: boolean; // `editor.hover.enabled`
+  suggestOnTriggerCharacters: boolean; // `editor.suggestOnTriggerCharacters`
+  autoClosing: boolean; // `editor.autoClosingBrackets` and `editor.autoClosingQuotes`
   checkForUpdates: boolean; // `arduino.checkForUpdates`
   showCloudSketches: boolean; // `arduino.cloud.enabled`
   librariesPath: string; // `arduino.libraries.path`, empty is the default `<sketchbook>/libraries`
@@ -179,6 +184,9 @@ export class SettingsService {
       verifyAfterUpload,
       sketchbookShowAllFiles,
       editorHover,
+      suggestOnTriggerCharacters,
+      autoClosingBrackets,
+      autoClosingQuotes,
       checkForUpdates,
       showCloudSketches,
       librariesPath,
@@ -212,6 +220,18 @@ export class SettingsService {
       this.preferenceService.get<boolean>(UPLOAD_VERIFY_SETTING, true),
       this.preferenceService.get<boolean>(SHOW_ALL_FILES_SETTING, false),
       this.preferenceService.get<boolean>(EDITOR_HOVER_SETTING, true),
+      this.preferenceService.get<boolean>(
+        SUGGEST_ON_TRIGGER_CHARACTERS_SETTING,
+        true
+      ),
+      this.preferenceService.get<string>(
+        AUTO_CLOSING_BRACKETS_SETTING,
+        'languageDefined'
+      ),
+      this.preferenceService.get<string>(
+        AUTO_CLOSING_QUOTES_SETTING,
+        'languageDefined'
+      ),
       this.preferenceService.get<boolean>(CHECK_FOR_UPDATES_SETTING, true),
       this.preferenceService.get<boolean>(SHOW_CLOUD_SKETCHES_SETTING, true),
       this.preferenceService.get<string>(LIBRARIES_PATH_SETTING, ''),
@@ -242,6 +262,9 @@ export class SettingsService {
       verifyAfterUpload,
       sketchbookShowAllFiles,
       editorHover,
+      suggestOnTriggerCharacters,
+      autoClosing:
+        autoClosingBrackets !== 'never' || autoClosingQuotes !== 'never',
       checkForUpdates,
       showCloudSketches,
       librariesPath,
@@ -370,6 +393,8 @@ export class SettingsService {
       network,
       sketchbookShowAllFiles,
       editorHover,
+      suggestOnTriggerCharacters,
+      autoClosing,
       checkForUpdates,
       showCloudSketches,
       librariesPath,
@@ -435,6 +460,18 @@ export class SettingsService {
       this.savePreference(UPLOAD_VERIFY_SETTING, verifyAfterUpload),
       this.savePreference(SHOW_ALL_FILES_SETTING, sketchbookShowAllFiles),
       this.savePreference(EDITOR_HOVER_SETTING, editorHover),
+      this.savePreference(
+        SUGGEST_ON_TRIGGER_CHARACTERS_SETTING,
+        suggestOnTriggerCharacters
+      ),
+      this.savePreference(
+        AUTO_CLOSING_BRACKETS_SETTING,
+        autoClosing ? 'languageDefined' : 'never'
+      ),
+      this.savePreference(
+        AUTO_CLOSING_QUOTES_SETTING,
+        autoClosing ? 'languageDefined' : 'never'
+      ),
       this.savePreference(CHECK_FOR_UPDATES_SETTING, checkForUpdates),
       this.savePreference(SHOW_CLOUD_SKETCHES_SETTING, showCloudSketches),
       this.savePreference(LIBRARIES_PATH_SETTING, librariesPath),

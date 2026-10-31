@@ -347,6 +347,28 @@ export class SettingsComponent extends React.Component<
         <label className="flex-line">
           <input
             type="checkbox"
+            checked={this.state.suggestOnTriggerCharacters === true}
+            onChange={this.suggestOnTriggerCharactersDidChange}
+          />
+          {nls.localize(
+            'arduino/preferences/suggestOnTriggerCharacters',
+            'Show suggestions after special characters (such as "." and "->")'
+          )}
+        </label>
+        <label className="flex-line">
+          <input
+            type="checkbox"
+            checked={this.state.autoClosing === true}
+            onChange={this.autoClosingDidChange}
+          />
+          {nls.localize(
+            'arduino/preferences/autoClosing',
+            'Auto-close brackets and quotes'
+          )}
+        </label>
+        <label className="flex-line">
+          <input
+            type="checkbox"
             checked={this.state.checkForUpdates === true}
             onChange={this.checkForUpdatesDidChange}
           />
@@ -664,6 +686,18 @@ export class SettingsComponent extends React.Component<
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
     this.setState({ editorHover: event.target.checked });
+  };
+
+  protected suggestOnTriggerCharactersDidChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    this.setState({ suggestOnTriggerCharacters: event.target.checked });
+  };
+
+  protected autoClosingDidChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    this.setState({ autoClosing: event.target.checked });
   };
 
   protected checkForUpdatesDidChange = (
