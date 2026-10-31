@@ -10,7 +10,7 @@ import { nls } from '@theia/core/lib/common';
 @injectable()
 export class KeymapsFrontendContribution extends TheiaKeymapsFrontendContribution {
   override registerMenus(menus: MenuModelRegistry): void {
-    menus.registerMenuAction(ArduinoMenus.FILE__ADVANCED_SUBMENU, {
+    menus.registerMenuAction(ArduinoMenus.FILE__PREFERENCES_GROUP, {
       commandId: KeymapsCommands.OPEN_KEYMAPS.id,
       label: nls.localize(
         'vscode/helpActions/miKeyboardShortcuts',

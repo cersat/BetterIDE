@@ -173,19 +173,12 @@ export class ElectronMainMenuFactory extends TheiaElectronMainMenuFactory {
         [],
         { rootMenuPath: ArduinoMenus.FILE__PREFERENCES_GROUP }
       );
-      const advanced = this.fillMenuTemplate(
-        [],
-        this.menuProvider.getMenu(ArduinoMenus.FILE__ADVANCED_GROUP),
-        [],
-        { rootMenuPath: ArduinoMenus.FILE__ADVANCED_GROUP }
-      );
       return {
         label,
         submenu: [
           ...about,
           { type: 'separator' },
           ...preferences,
-          ...advanced,
           { type: 'separator' },
           ...rest,
         ],

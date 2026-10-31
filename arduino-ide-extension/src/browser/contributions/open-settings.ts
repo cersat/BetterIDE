@@ -54,10 +54,6 @@ export class OpenSettings extends SketchContribution {
         ) + '...',
       order: '0',
     });
-    registry.registerSubmenu(
-      ArduinoMenus.FILE__ADVANCED_SUBMENU,
-      nls.localize('arduino/menu/advanced', 'Advanced')
-    );
   }
 
   override registerKeybindings(registry: KeybindingRegistry): void {
