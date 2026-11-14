@@ -136,6 +136,30 @@ index 7c46c4d..639d651 100644
  	sketchInBuildPath := b.buildPath.Join(sketchFileName + ".hex")
  	sketchInSubfolder := b.buildPath.Join("sketch", sketchFileName+".hex")
  
+diff --git a/internal/arduino/libraries/librariesresolver/cpp.go b/internal/arduino/libraries/librariesresolver/cpp.go
+index 0b1d770..53e4772 100644
+--- a/internal/arduino/libraries/librariesresolver/cpp.go
++++ b/internal/arduino/libraries/librariesresolver/cpp.go
+@@ -191,14 +191,16 @@ func ComputePriority(lib *libraries.Library, header, arch string) int {
+ 	}
+ 
+ 	switch lib.Location {
+-	case libraries.IDEBuiltIn:
+-		priority += 0
+ 	case libraries.ReferencedPlatformBuiltIn:
+ 		priority++
+ 	case libraries.PlatformBuiltIn:
+ 		priority += 2
+-	case libraries.User:
++	case libraries.IDEBuiltIn:
++		// BetterIDE: the libraries bundled with the IDE (such as its faster SPI) replace the ones of the platform,
++		// the libraries of the sketchbook still replace both.
+ 		priority += 3
++	case libraries.User:
++		priority += 4
+ 	case libraries.Unmanaged:
+ 		// Bonus for libraries specified via --libraries flags, those libraries gets the highest priority
+ 		priority += 10000
 diff --git a/internal/arduino/sketch/sketch.go b/internal/arduino/sketch/sketch.go
 index 1d59bc8..a854d21 100644
 --- a/internal/arduino/sketch/sketch.go
