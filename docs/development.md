@@ -61,7 +61,7 @@ This repository contains the main code, but two more repositories are included d
 ---
 
 If you’re familiar with TypeScript, the [Theia IDE](https://theia-ide.org/), and if you want to contribute to the
-project, you should be able to build the Arduino IDE locally.
+project, you should be able to build BetterIDE locally.
 Please refer to the [Theia IDE prerequisites](https://github.com/eclipse-theia/theia/blob/master/doc/Developing.md#prerequisites) documentation for the setup instructions.
 
 Once you have all the tools installed, you can build the editor following these steps
@@ -70,14 +70,14 @@ Once you have all the tools installed, you can build the editor following these 
 
 If you want to develop the application, do the following:
 
-1. Clone the project from Git and change directory to the `arduino-ide` folder:
+1. Clone the project from Git and change directory to the `BetterIDE` folder:
 
    ```sh
-   git clone https://github.com/arduino/arduino-ide.git
+   git clone https://github.com/cersat/BetterIDE.git
    ```
 
    ```sh
-   cd arduino-ide
+   cd BetterIDE
    ```
 
 2. Install the dependencies
@@ -200,6 +200,6 @@ This project is built on [GitHub Actions](https://github.com/arduino/arduino-ide
 
   [Get](https://arduino.github.io/arduino-cli/installation) the desired version of `arduino-cli` for your platform and manually replace the one inside the IDE. The CLI can be found inside the IDE at:
 
-  - Windows: `C:\path\to\Arduino IDE\resources\app\lib\backend\resources\arduino-cli.exe`,
-  - macOS: `/path/to/Arduino IDE.app/Contents/Resources/app/lib/backend/resources/arduino-cli`, and
-  - Linux: `/path/to/Arduino IDE/resources/app/lib/backend/resources/arduino-cli`.
+  - Windows: `C:\path\to\BetterIDE\resources\app\lib\backend\resources\arduino-cli.exe`,
+  - macOS: `/path/to/BetterIDE.app/Contents/Resources/app/lib/backend/resources/arduino-cli`, and
+  - Linux: `/path/to/BetterIDE/resources/app/lib/backend/resources/arduino-cli`.

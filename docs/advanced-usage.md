@@ -2,9 +2,9 @@
 
 ## Advanced settings
 
-The Arduino IDE's primary settings are accessible via the **File > Preferences** menu item. These provide all the configuration capability required by the average user to develop sketches.
+BetterIDE's primary settings are accessible via the **File > Preferences** menu item. These provide all the configuration capability required by the average user to develop sketches.
 
-Arduino IDE has some additional settings which may be of interest to advanced users who want to do things such as fine tune the behavior of the application or increase log output while investigating a problem.
+BetterIDE has some additional settings which may be of interest to advanced users who want to do things such as fine tune the behavior of the application or increase log output while investigating a problem.
 
 These advanced settings can be accessed by the following procedure:
 
@@ -15,7 +15,7 @@ This will open a "**Preferences**" view in the IDE. Once you are finished adjust
 
 ## 3rd party themes
 
-Arduino IDE is built on the [**Eclipse Theia** IDE framework](https://theia-ide.org/), which allows it to use [**VS Code**](https://code.visualstudio.com/) themes.
+BetterIDE is built on the [**Eclipse Theia** IDE framework](https://theia-ide.org/), which allows it to use [**VS Code**](https://code.visualstudio.com/) themes.
 
 ---
 
@@ -35,8 +35,8 @@ A large selection of free VS Code themes are available from the **Visual Studio 
 
 ### Installation
 
-1. If Arduino IDE is running, select **File > Quit** from the Arduino IDE menus to exit all windows.
-1. Create a folder named `plugins` under Arduino IDE's configuration folder:
+1. If BetterIDE is running, select **File > Quit** from the BetterIDE menus to exit all windows.
+1. Create a folder named `plugins` under BetterIDE's configuration folder:
    - **Windows:**
      ```text
      C:\Users\<username>\.arduinoIDE\
@@ -53,8 +53,8 @@ A large selection of free VS Code themes are available from the **Visual Studio 
      ```
      ❗ The `.arduinoIDE` folder is hidden by default. You can make it visible by pressing the <kbd>**Command**</kbd>+<kbd>**Shift**</kbd>+<kbd>**.**</kbd> keyboard shortcut.
 1. Copy the downloaded theme file to the `plugins` folder you created.
-1. Start Arduino IDE.
-1. Select **File > Preferences** from the Arduino IDE menus. <br />
+1. Start BetterIDE.
+1. Select **File > Preferences** from the BetterIDE menus. <br />
    The "**Preferences**" dialog will open.
 1. Select the name of the new theme from the "**Theme**" menu in the "**Preferences**" dialog.
 1. Click the "**OK**" button.
@@ -63,7 +63,7 @@ A large selection of free VS Code themes are available from the **Visual Studio 
 
 If you later decide you would like to remove a 3rd party theme you installed, it can be done by following these instructions:
 
-1. If Arduino IDE is running, select **File > Quit** from the Arduino IDE menus to exit all windows.
+1. If BetterIDE is running, select **File > Quit** from the BetterIDE menus to exit all windows.
 1. Delete the theme's `.vsix` file from [the location you installed it to](#installation). <br />
    ⚠ Please be careful when deleting things from your computer. When in doubt, back up!
 
@@ -71,7 +71,7 @@ If you later decide you would like to remove a 3rd party theme you installed, it
 
 ### Linux: Wayland Display Server Issues
 
-Arduino IDE is built on [Electron](https://www.electronjs.org/), which attempts to use native Wayland rendering on Linux systems with Wayland display servers. However, some Wayland compositors (particularly Hyprland, Sway, and some configurations of KDE Plasma and GNOME) may experience crashes or initialization failures with errors such as:
+BetterIDE is built on [Electron](https://www.electronjs.org/), which attempts to use native Wayland rendering on Linux systems with Wayland display servers. However, some Wayland compositors (particularly Hyprland, Sway, and some configurations of KDE Plasma and GNOME) may experience crashes or initialization failures with errors such as:
 
 ```
 Failed to connect to Wayland display
@@ -83,32 +83,32 @@ Or segmentation faults immediately after launching.
 
 #### Workaround: Force X11/XWayland Backend
 
-If you encounter Wayland-related crashes, you can force Arduino IDE to use the X11/XWayland backend instead of native Wayland rendering:
+If you encounter Wayland-related crashes, you can force BetterIDE to use the X11/XWayland backend instead of native Wayland rendering:
 
 **Method 1: Environment Variable (Recommended)**
 
-Set the `ELECTRON_OZONE_PLATFORM_HINT` environment variable before launching Arduino IDE:
+Set the `ELECTRON_OZONE_PLATFORM_HINT` environment variable before launching BetterIDE:
 
 ```bash
 export ELECTRON_OZONE_PLATFORM_HINT=x11
-arduino-ide
+betteride
 ```
 
 To make this permanent, add the export line to your shell configuration file (`~/.bashrc`, `~/.zshrc`, or equivalent).
 
 **Method 2: Command Line Flag**
 
-Launch Arduino IDE with the `--ozone-platform=x11` flag:
+Launch BetterIDE with the `--ozone-platform=x11` flag:
 
 ```bash
-arduino-ide --ozone-platform=x11
+betteride --ozone-platform=x11
 ```
 
 You can create a wrapper script or shell alias for convenience:
 
 ```bash
 # Add to ~/.bashrc or ~/.zshrc
-alias arduino-ide='arduino-ide --ozone-platform=x11'
+alias betteride='betteride --ozone-platform=x11'
 ```
 
 #### Related Issues

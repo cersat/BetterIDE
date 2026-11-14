@@ -26,10 +26,10 @@ body:
   - type: input
     id: project-version
     attributes:
-      label: Arduino IDE version
+      label: BetterIDE version
       description: |
-        Which version of the Arduino IDE are you using?
-        See **Help > About Arduino IDE** in the Arduino IDE menus (**Arduino IDE > About Arduino IDE** on macOS).
+        Which version of BetterIDE are you using?
+        See **Help > About BetterIDE** in the BetterIDE menus (**BetterIDE > About BetterIDE** on macOS).
         This should be the latest [nightly build](https://www.arduino.cc/en/software#nightly-builds).
     validations:
       required: true

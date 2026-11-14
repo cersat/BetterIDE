@@ -1,6 +1,6 @@
 # Localization Data
 
-This folder contains the [localization](https://en.wikipedia.org/wiki/Internationalization_and_localization) data for Arduino IDE.
+This folder contains the [localization](https://en.wikipedia.org/wiki/Internationalization_and_localization) data for BetterIDE.
 
 ❗ These files are automatically generated and so can not be edited directly. If you wish to modify the contents, do it at the source:
 

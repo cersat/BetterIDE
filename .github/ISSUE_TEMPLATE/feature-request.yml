@@ -14,17 +14,17 @@ body:
     attributes:
       label: Describe the current behavior
       description: |
-        What is the current behavior of the Arduino IDE in relation to your request?
+        What is the current behavior of BetterIDE in relation to your request?
         How can we reproduce that behavior?
     validations:
       required: true
   - type: input
     id: project-version
     attributes:
-      label: Arduino IDE version
+      label: BetterIDE version
       description: |
-        Which version of the Arduino IDE are you using?
-        See **Help > About Arduino IDE** in the Arduino IDE menus (**Arduino IDE > About Arduino IDE** on macOS).
+        Which version of BetterIDE are you using?
+        See **Help > About BetterIDE** in the BetterIDE menus (**BetterIDE > About BetterIDE** on macOS).
         This should be the latest [nightly build](https://www.arduino.cc/en/software#nightly-builds).
     validations:
       required: true

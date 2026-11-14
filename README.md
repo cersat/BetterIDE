@@ -30,9 +30,9 @@ Builds are published on the [Releases](../../releases) page. Every push to `main
 | --- | --- | --- |
 | Windows | `…_Windows_64bit.exe` | portable, no installation |
 | Windows | `…_Windows_64bit_setup.exe` | installer, can update itself |
-| Windows | `…_Windows_64bit.zip` | unpack and run `Arduino IDE.exe` |
+| Windows | `…_Windows_64bit.zip` | unpack and run `BetterIDE.exe` |
 | Linux | `…_Linux_64bit.AppImage` | `chmod +x` it and run, add `--no-sandbox` if the sandbox is not set up |
-| Linux | `…_Linux_64bit.zip` | unpack and run `arduino-ide` |
+| Linux | `…_Linux_64bit.zip` | unpack and run `betteride` |
 
 The Windows and Linux builds are made by [GitHub Actions](.github/workflows/build.yml). The version looks like `2.3.11-build.N`, where `N` grows with every build.
 
