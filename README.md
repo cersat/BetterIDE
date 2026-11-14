@@ -18,7 +18,7 @@ BetterIDE is a fork of the [Arduino IDE 2.x](https://github.com/arduino/arduino-
   - the libraries folder, `<sketchbook>/libraries` by default. Libraries are installed to and searched in the chosen folder. Libraries that were in the previous folder are not moved, the IDE warns you to reinstall or move them by hand;
   - show cloud sketches.
 - **Serial Monitor:** a filter that shows only the lines containing a text, *Save Output* to a file, and *Copy Output* and *Save Output* keep the timestamps when they are shown.
-- **Built-in libraries folder.** The CLI's built-in libraries folder is `~/.arduinoIDE/libraries` (the Arduino IDE leaves it unset, so the `Arduino_BuiltIn` library it installs on the first startup could never be installed). FastPins comes with the IDE there.
+- **Built-in libraries folder.** The CLI's built-in libraries folder is `~/.arduinoIDE/libraries` (the Arduino IDE leaves it unset, so the `Arduino_BuiltIn` library it installs on the first startup could never be installed). FastPins and a faster SPI library come with the IDE there. With the patched `arduino-cli`, a library of this folder replaces the library of the same name of the board platform, and a library in the sketchbook still replaces both.
 - **No `Advanced` submenu.** `Keyboard Shortcuts` is in the `File` menu.
 - **Updates from this repository.** The IDE checks the latest [release](../../releases) here instead of the Arduino servers.
 
@@ -39,6 +39,16 @@ The Windows and Linux builds are made by [GitHub Actions](.github/workflows/buil
 ## FastPins
 
 [`libraries/FastPins`](libraries/FastPins) is a library of fast `digitalWrite`, `digitalRead` and `pinMode` for pins known at compile time: one or two instructions on the AVR boards, the ESP32 chips and the RP2040/RP2350 boards, the standard functions elsewhere. It comes with BetterIDE (`#include <FastPins.h>` works without installing anything), and `FastPins.zip` is attached to every release for other IDEs.
+
+## SPI
+
+[`libraries/SPI`](libraries/SPI) replaces the SPI library of the RP2040 and RP2350 boards (arduino-pico 6.3.2) for every sketch and library that includes `<SPI.h>`, without any change to them:
+
+- `SPI.transfer(byte)` and `SPI.transfer16()` are inline and use the FIFO of the SPI directly,
+- `SPI.transfer(buffer, count)` sends the whole buffer at once, instead of byte by byte through `transfer(byte)`,
+- with `LSBFIRST`, `SPI.transfer(txbuf, rxbuf, count)` returns the received bytes in the right bit order and accepts `nullptr` buffers (in the library of the core, the bits come back reversed and a `nullptr` buffer is accessed at address 0).
+
+In the [rp2040js](https://github.com/wokwi/rp2040js) emulator, with `SPISettings(20000000, MSBFIRST, SPI_MODE0)`, 1000 `transfer(byte)` take 1168 µs instead of 1800 µs and 1024 bytes with `transfer(buffer, 256)` take 688 µs instead of 1910 µs. With other versions of arduino-pico, the library of the core is used unchanged. On the AVR and ESP32 boards, the SPI libraries of the cores already work directly with the registers of the SPI, and they are used as they are.
 
 ## Building from source
 
