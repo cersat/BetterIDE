@@ -273,21 +273,21 @@
       "visit": "Arduino.cc 방문"
     },
     "ide-updater": {
-      "checkForUpdates": "Arduino IDE 업데이트 확인",
+      "checkForUpdates": "BetterIDE 업데이트 확인",
       "closeAndInstallButton": "닫고 설치하기",
       "closeToInstallNotice": "소프트웨어를 닫고 장치에 업데이트를 설치해주세요.",
       "downloadButton": "다운로드",
-      "downloadingNotice": "최신 버전의 Arduino IDE를 다운로드하고 있습니다.",
-      "errorCheckingForUpdates": "Arduino IDE의 업데이트를 확인하던 중에 오류가 발생했어요.\n{0}",
+      "downloadingNotice": "최신 버전의 BetterIDE를 다운로드하고 있습니다.",
+      "errorCheckingForUpdates": "BetterIDE의 업데이트를 확인하던 중에 오류가 발생했어요.\n{0}",
       "goToDownloadButton": "다운로드하러 가기",
       "goToDownloadPage": "Ardunio IDE에 대한 업데이트가 있지만 자동으로 다운로드하고 설치할 수 없습니다. 다운로드 페이지에서 최신 버전을 다운로드 해주세요.",
       "ideUpdaterDialog": "소프트웨어 업데이트",
-      "newVersionAvailable": "새로운 버전의 Arduino IDE ({0})를 다운로드할 수 있습니다.",
+      "newVersionAvailable": "새로운 버전의 BetterIDE ({0})를 다운로드할 수 있습니다.",
       "noUpdatesAvailable": "현재 Ardunio IDE는 최신 버전입니다",
       "notNowButton": "나중에",
       "skipVersionButton": "이 버전 건너뛰기",
       "updateAvailable": "업데이트 사용 가능",
-      "versionDownloaded": "Arduino IDE {0} 버전이 다운로드 되었습니다. "
+      "versionDownloaded": "BetterIDE {0} 버전이 다운로드 되었습니다. "
     },
     "installable": {
       "libraryInstallFailed": "Failed to install library: '{0}{1}'.",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "에디터 빠른 제안",
       "enterAdditionalURLs": "각 행에 하나씩 추가 URL을 입력하세요.",
       "files.inside.sketches": "스케치 내부에 파일 표시",
-      "ide.updateBaseUrl": "업데이트를 다운로드할 기본 URL입니다. 기본값은 \n'https://downloads.arduino.cc/arduino-ide'",
+      "ide.updateBaseUrl": "업데이트를 다운로드할 기본 URL입니다. 기본값은 \n'https://github.com/cersat/BetterIDE/releases/latest/download'",
       "ide.updateChannel": "업데이트를 받을 릴리스 채널입니다. 'stable'은 안정적인 릴리스이고 'nightly'는 최신 개발 빌드입니다.",
       "interfaceScale": "인터페이스 크기조절",
       "invalid.editorFontSize": "잘못된 에디터 글꼴크기, 반드시 양의 정수를 사용해야합니다.",
@@ -489,7 +489,7 @@
       "newSketch": "New Sketch"
     },
     "theme": {
-      "currentThemeNotFound": "Could not find the currently selected theme: {0}. Arduino IDE has picked a built-in theme compatible with the missing one.",
+      "currentThemeNotFound": "Could not find the currently selected theme: {0}. BetterIDE has picked a built-in theme compatible with the missing one.",
       "dark": "Dark",
       "deprecated": "{0} (deprecated)",
       "hc": "Dark High Contrast",

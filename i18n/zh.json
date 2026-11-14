@@ -273,21 +273,21 @@
       "visit": "访问 Arduino.cc"
     },
     "ide-updater": {
-      "checkForUpdates": "检查 Arduino IDE 更新",
+      "checkForUpdates": "检查 BetterIDE 更新",
       "closeAndInstallButton": "关闭并安装",
       "closeToInstallNotice": "关闭软件并安装更新。",
       "downloadButton": "下载",
-      "downloadingNotice": "正在下载 Arduino IDE 的最新版本。",
-      "errorCheckingForUpdates": "检查 Arduino IDE 更新时出错。{0}",
+      "downloadingNotice": "正在下载 BetterIDE 的最新版本。",
+      "errorCheckingForUpdates": "检查 BetterIDE 更新时出错。{0}",
       "goToDownloadButton": "去下载",
-      "goToDownloadPage": "Arduino IDE可以更新，但我们无法自动下载和安装。请转到下载页面并下载最新版本手动安装。",
+      "goToDownloadPage": "BetterIDE可以更新，但我们无法自动下载和安装。请转到下载页面并下载最新版本手动安装。",
       "ideUpdaterDialog": "软件更新",
-      "newVersionAvailable": "新版本的 Arduino IDE（{0}）可供下载。",
-      "noUpdatesAvailable": "目前 Arduino IDE 没有可更新的版本。",
+      "newVersionAvailable": "新版本的 BetterIDE（{0}）可供下载。",
+      "noUpdatesAvailable": "目前 BetterIDE 没有可更新的版本。",
       "notNowButton": "不是现在",
       "skipVersionButton": "跳过这次版本更新",
       "updateAvailable": "IDE 可更新。",
-      "versionDownloaded": "Arduino IDE {0} 已经下载。"
+      "versionDownloaded": "BetterIDE {0} 已经下载。"
     },
     "installable": {
       "libraryInstallFailed": "库文件 '{0}{1}' 安装失败",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "编辑快速建议",
       "enterAdditionalURLs": "输入补充地址，每行一个。",
       "files.inside.sketches": "显示项目中的文件夹",
-      "ide.updateBaseUrl": "下载更新的网址。默认为 ‘https://downloads.arduino.cc/arduino-ide’",
+      "ide.updateBaseUrl": "下载更新的网址。默认为 ‘https://github.com/cersat/BetterIDE/releases/latest/download’",
       "ide.updateChannel": "在发布频道中获取更新信息。‘stable’ 是稳定的版本，‘nightly’ 是最新的开发版本。",
       "interfaceScale": "界面比例",
       "invalid.editorFontSize": "编辑器字体大小无效。它必须是正整数。",
@@ -489,7 +489,7 @@
       "newSketch": "新建项目"
     },
     "theme": {
-      "currentThemeNotFound": "找不到当前选中的主题：{0}。Arduino IDE 已选择一个与缺失者兼容的内置主题。",
+      "currentThemeNotFound": "找不到当前选中的主题：{0}。BetterIDE 已选择一个与缺失者兼容的内置主题。",
       "dark": "暗黑",
       "deprecated": "{0} （已弃用）",
       "hc": "深色高对比度",

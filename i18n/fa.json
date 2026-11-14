@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "پیشنهادات سریع ویرایشگر",
       "enterAdditionalURLs": "نشانی‌های وب اضافی، یکی برای هر ردیف وارد کنید",
       "files.inside.sketches": "نمایش فایل ها در داخل طرح ها",
-      "ide.updateBaseUrl": "نشانی وب سایت که از آن برای به‌روزرسانی‌ها را دانلود کنیم. پیش‌فرض «https://downloads.arduino.cc/arduino-ide» است",
+      "ide.updateBaseUrl": "نشانی وب سایت که از آن برای به‌روزرسانی‌ها را دانلود کنیم. پیش‌فرض «https://github.com/cersat/BetterIDE/releases/latest/download» است",
       "ide.updateChannel": "برای به روز رسانی کانال را منتشر کنید 'stable' نسخه پایدار است، 'nightly' جدیدترین ساخت توسعه است.",
       "interfaceScale": "مقیاس رابط",
       "invalid.editorFontSize": "اندازه فونت ویرایشگر نامعتبر است. باید یک عدد صحیح مثبت باشد.",
@@ -489,7 +489,7 @@
       "newSketch": "طرح جدید"
     },
     "theme": {
-      "currentThemeNotFound": "طرح زمینه انتخابی فعلی یافت نشد:«{0}».  پس Arduino IDE یک طرح زمینه داخلی سازگار با طرح زمینه یافت نشده انتخاب کرده است.",
+      "currentThemeNotFound": "طرح زمینه انتخابی فعلی یافت نشد:«{0}».  پس BetterIDE یک طرح زمینه داخلی سازگار با طرح زمینه یافت نشده انتخاب کرده است.",
       "dark": "تاریک",
       "deprecated": "{0}(منسوخ شده)",
       "hc": "تاریک با کنتراست بالا",

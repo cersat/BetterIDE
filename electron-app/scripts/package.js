@@ -27,9 +27,9 @@ async function run() {
     electronVersion,
     '-c.extraMetadata.version',
     version,
-    // overrides the `name` in the `package.json` to keep the `localStorage` location. (https://github.com/arduino/arduino-ide/pull/2144#pullrequestreview-1554005028)
+    // overrides the `name` (`electron-app`) of the `package.json` in the packaged application.
     '-c.extraMetadata.name',
-    'arduino-ide',
+    'betteride',
     `-c.${platform}.artifactName`,
     artifactName,
     '-c.extraMetadata.theia.frontend.config.appVersion',
@@ -105,7 +105,7 @@ async function getVersion() {
 async function getArtifactName(version) {
   const { platform, arch } = process;
   version = isNightly ? `nightly-${await timestamp()}` : version;
-  const name = 'arduino-ide';
+  const name = 'betteride';
   switch (platform) {
     case 'win32': {
       if (arch === 'x64') {

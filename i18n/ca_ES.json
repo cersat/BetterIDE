@@ -273,21 +273,21 @@
       "visit": "Visiteu Arduino.cc"
     },
     "ide-updater": {
-      "checkForUpdates": "Comprova si hi ha actualitzacions de l'IDE d'Arduino",
+      "checkForUpdates": "Comprova si hi ha actualitzacions de BetterIDE",
       "closeAndInstallButton": "Tanca i instal·la",
       "closeToInstallNotice": "Tanqueu el programari i instal·leu l'actualització a la vostra màquina.",
       "downloadButton": "Descarrega",
-      "downloadingNotice": "Descarregant de l'última versió de l'IDE d'Arduino.",
-      "errorCheckingForUpdates": "S'ha produït un error en comprovar si hi ha actualitzacions de l'IDE d'Arduino.\n{0}",
+      "downloadingNotice": "Descarregant de l'última versió de BetterIDE.",
+      "errorCheckingForUpdates": "S'ha produït un error en comprovar si hi ha actualitzacions de BetterIDE.\n{0}",
       "goToDownloadButton": "Ves a descàrregues",
-      "goToDownloadPage": "Hi ha disponible una actualització per a l'IDE d'Arduino, però no podem baixar-la i instal·lar-la automàticament. Si us plau, aneu a la pàgina de descàrrega i descarregueu-ne la darrera versió.",
+      "goToDownloadPage": "Hi ha disponible una actualització per a BetterIDE, però no podem baixar-la i instal·lar-la automàticament. Si us plau, aneu a la pàgina de descàrrega i descarregueu-ne la darrera versió.",
       "ideUpdaterDialog": "Actualització de programari",
-      "newVersionAvailable": "Una nova versió de l'IDE d'Arduino ({0}) està disponible per descarregar.",
-      "noUpdatesAvailable": "No hi ha actualitzacions recents disponibles per a l'IDE d'Arduino",
+      "newVersionAvailable": "Una nova versió de BetterIDE ({0}) està disponible per descarregar.",
+      "noUpdatesAvailable": "No hi ha actualitzacions recents disponibles per a BetterIDE",
       "notNowButton": "Ara no",
       "skipVersionButton": "Omet la versió",
       "updateAvailable": "Actualització disponible",
-      "versionDownloaded": "L'IDE d'Arduino {0} s'ha descarregat"
+      "versionDownloaded": "BetterIDE {0} s'ha descarregat"
     },
     "installable": {
       "libraryInstallFailed": "Instal.lació de llibrería fallida  '{0}{1}'.",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "Suggeriments ràpids de l'editor",
       "enterAdditionalURLs": "Introduïu URL addicionals, un per a cada fila",
       "files.inside.sketches": "Mostra fitxers dins dels programes",
-      "ide.updateBaseUrl": "L'URL base des d'on baixar les actualitzacions. El valor per defecte és \"https://downloads.arduino.cc/arduino-ide\"",
+      "ide.updateBaseUrl": "L'URL base des d'on baixar les actualitzacions. El valor per defecte és \"https://github.com/cersat/BetterIDE/releases/latest/download\"",
       "ide.updateChannel": "Canal de novetats per rebre actualitzacions. \"stable\" és la versió estable, \"nightly\" és l'última versió de desenvolupament.",
       "interfaceScale": "Escala de la interfície",
       "invalid.editorFontSize": "Mida del tipus de lletra de l'editor no vàlida. Ha de ser un nombre enter positiu.",
@@ -489,7 +489,7 @@
       "newSketch": "Programa nou"
     },
     "theme": {
-      "currentThemeNotFound": "No s'ha trobat el nom seleccionat: {0}. L'IDE d'Arduino ha agafat un tema compatible amb el que falta.",
+      "currentThemeNotFound": "No s'ha trobat el nom seleccionat: {0}. BetterIDE ha agafat un tema compatible amb el que falta.",
       "dark": "Fosc",
       "deprecated": "{0} (obsolet)",
       "hc": "Fosc alt contrast",

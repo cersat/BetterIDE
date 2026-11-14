@@ -273,7 +273,7 @@
       "visit": "Arduino.cc मा जानुहोस्"
     },
     "ide-updater": {
-      "checkForUpdates": "Arduino IDE अपडेटहरूको लागि जाँच गर्नुहोस्",
+      "checkForUpdates": "BetterIDE अपडेटहरूको लागि जाँच गर्नुहोस्",
       "closeAndInstallButton": "बन्द गरेर र स्थापना गर्नुहोस्",
       "closeToInstallNotice": "सफ्टवेयर बन्द गर्नुहोस् र आफ्नो मेसिनमा अपडेट स्थापना गर्नुहोस्।",
       "downloadButton": "डाउनलोड ",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "सम्पादकको द्रुत सुझावहरू",
       "enterAdditionalURLs": "प्रत्येक पङ्क्तिको लागि एक थप URL प्रविष्ट गर्नुहोस्",
       "files.inside.sketches": "स्केचहरू भित्र फाइलहरू देखाउनुहोस्",
-      "ide.updateBaseUrl": "अपडेटहरू डाउनलोड गर्ने आधार URL। पूर्वनिर्धारित URL 'https://downloads.arduino.cc/arduino-ide'  छ।",
+      "ide.updateBaseUrl": "अपडेटहरू डाउनलोड गर्ने आधार URL। पूर्वनिर्धारित URL 'https://github.com/cersat/BetterIDE/releases/latest/download'  छ।",
       "ide.updateChannel": "अपडेट प्राप्त गर्न च्यानल जारी गर्नुहोस्। 'stable' स्थिर रिलीज हो, 'nightly' पछिल्लो विकास निर्माण हो।",
       "interfaceScale": "इन्टरफेस स्केल",
       "invalid.editorFontSize": "अवैध सम्पादक फन्ट साइज। यो सकारात्मक पूर्णांक हुनुपर्छ।",

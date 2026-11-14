@@ -273,21 +273,21 @@
       "visit": "Επίσκεψη Arduino.cc"
     },
     "ide-updater": {
-      "checkForUpdates": "Ελέγξτε για νέες ενημερώσεις Arduino IDE",
+      "checkForUpdates": "Ελέγξτε για νέες ενημερώσεις BetterIDE",
       "closeAndInstallButton": "Κλείσιμο και εγκατάσταση",
       "closeToInstallNotice": "Κλείστε το πρόγραμμα και εγκαταστήστε την ενημέρωση στον υπολογιστή σας.",
       "downloadButton": "Κατεβάστε",
-      "downloadingNotice": "Λήψη της πιο πρόσφατης έκδοσης του Arduino IDE.",
-      "errorCheckingForUpdates": "Σφάλμα κατά τον έλεγχο για ενημερώσεις του Arduino IDE.\n{0}",
+      "downloadingNotice": "Λήψη της πιο πρόσφατης έκδοσης του BetterIDE.",
+      "errorCheckingForUpdates": "Σφάλμα κατά τον έλεγχο για ενημερώσεις του BetterIDE.\n{0}",
       "goToDownloadButton": "Μετάβαση στη λήψη",
-      "goToDownloadPage": "Υπάρχει διαθέσιμη ενημέρωση για το Arduino IDE, αλλά δεν μπορούμε να το κατεβάσουμε και να το εγκαταστήσουμε αυτόματα. Μεταβείτε στη σελίδα λήψης και κατεβάστε την πιο πρόσφατη έκδοση από εκεί. ",
+      "goToDownloadPage": "Υπάρχει διαθέσιμη ενημέρωση για το BetterIDE, αλλά δεν μπορούμε να το κατεβάσουμε και να το εγκαταστήσουμε αυτόματα. Μεταβείτε στη σελίδα λήψης και κατεβάστε την πιο πρόσφατη έκδοση από εκεί. ",
       "ideUpdaterDialog": "Ενημέρωση λογισμικού",
-      "newVersionAvailable": "Μια νέα έκδοση του Arduino IDE ({0}) είναι διαθέσιμη για λήψη.",
-      "noUpdatesAvailable": "Δεν υπάρχουν διαθέσιμες πρόσφατες ενημερώσεις για το Arduino IDE",
+      "newVersionAvailable": "Μια νέα έκδοση του BetterIDE ({0}) είναι διαθέσιμη για λήψη.",
+      "noUpdatesAvailable": "Δεν υπάρχουν διαθέσιμες πρόσφατες ενημερώσεις για το BetterIDE",
       "notNowButton": "Όχι τώρα",
       "skipVersionButton": "Παράλειψη έκδοσης",
       "updateAvailable": "Διαθέσιμη ενημέρωση",
-      "versionDownloaded": "Arduino IDE {0} έχει ληφθεί."
+      "versionDownloaded": "BetterIDE {0} έχει ληφθεί."
     },
     "installable": {
       "libraryInstallFailed": "Αποτυχία εγκατάστασης βιβλιοθήκης: '{0}{1}'.",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "Επιμελιτής γρήγορων προτάσεων",
       "enterAdditionalURLs": "Τοποθετήστε πρόσθετους Συνδέσμους, ένα σε κάθε σειρά",
       "files.inside.sketches": "Εμφάνιση αρχείων μέσα σε Σχέδια",
-      "ide.updateBaseUrl": "Η βασική διεύθυνση URL από την οποία μπορείτε να πραγματοποιήσετε λήψη ενημερώσεων. Οι προεπιλογές είναι \"https://downloads.arduino.cc/arduino-ide\"",
+      "ide.updateBaseUrl": "Η βασική διεύθυνση URL από την οποία μπορείτε να πραγματοποιήσετε λήψη ενημερώσεων. Οι προεπιλογές είναι \"https://github.com/cersat/BetterIDE/releases/latest/download\"",
       "ide.updateChannel": "Κυκλοφόρησε το κανάλι για να ενημέρωση. Το \"stable\" είναι η σταθερή έκδοση, το \"nightly\" είναι η τελευταία έκδοση ανάπτυξης.",
       "interfaceScale": "Κλίμακα διεπαφής",
       "invalid.editorFontSize": "Μη-έγκυρο μέγεθος γραμματοσειράς συντάκτη. Πρέπει να είναι θετικός ακέραιος.",
@@ -489,7 +489,7 @@
       "newSketch": "Νέο Σχέδιο"
     },
     "theme": {
-      "currentThemeNotFound": "Δεν ήταν δυνατή η εύρεση του τρέχοντος επιλεγμένου θέματος:{0} . Το Arduino IDE έχει επιλέξει ένα ενσωματωμένο θέμα συμβατό με αυτό που λείπει.",
+      "currentThemeNotFound": "Δεν ήταν δυνατή η εύρεση του τρέχοντος επιλεγμένου θέματος:{0} . Το BetterIDE έχει επιλέξει ένα ενσωματωμένο θέμα συμβατό με αυτό που λείπει.",
       "dark": "Σκοτεινό",
       "deprecated": "{0}(καταργήθηκε)",
       "hc": "Σκούρο Υψηλής Αντίθεσης",

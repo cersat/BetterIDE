@@ -273,21 +273,21 @@
       "visit": "Visitez Arduino.cc"
     },
     "ide-updater": {
-      "checkForUpdates": "Check for Arduino IDE Updates",
+      "checkForUpdates": "Check for BetterIDE Updates",
       "closeAndInstallButton": "Fermer et installer",
       "closeToInstallNotice": "Fermez le logiciel et installez la mise à jour sur votre machine.",
       "downloadButton": "Télécharger",
-      "downloadingNotice": "Téléchargement de la dernière version de l'IDE Arduino.",
-      "errorCheckingForUpdates": "Erreur lors de la vérification de la mise à jour de l'IDE Arduino.\n{0}",
+      "downloadingNotice": "Téléchargement de la dernière version de BetterIDE.",
+      "errorCheckingForUpdates": "Erreur lors de la vérification de la mise à jour de BetterIDE.\n{0}",
       "goToDownloadButton": "Aller au téléchargement",
-      "goToDownloadPage": "Une mise à jour pour l'IDE Arduino est disponible, mais nous ne sommes pas en mesure de la télécharger et de l'installer automatiquement. Veuillez vous rendre sur la page de téléchargement et télécharger la dernière version à partir de là.",
+      "goToDownloadPage": "Une mise à jour pour BetterIDE est disponible, mais nous ne sommes pas en mesure de la télécharger et de l'installer automatiquement. Veuillez vous rendre sur la page de téléchargement et télécharger la dernière version à partir de là.",
       "ideUpdaterDialog": "Mise à jour logicielle",
-      "newVersionAvailable": "Une nouvelle version de l'IDE Arduino ({0}) est disponible en téléchargement.",
-      "noUpdatesAvailable": "Il n'y a pas de mises à jour récentes disponibles pour l'IDE Arduino",
+      "newVersionAvailable": "Une nouvelle version de BetterIDE ({0}) est disponible en téléchargement.",
+      "noUpdatesAvailable": "Il n'y a pas de mises à jour récentes disponibles pour BetterIDE",
       "notNowButton": "Pas maintenant",
       "skipVersionButton": "Ignorer la version",
       "updateAvailable": "Mise à jour disponible",
-      "versionDownloaded": "L'IDE Arduino {0} a été téléchargé."
+      "versionDownloaded": "BetterIDE {0} a été téléchargé."
     },
     "installable": {
       "libraryInstallFailed": "Échec de l'installation de la bibliothèque: '{0} {1}'.",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "Suggestion rapide pour l'éditeur",
       "enterAdditionalURLs": "Entrer des URLs additionnelles, une par colonne",
       "files.inside.sketches": "Afficher les fichiers à l’intérieur de Sketches.",
-      "ide.updateBaseUrl": "L'URL de base où sont téléchargées les mises à jour. La valeur par défaut est 'https://downloads.arduino.cc/arduino-ide'.",
+      "ide.updateBaseUrl": "L'URL de base où sont téléchargées les mises à jour. La valeur par défaut est 'https://github.com/cersat/BetterIDE/releases/latest/download'.",
       "ide.updateChannel": "Canal de mise à jour à partir de 'stable' est la version stable, 'nightly' est la dernière version de développement.",
       "interfaceScale": "Échelle de l'interface",
       "invalid.editorFontSize": "Police de l'éditeur invalide. La taille doit être un entier positif.",
@@ -489,7 +489,7 @@
       "newSketch": "Nouveau croquis"
     },
     "theme": {
-      "currentThemeNotFound": "Impossible de trouver le thème actuellement sélectionné : {0}. L'IDE Arduino a choisi un thème intégré compatible avec celui qui manque.",
+      "currentThemeNotFound": "Impossible de trouver le thème actuellement sélectionné : {0}. BetterIDE a choisi un thème intégré compatible avec celui qui manque.",
       "dark": "Sombre",
       "deprecated": "{0} (déprécié)",
       "hc": "Sombre avec contraste élevé",

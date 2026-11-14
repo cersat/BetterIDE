@@ -273,21 +273,21 @@
       "visit": "Bezoek Arduino.cc"
     },
     "ide-updater": {
-      "checkForUpdates": "Controleren op Arduino IDE-updates",
+      "checkForUpdates": "Controleren op BetterIDE-updates",
       "closeAndInstallButton": "Sluiten en installeren",
       "closeToInstallNotice": "Sluit de software en installeer de update op je machine.",
       "downloadButton": "Download",
-      "downloadingNotice": "Download de nieuwste versie van de Arduino IDE.",
-      "errorCheckingForUpdates": "Fout bij het controleren op Arduino IDE updates.\n{0}",
+      "downloadingNotice": "Download de nieuwste versie van de BetterIDE.",
+      "errorCheckingForUpdates": "Fout bij het controleren op BetterIDE updates.\n{0}",
       "goToDownloadButton": "Ga naar Download",
-      "goToDownloadPage": "Er is een update voor de Arduino IDE beschikbaar, maar we zijn niet in staat om die automatisch te downloaden en te installeren. Ga naar de download pagina en download de nieuwste versie vanaf daar.",
+      "goToDownloadPage": "Er is een update voor de BetterIDE beschikbaar, maar we zijn niet in staat om die automatisch te downloaden en te installeren. Ga naar de download pagina en download de nieuwste versie vanaf daar.",
       "ideUpdaterDialog": "Software bijwerken",
-      "newVersionAvailable": "Een nieuwe versie van Arduino IDE ({0}) is beschikbaar om te downloaden.",
-      "noUpdatesAvailable": "Er zijn geen recente updates beschikbaar voor de Arduino IDE",
+      "newVersionAvailable": "Een nieuwe versie van BetterIDE ({0}) is beschikbaar om te downloaden.",
+      "noUpdatesAvailable": "Er zijn geen recente updates beschikbaar voor de BetterIDE",
       "notNowButton": "Niet nu",
       "skipVersionButton": "Versie overslaan",
       "updateAvailable": "Update beschikbaar",
-      "versionDownloaded": "Arduino IDE {0} is gedownload."
+      "versionDownloaded": "BetterIDE {0} is gedownload."
     },
     "installable": {
       "libraryInstallFailed": "Installeren van bibliotheek mislukt: '{0} {1}'.",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "Snelle suggesties in editor",
       "enterAdditionalURLs": "Voer extra URL's in, één per rij",
       "files.inside.sketches": "Toon bestanden in Schetsen",
-      "ide.updateBaseUrl": "De basis URL waar updates van gedownload moeten worden. Wordt standaard ingesteld op 'https://downloads.arduino.cc/arduino-ide'",
+      "ide.updateBaseUrl": "De basis URL waar updates van gedownload moeten worden. Wordt standaard ingesteld op 'https://github.com/cersat/BetterIDE/releases/latest/download'",
       "ide.updateChannel": "Release kanaal om bijgewerkte versies van te krijgen. 'stable' is de stabiele release, 'nightly' is de laatste ontwikkel build.",
       "interfaceScale": "Interface schaal",
       "invalid.editorFontSize": "Ongeldige lettergrootte voor editor. Het moet een positief geheel getal zijn.",
@@ -489,7 +489,7 @@
       "newSketch": "Nieuwe schets"
     },
     "theme": {
-      "currentThemeNotFound": "Kan het huidig geselecteerde thema niet vinden: {0}. Arduino IDE heeft een ingebouwd thema gekozen dat compatibel is met het ontbrekende.",
+      "currentThemeNotFound": "Kan het huidig geselecteerde thema niet vinden: {0}. BetterIDE heeft een ingebouwd thema gekozen dat compatibel is met het ontbrekende.",
       "dark": "Donker",
       "deprecated": "{0} (verouderd)",
       "hc": "Donker hoog contrast",

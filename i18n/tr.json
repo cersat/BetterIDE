@@ -273,21 +273,21 @@
       "visit": "Arduino.cc'yi Ziyaret Et"
     },
     "ide-updater": {
-      "checkForUpdates": "Arduino IDE Güncellemelerini kontrol et",
+      "checkForUpdates": "BetterIDE Güncellemelerini kontrol et",
       "closeAndInstallButton": "Kapat ve Kur",
       "closeToInstallNotice": "Yazılımı kapatın ve güncellemeyi makinanıza yükleyin.",
       "downloadButton": "İndir",
-      "downloadingNotice": "Arduino IDE'nin son sürümü indiriliyor.",
-      "errorCheckingForUpdates": "Arduino IDE güncellemelerini kontrol ederken hata oluştu.{0}",
+      "downloadingNotice": "BetterIDE'nin son sürümü indiriliyor.",
+      "errorCheckingForUpdates": "BetterIDE güncellemelerini kontrol ederken hata oluştu.{0}",
       "goToDownloadButton": "İndirmeye Git",
-      "goToDownloadPage": "Arduino IDE için bir güncelleme mevcut, ancak otomatik olarak indirip kuramadık. Lütfen indirme sayfasına gidin ve son sürümü oradan indirin.",
+      "goToDownloadPage": "BetterIDE için bir güncelleme mevcut, ancak otomatik olarak indirip kuramadık. Lütfen indirme sayfasına gidin ve son sürümü oradan indirin.",
       "ideUpdaterDialog": "Yazılım Güncelleme",
-      "newVersionAvailable": "Yeni sürüm Arduino IDE ({0}) indirilmeye hazır.",
-      "noUpdatesAvailable": "Arduino IDE için yeni bir güncelleme bulunmuyor",
+      "newVersionAvailable": "Yeni sürüm BetterIDE ({0}) indirilmeye hazır.",
+      "noUpdatesAvailable": "BetterIDE için yeni bir güncelleme bulunmuyor",
       "notNowButton": "Şimdi değil",
       "skipVersionButton": "Sürümü Atla",
       "updateAvailable": "Güncelleme Mevcut",
-      "versionDownloaded": "Arduino IDE {0} indirildi."
+      "versionDownloaded": "BetterIDE {0} indirildi."
     },
     "installable": {
       "libraryInstallFailed": "Kütüphane kurulamadı: '{0}{1}'.",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "Editör Hızlı Önerileri",
       "enterAdditionalURLs": "Ek URL'leri gir, her satıra bir adet",
       "files.inside.sketches": "Eskizlerin içindeki dosyaları görüntüle",
-      "ide.updateBaseUrl": "Güncellemelerin indirileceği ana link. Varsayılan: 'https://downloads.arduino.cc/arduino-ide'",
+      "ide.updateBaseUrl": "Güncellemelerin indirileceği ana link. Varsayılan: 'https://github.com/cersat/BetterIDE/releases/latest/download'",
       "ide.updateChannel": "Güncelleme yapılacak dağıtım kanalı. 'stable' kararlı sürümdür, 'nightly' ise son geliştirme sürümüdür.",
       "interfaceScale": "Arayüz ölçeği",
       "invalid.editorFontSize": "Hatalı editör yazı tipi boyutu. Pozitif bir tam sayı olmalı.",
@@ -489,7 +489,7 @@
       "newSketch": "Yeni Eskiz"
     },
     "theme": {
-      "currentThemeNotFound": "Mevcut seçili tema bulunamadı: {0}. Arduino IDE kayıp olanın yerine uyumlu dahili bir tane seçti.",
+      "currentThemeNotFound": "Mevcut seçili tema bulunamadı: {0}. BetterIDE kayıp olanın yerine uyumlu dahili bir tane seçti.",
       "dark": "Koyu",
       "deprecated": "{0} (kaldırıldı)",
       "hc": "Koyu Yüksek Karşıtlık",

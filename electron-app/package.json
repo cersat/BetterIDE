@@ -59,7 +59,7 @@
     "target": "electron",
     "frontend": {
       "config": {
-        "applicationName": "Arduino IDE",
+        "applicationName": "BetterIDE",
         "defaultTheme": {
           "light": "arduino-theme",
           "dark": "arduino-theme-dark"
@@ -68,7 +68,7 @@
         "validatePreferencesSchema": false,
         "electron": {
           "showWindowEarly": true,
-          "uriScheme": "arduino-ide"
+          "uriScheme": "betteride"
         },
         "reloadOnReconnect": true,
         "preferences": {
@@ -103,10 +103,10 @@
     }
   },
   "author": "Arduino SA",
-  "description": "Arduino IDE",
+  "description": "BetterIDE",
   "build": {
-    "appId": "cc.arduino.IDE2",
-    "productName": "Arduino IDE",
+    "appId": "io.github.cersat.betteride",
+    "productName": "BetterIDE",
     "asar": false,
     "detectUpdateChannel": false,
     "generateUpdatesFilesForAllChannels": true,
@@ -156,6 +156,7 @@
       "extraResources": "resources/PATENT_DISCLAIMER"
     },
     "linux": {
+      "executableName": "betteride",
       "target": [
         "zip",
         "AppImage"

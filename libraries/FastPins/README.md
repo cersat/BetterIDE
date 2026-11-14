@@ -49,9 +49,54 @@ and call the Arduino function otherwise.
 - On the Mega, the ports H, J, K and L are outside of the bit-addressable I/O space: a write there takes a few
   instructions with interrupts disabled for a moment, like the Arduino function does.
 
+## Hardware SPI
+
+`FastSPI.h` adds a device on the hardware SPI bus (`SPI`) with its chip select pin and settings fixed at compile time.
+The chip select is switched with FastPins, and `write()` sends a buffer without overwriting it:
+
+| Boards | `write()` |
+| --- | --- |
+| AVR | a loop on the SPI registers that loads the next byte while the current one is shifted out |
+| ESP32 | `SPI.writeBytes()`, through the FIFO of the SPI peripheral |
+| RP2040, RP2350 | the transmit-only transfer of the Pico SDK (`MSBFIRST`; with `LSBFIRST`, byte by byte) |
+| other boards | `SPI.transfer()` byte by byte |
+
+```cpp
+#include <FastSPI.h>
+
+fastpins::SpiDevice<10> flash;                              // 4 MHz, MSBFIRST, SPI_MODE0
+fastpins::SpiDevice<9, 8000000, MSBFIRST, SPI_MODE3> display;
+
+void setup() {
+	flash.begin();
+	display.begin();
+}
+
+void loop() {
+	flash.select();
+	flash.transfer(0x9F);
+	uint8_t id[3];
+	flash.read(id, sizeof(id));
+	flash.deselect();
+}
+```
+
+`fastpins::SpiDevice<CS, Clock, Order, Mode>` has:
+
+- `begin()`: sets the chip select up as a high output and starts the bus, once in `setup()`,
+- `select()` / `deselect()`: `SPI.beginTransaction()` with the device's settings and the chip select low, then the
+  chip select high and `SPI.endTransaction()`,
+- `transfer(byte)` and `transfer16(value)`: return the received data,
+- `transfer(buffer, count)`: replaces the buffer with the received bytes,
+- `write(data, count)`: sends only, the buffer can be `const`,
+- `read(buffer, count, fill = 0xFF)`: receives `count` bytes, sending `fill`.
+
+Between `select()` and `deselect()`, other code must not use the bus. The example *SpiFlashId* reads the ID of an SPI
+flash chip and compares `write()` with a loop of `SPI.transfer()`.
+
 ## Installing
 
-BetterIDE comes with FastPins: just `#include <FastPins.h>`. A FastPins installed in the sketchbook takes precedence.
+BetterIDE comes with FastPins: just `#include <FastPins.h>` or `#include <FastSPI.h>`. A FastPins installed in the sketchbook takes precedence.
 
 In another IDE, copy the `FastPins` folder into the `libraries` folder of your sketchbook, or use
 *Sketch → Include Library → Add .ZIP Library…* with `FastPins.zip` from the BetterIDE releases.

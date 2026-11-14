@@ -273,21 +273,21 @@
       "visit": "Перайсці на Arduino.cc"
     },
     "ide-updater": {
-      "checkForUpdates": "Праверыць наяўнасць абнаўленняў Arduino IDE",
+      "checkForUpdates": "Праверыць наяўнасць абнаўленняў BetterIDE",
       "closeAndInstallButton": "Зачыніць і ўсталяваць",
       "closeToInstallNotice": "Зачыніце праграмнае забеспячэнне і ўсталюйце абнаўленне на свой кампутар.",
       "downloadButton": "Спампаваць",
-      "downloadingNotice": "Пампуе апошнюю версію Arduino IDE.",
-      "errorCheckingForUpdates": "Памылка пры праверцы абнаўленняў Arduino IDE.\n{0}",
+      "downloadingNotice": "Пампуе апошнюю версію BetterIDE.",
+      "errorCheckingForUpdates": "Памылка пры праверцы абнаўленняў BetterIDE.\n{0}",
       "goToDownloadButton": "Перайсці да спампоўкі",
-      "goToDownloadPage": "Даступна абнаўленне для Arduino IDE, але мы не можам загрузіць і ўсталяваць яго аўтаматычна.\nКалі ласка, перайдзіце на старонку спампоўкі і спампуйце адтуль апошнюю версію.",
+      "goToDownloadPage": "Даступна абнаўленне для BetterIDE, але мы не можам загрузіць і ўсталяваць яго аўтаматычна.\nКалі ласка, перайдзіце на старонку спампоўкі і спампуйце адтуль апошнюю версію.",
       "ideUpdaterDialog": "Абнаўленне праграмнага забеспячэння",
-      "newVersionAvailable": "Новая версія Arduino IDE ({0}) даступная для спампоўкі.",
-      "noUpdatesAvailable": "Апошнія абнаўленні для Arduino IDE недаступныя",
+      "newVersionAvailable": "Новая версія BetterIDE ({0}) даступная для спампоўкі.",
+      "noUpdatesAvailable": "Апошнія абнаўленні для BetterIDE недаступныя",
       "notNowButton": "Не цяпер",
       "skipVersionButton": "Прапусціць версію",
       "updateAvailable": "Даступна абнаўленне",
-      "versionDownloaded": "Arduino IDE {0} быў спампаваны."
+      "versionDownloaded": "BetterIDE {0} быў спампаваны."
     },
     "installable": {
       "libraryInstallFailed": "Не атрымалася ўсталяваць бібліятэку: '{0}{1}'.",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "Хуткія падказкі ў сродку праўкі",
       "enterAdditionalURLs": "Увядзіце дадатковыя адрасы URL, па адным на кожным радку",
       "files.inside.sketches": "Адлюстраваць файлы ўнутры сцэнара",
-      "ide.updateBaseUrl": "Асноўны адрас URL, з якога можна спампаваць абнаўленні.\nПершапачаткова 'https://downloads.arduino.cc/arduino-ide'",
+      "ide.updateBaseUrl": "Асноўны адрас URL, з якога можна спампаваць абнаўленні.\nПершапачаткова 'https://github.com/cersat/BetterIDE/releases/latest/download'",
       "ide.updateChannel": "Канал выпуску, з якога можна атрымліваць абнаўленні.\n'stable' - гэта стабільны выпуск, 'nightly' - апошняя зборка для распрацоўшчыкаў.",
       "interfaceScale": "Маштабаванне інтэрфейсу",
       "invalid.editorFontSize": "Хібны памер шрыфту сродку праўкі.\nПавінны быць станоўчы цэлы лік.",
@@ -489,7 +489,7 @@
       "newSketch": "Новы сцэнар"
     },
     "theme": {
-      "currentThemeNotFound": "Не атрымалася знайсці абраную ў дадзены момант тэму: {0}.\nArduino IDE абрала ўбудаваную тэму, якая сумяшчальная з адсутнай.",
+      "currentThemeNotFound": "Не атрымалася знайсці абраную ў дадзены момант тэму: {0}.\nBetterIDE абрала ўбудаваную тэму, якая сумяшчальная з адсутнай.",
       "dark": "Цёмная",
       "deprecated": "{0} (састарэлая)",
       "hc": "Цёмная высокакантрасная",

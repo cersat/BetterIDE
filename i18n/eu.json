@@ -273,21 +273,21 @@
       "visit": "Bisitatu Arduino.cc"
     },
     "ide-updater": {
-      "checkForUpdates": "Check for Arduino IDE Updates",
+      "checkForUpdates": "Check for BetterIDE Updates",
       "closeAndInstallButton": "Itxi eta instalatu",
       "closeToInstallNotice": "Itxi softwarea eta instalatu eguneratzea zure makinan.",
       "downloadButton": "Software eguneratzea",
-      "downloadingNotice": "Arduino IDEren azken bertsioa deskargatzen",
-      "errorCheckingForUpdates": "Errorea Arduino IDE eguneraketak egiaztatzean.\n{0}",
+      "downloadingNotice": "BetterIDEren azken bertsioa deskargatzen",
+      "errorCheckingForUpdates": "Errorea BetterIDE eguneraketak egiaztatzean.\n{0}",
       "goToDownloadButton": "Joan Deskargak orrira",
-      "goToDownloadPage": "Arduino IDErentzako eguneraketa bat eskuragarri dago, baina ezin dugu automatikoki deskargatu eta instalatu. Mesedez joan deskargen orrira eta deskargatu azken bertsioa bertatik.",
+      "goToDownloadPage": "BetterIDErentzako eguneraketa bat eskuragarri dago, baina ezin dugu automatikoki deskargatu eta instalatu. Mesedez joan deskargen orrira eta deskargatu azken bertsioa bertatik.",
       "ideUpdaterDialog": "Software eguneratzea",
-      "newVersionAvailable": "Arduino IDEren bertsio berri bat ({0}) eskuragarri dago deskargatzeko.",
-      "noUpdatesAvailable": "Ez dago eguneraketa berririk eskuragarri Arduino IDErentzat",
+      "newVersionAvailable": "BetterIDEren bertsio berri bat ({0}) eskuragarri dago deskargatzeko.",
+      "noUpdatesAvailable": "Ez dago eguneraketa berririk eskuragarri BetterIDErentzat",
       "notNowButton": "Orain ez",
       "skipVersionButton": "Saltatu bertsioa",
       "updateAvailable": "Eguneratzea eskuragarri",
-      "versionDownloaded": "Arduino IDE {0} deskargatu da."
+      "versionDownloaded": "BetterIDE {0} deskargatu da."
     },
     "installable": {
       "libraryInstallFailed": "Failed to install library: '{0}{1}'.",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "Editorearen iradokizun azkarrak",
       "enterAdditionalURLs": "Sartu URL gehigarriak, bat errenkadako",
       "files.inside.sketches": "Erakutsi fitxategiak programen barruan",
-      "ide.updateBaseUrl": "The base URL where to download updates from. Defaults to 'https://downloads.arduino.cc/arduino-ide'",
+      "ide.updateBaseUrl": "The base URL where to download updates from. Defaults to 'https://github.com/cersat/BetterIDE/releases/latest/download'",
       "ide.updateChannel": "Eguneratzea ze argitalpen kanaletik hartu behar den. 'stable' argitalpen egonkorra da, 'nightly' garapeneko azken eraikitzea.",
       "interfaceScale": "Interfazearen eskala",
       "invalid.editorFontSize": "Editorearen letra-tamaina baliogabea. Osoko zenbaki positibo bat izan behar du.",
@@ -489,7 +489,7 @@
       "newSketch": "New Sketch"
     },
     "theme": {
-      "currentThemeNotFound": "Could not find the currently selected theme: {0}. Arduino IDE has picked a built-in theme compatible with the missing one.",
+      "currentThemeNotFound": "Could not find the currently selected theme: {0}. BetterIDE has picked a built-in theme compatible with the missing one.",
       "dark": "Dark",
       "deprecated": "{0} (deprecated)",
       "hc": "Dark High Contrast",

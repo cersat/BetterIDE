@@ -273,21 +273,21 @@
       "visit": "Arduino.ccウェブサイトを開く"
     },
     "ide-updater": {
-      "checkForUpdates": "Arduino IDEのアップデートを確認",
+      "checkForUpdates": "BetterIDEのアップデートを確認",
       "closeAndInstallButton": "終了してインストール",
       "closeToInstallNotice": "ソフトウェアを終了してアップデートをインストールする。",
       "downloadButton": "ダウンロード",
-      "downloadingNotice": "Arduino IDEの最新版をダウンロード中です。",
-      "errorCheckingForUpdates": "Arduino IDEの更新を確認中にエラーが発生しました。\n{0}",
+      "downloadingNotice": "BetterIDEの最新版をダウンロード中です。",
+      "errorCheckingForUpdates": "BetterIDEの更新を確認中にエラーが発生しました。\n{0}",
       "goToDownloadButton": "ダウンロードに移動",
-      "goToDownloadPage": "Arduino IDEのアップデートがありますが、自動でダウンロードしてインストールすることはできません。ダウンロードページに移動して、そこから最新版をダウンロードしてください。",
+      "goToDownloadPage": "BetterIDEのアップデートがありますが、自動でダウンロードしてインストールすることはできません。ダウンロードページに移動して、そこから最新版をダウンロードしてください。",
       "ideUpdaterDialog": "ソフトウェア・アップデート",
-      "newVersionAvailable": "新しいバージョンのArduino IDE（{0}）をダウンロードできます。",
-      "noUpdatesAvailable": "Arduino IDEに最近のアップデートはありません",
+      "newVersionAvailable": "新しいバージョンのBetterIDE（{0}）をダウンロードできます。",
+      "noUpdatesAvailable": "BetterIDEに最近のアップデートはありません",
       "notNowButton": "今はしない",
       "skipVersionButton": "バージョンをスキップ",
       "updateAvailable": "アップデートがあります",
-      "versionDownloaded": "Arduino IDE {0}がダウンロードされました。"
+      "versionDownloaded": "BetterIDE {0}がダウンロードされました。"
     },
     "installable": {
       "libraryInstallFailed": "Failed to install library: '{0}{1}'.",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "エディターのクイックサジェスト",
       "enterAdditionalURLs": "追加のURLを1行ずつ入力",
       "files.inside.sketches": "スケッチ内のファイルを表示",
-      "ide.updateBaseUrl": "アップデートをダウンロードするためのベースURL。デフォルトは 'https://downloads.arduino.cc/arduino-ide' です。",
+      "ide.updateBaseUrl": "アップデートをダウンロードするためのベースURL。デフォルトは 'https://github.com/cersat/BetterIDE/releases/latest/download' です。",
       "ide.updateChannel": "アップデート元のリリースチャンネル。stableは安定版リリース、nightlyは最新の開発用ビルドです。",
       "interfaceScale": "インターフェイスのスケール",
       "invalid.editorFontSize": "エディターのフォントサイズが無効です。正の整数でなければなりません。",
@@ -489,7 +489,7 @@
       "newSketch": "新規スケッチ"
     },
     "theme": {
-      "currentThemeNotFound": "Could not find the currently selected theme: {0}. Arduino IDE has picked a built-in theme compatible with the missing one.",
+      "currentThemeNotFound": "Could not find the currently selected theme: {0}. BetterIDE has picked a built-in theme compatible with the missing one.",
       "dark": "Dark",
       "deprecated": "{0} (deprecated)",
       "hc": "Dark High Contrast",

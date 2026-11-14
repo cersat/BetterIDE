@@ -273,21 +273,21 @@
       "visit": "Visit Arduino.cc"
     },
     "ide-updater": {
-      "checkForUpdates": "Check for Arduino IDE Updates",
+      "checkForUpdates": "Check for BetterIDE Updates",
       "closeAndInstallButton": "Close and Install",
       "closeToInstallNotice": "Close the software and install the update on your machine.",
       "downloadButton": "Download",
-      "downloadingNotice": "Downloading the latest version of the Arduino IDE.",
-      "errorCheckingForUpdates": "Error while checking for Arduino IDE updates.\n{0}",
+      "downloadingNotice": "Downloading the latest version of BetterIDE.",
+      "errorCheckingForUpdates": "Error while checking for BetterIDE updates.\n{0}",
       "goToDownloadButton": "Go To Download",
-      "goToDownloadPage": "มีการอัปเดตสำหรับ Arduino IDE แต่เราไม่สามารถดาวน์โหลดและติดตั้งมันโดยอัตโนมัติได้ กรุณาไปที่หน้าดาวน์โหลดและดาวน์โหลดเวอร์ชันล่าสุดจากที่นั่น",
+      "goToDownloadPage": "มีการอัปเดตสำหรับ BetterIDE แต่เราไม่สามารถดาวน์โหลดและติดตั้งมันโดยอัตโนมัติได้ กรุณาไปที่หน้าดาวน์โหลดและดาวน์โหลดเวอร์ชันล่าสุดจากที่นั่น",
       "ideUpdaterDialog": "Software Update",
-      "newVersionAvailable": "A new version of Arduino IDE ({0}) is available for download.",
-      "noUpdatesAvailable": "There are no recent updates available for the Arduino IDE",
+      "newVersionAvailable": "A new version of BetterIDE ({0}) is available for download.",
+      "noUpdatesAvailable": "There are no recent updates available for BetterIDE",
       "notNowButton": "Not now",
       "skipVersionButton": "Skip Version",
       "updateAvailable": "Update Available",
-      "versionDownloaded": "Arduino IDE {0} has been downloaded."
+      "versionDownloaded": "BetterIDE {0} has been downloaded."
     },
     "installable": {
       "libraryInstallFailed": "Failed to install library: '{0}{1}'.",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "Editor Quick Suggestions",
       "enterAdditionalURLs": "Enter additional URLs, one for each row",
       "files.inside.sketches": "Show files inside Sketches",
-      "ide.updateBaseUrl": "URL หลักที่ใช้สำหรับดาวน์โหลดการอัปเดต ค่าเริ่มต้นเป็น 'https://downloads.arduino.cc/arduino-ide'",
+      "ide.updateBaseUrl": "URL หลักที่ใช้สำหรับดาวน์โหลดการอัปเดต ค่าเริ่มต้นเป็น 'https://github.com/cersat/BetterIDE/releases/latest/download'",
       "ide.updateChannel": "ช่องการอัปเดตที่ใช้สำหรับดาวน์โหลดการอัปเดต 'stable' คือเวอร์ชันที่เสถียร, 'nightly' คือการพัฒนาล่าสุด",
       "interfaceScale": "Interface scale",
       "invalid.editorFontSize": "Invalid editor font size. It must be a positive integer.",
@@ -489,7 +489,7 @@
       "newSketch": "สเก็ตช์ ใหม่"
     },
     "theme": {
-      "currentThemeNotFound": " ไม่สามารถค้นหาธีมที่เลือกไว้ในปัจจุบัน: {0} Arduino IDE ได้เลือกธีมที่มีในตัวที่เข้ากันได้กับธีมที่หายไป",
+      "currentThemeNotFound": " ไม่สามารถค้นหาธีมที่เลือกไว้ในปัจจุบัน: {0} BetterIDE ได้เลือกธีมที่มีในตัวที่เข้ากันได้กับธีมที่หายไป",
       "dark": "มืด",
       "deprecated": "{0} (เลิกใช้แล้ว)",
       "hc": "มืด",

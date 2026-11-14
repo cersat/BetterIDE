@@ -3,7 +3,7 @@ import { join } from 'node:path';
 
 /**
  * The folder name of the CLI's `directories.builtin.libraries` inside the IDE's config folder (`~/.arduinoIDE`).
- * The Arduino IDE does not set this folder, so the `Arduino_BuiltIn` library the IDE installs on the first
+ * The upstream IDE does not set this folder, so the `Arduino_BuiltIn` library the IDE installs on the first
  * startup could never be installed. BetterIDE uses a writable folder and keeps its bundled libraries there.
  */
 export const BUILTIN_LIBRARIES_FOLDER = 'libraries';

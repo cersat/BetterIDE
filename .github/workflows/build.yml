@@ -55,7 +55,7 @@ jobs:
           const file = 'electron-app/package.json';
           const p = JSON.parse(fs.readFileSync(file, 'utf8'));
           p.build.win.target = ['zip', 'portable', 'nsis'];
-          p.build.nsis = { ...p.build.nsis, artifactName: 'arduino-ide_${version}_Windows_64bit_setup.${ext}' };
+          p.build.nsis = { ...p.build.nsis, artifactName: 'betteride_${version}_Windows_64bit_setup.${ext}' };
           fs.writeFileSync(file, JSON.stringify(p, null, 2));
           EOF
       - name: Install dependencies

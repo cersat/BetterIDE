@@ -273,21 +273,21 @@
       "visit": "Посјети Arduino.cc"
     },
     "ide-updater": {
-      "checkForUpdates": "Check for Arduino IDE Updates",
+      "checkForUpdates": "Check for BetterIDE Updates",
       "closeAndInstallButton": "Затвори и инсталирај",
       "closeToInstallNotice": "Затворите програм и покрените инсталацију надоградње на ваш рачунар.",
       "downloadButton": "Преузимање",
-      "downloadingNotice": "Преузимање последње верзије Arduino IDE.",
-      "errorCheckingForUpdates": "Грешка приликом провере надоградњи за Arduino IDE.\n{0}",
+      "downloadingNotice": "Преузимање последње верзије BetterIDE.",
+      "errorCheckingForUpdates": "Грешка приликом провере надоградњи за BetterIDE.\n{0}",
       "goToDownloadButton": "Пређите на преузимање",
       "goToDownloadPage": "Ажурирање за Arduine IDE је доступно, али нисмо у могућности да га аутоматски преузмемо и инсталирамо. Идите на страницу за преузимање и преузмите најновију верзију одатле.",
       "ideUpdaterDialog": "Надоградња програма",
-      "newVersionAvailable": "Нова верзија Arduino IDE ({0}) је доступна за преузимање.",
+      "newVersionAvailable": "Нова верзија BetterIDE ({0}) је доступна за преузимање.",
       "noUpdatesAvailable": "Нема недавних доступних ажурирања за Arduine IDE",
       "notNowButton": "Не сада",
       "skipVersionButton": "Прескочите ову верзију",
       "updateAvailable": "Доступна је надоградња",
-      "versionDownloaded": "Arduino IDE {0} је преузет."
+      "versionDownloaded": "BetterIDE {0} је преузет."
     },
     "installable": {
       "libraryInstallFailed": "Failed to install library: '{0}{1}'.",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "Editor Quick Suggestions",
       "enterAdditionalURLs": "Enter additional URLs, one for each row",
       "files.inside.sketches": "Прикажи датотеке у радовима",
-      "ide.updateBaseUrl": "The base URL where to download updates from. Defaults to 'https://downloads.arduino.cc/arduino-ide'",
+      "ide.updateBaseUrl": "The base URL where to download updates from. Defaults to 'https://github.com/cersat/BetterIDE/releases/latest/download'",
       "ide.updateChannel": "Release channel to get updated from. 'stable' is the stable release, 'nightly' is the latest development build.",
       "interfaceScale": "Величина интерфејса",
       "invalid.editorFontSize": "Неважећа величина текста уређивача. Мора да буде позитиван цијели број.",
@@ -489,7 +489,7 @@
       "newSketch": "New Sketch"
     },
     "theme": {
-      "currentThemeNotFound": "Could not find the currently selected theme: {0}. Arduino IDE has picked a built-in theme compatible with the missing one.",
+      "currentThemeNotFound": "Could not find the currently selected theme: {0}. BetterIDE has picked a built-in theme compatible with the missing one.",
       "dark": "Dark",
       "deprecated": "{0} (deprecated)",
       "hc": "Dark High Contrast",

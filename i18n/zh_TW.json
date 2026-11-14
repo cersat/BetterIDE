@@ -273,21 +273,21 @@
       "visit": "造訪 Arduino.cc"
     },
     "ide-updater": {
-      "checkForUpdates": "檢查 Arduino IDE 更新",
+      "checkForUpdates": "檢查 BetterIDE 更新",
       "closeAndInstallButton": "關閉並安裝。",
       "closeToInstallNotice": "關閉本程式後安裝更新。",
       "downloadButton": "下載",
-      "downloadingNotice": "正在下載最新版本的Arduino IDE。",
-      "errorCheckingForUpdates": "檢查Arduino IDE更新時發生錯誤。\n{0}",
+      "downloadingNotice": "正在下載最新版本的BetterIDE。",
+      "errorCheckingForUpdates": "檢查BetterIDE更新時發生錯誤。\n{0}",
       "goToDownloadButton": "前往下載",
-      "goToDownloadPage": "Arduino IDE 有更新版本, 但我們無法自動下載安裝, 請至下載頁面下載最新的版本。",
+      "goToDownloadPage": "BetterIDE 有更新版本, 但我們無法自動下載安裝, 請至下載頁面下載最新的版本。",
       "ideUpdaterDialog": "軟體更新",
-      "newVersionAvailable": "有新版本的Arduino IDE({0})可供下載。",
-      "noUpdatesAvailable": "Arduino IDE 沒更新檔。",
+      "newVersionAvailable": "有新版本的BetterIDE({0})可供下載。",
+      "noUpdatesAvailable": "BetterIDE 沒更新檔。",
       "notNowButton": "現在不要",
       "skipVersionButton": "略過這個版本",
       "updateAvailable": "有更新檔。",
-      "versionDownloaded": "Arduino IDE{0}下載完成。"
+      "versionDownloaded": "BetterIDE{0}下載完成。"
     },
     "installable": {
       "libraryInstallFailed": "函式庫 ' {0} {1}' : 安裝失敗。",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "編輯器快速建議",
       "enterAdditionalURLs": "輸入其他網址，每行一個",
       "files.inside.sketches": "顯示 sketch 裏面的檔案",
-      "ide.updateBaseUrl": "下載更新的網址, 預設為：'https://downloads.arduino.cc/arduino-ide'",
+      "ide.updateBaseUrl": "下載更新的網址, 預設為：'https://github.com/cersat/BetterIDE/releases/latest/download'",
       "ide.updateChannel": "前往版本釋出頻道獲取更新。 'stable'表示為穩定的版本， 'nightly' 則是最新的開發版本。",
       "interfaceScale": "介面比例",
       "invalid.editorFontSize": "無效的編輯器字體大小。它必須是正整數。",
@@ -489,7 +489,7 @@
       "newSketch": "新增 sketch"
     },
     "theme": {
-      "currentThemeNotFound": "找不到目前選擇的主題：{0} 。 Arduino IDE 挑選了一個內建的相容主題。",
+      "currentThemeNotFound": "找不到目前選擇的主題：{0} 。 BetterIDE 挑選了一個內建的相容主題。",
       "dark": "暗",
       "deprecated": "{0} （已棄用）",
       "hc": "深色高對比",

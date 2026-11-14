@@ -87,7 +87,7 @@ function enableFileLogger() {
     process.env['XDG_CONFIG_HOME'] = xdgConfigHome;
   }
   setupFileLog({
-    appName: 'Arduino IDE',
+    appName: 'BetterIDE',
     maxSize: 10 * 1024 * 1024,
   });
   for (const name of consoleLogFunctionNames) {
@@ -997,7 +997,7 @@ async function updateFrontendApplicationConfigFromPackageJson(
 }
 
 const fallbackFrontendAppConfig: FrontendApplicationConfig = {
-  applicationName: 'Arduino IDE',
+  applicationName: 'BetterIDE',
   defaultTheme: {
     light: 'arduino-theme',
     dark: 'arduino-theme-dark',
@@ -1007,7 +1007,7 @@ const fallbackFrontendAppConfig: FrontendApplicationConfig = {
   defaultLocale: '',
   electron: {
     showWindowEarly: true,
-    uriScheme: 'arduino-ide',
+    uriScheme: 'betteride',
   },
   reloadOnReconnect: true,
 };

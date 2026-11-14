@@ -273,21 +273,21 @@
       "visit": "Відвідати Arduino.cc"
     },
     "ide-updater": {
-      "checkForUpdates": "Перевірка оновлень Arduino IDE",
+      "checkForUpdates": "Перевірка оновлень BetterIDE",
       "closeAndInstallButton": "Закрити та Встановити",
       "closeToInstallNotice": "Закрийте програму та встановіть оновлення.",
       "downloadButton": "Завантажити",
-      "downloadingNotice": "Завантажити останню версію Arduino IDE.",
-      "errorCheckingForUpdates": "Помилка під час перевірки оновлень Arduino IDE {0}",
+      "downloadingNotice": "Завантажити останню версію BetterIDE.",
+      "errorCheckingForUpdates": "Помилка під час перевірки оновлень BetterIDE {0}",
       "goToDownloadButton": "Перейти до завантаження ",
-      "goToDownloadPage": "Знайдено оновлення Arduino IDE, але його не вдається завантажити та встановити автоматично. Будь ласка, перейдіть на сторінку завантажень.",
+      "goToDownloadPage": "Знайдено оновлення BetterIDE, але його не вдається завантажити та встановити автоматично. Будь ласка, перейдіть на сторінку завантажень.",
       "ideUpdaterDialog": "Оновлення ПЗ",
-      "newVersionAvailable": "Нова версія Arduino IDE ({0}) доступна для завантаження.",
-      "noUpdatesAvailable": "Нема доступних оновлень для Arduino IDE",
+      "newVersionAvailable": "Нова версія BetterIDE ({0}) доступна для завантаження.",
+      "noUpdatesAvailable": "Нема доступних оновлень для BetterIDE",
       "notNowButton": "Не зараз",
       "skipVersionButton": "Пропустити Версію",
       "updateAvailable": "Доступне оновлення",
-      "versionDownloaded": "Arduino IDE {0} було завантажено"
+      "versionDownloaded": "BetterIDE {0} було завантажено"
     },
     "installable": {
       "libraryInstallFailed": "Помилка при встановленні бібліотеки: '{0}{1}'.",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "Швидкі підказки редактора",
       "enterAdditionalURLs": "Введіть додаткові URL-адреси, по одній для кожного рядка",
       "files.inside.sketches": "Відображати файли в середені скетчів",
-      "ide.updateBaseUrl": "Основна URL-адреса, з якої можна завантажити оновлення. За замовчуванням \"https://downloads.arduino.cc/arduino-ide\"",
+      "ide.updateBaseUrl": "Основна URL-адреса, з якої можна завантажити оновлення. За замовчуванням \"https://github.com/cersat/BetterIDE/releases/latest/download\"",
       "ide.updateChannel": "Вибір канала оновлень. 'Стабільні' - для стабільних релізів, 'Нічні' - найновіші збірки.",
       "interfaceScale": "Масштаб інтерфейсу",
       "invalid.editorFontSize": "Хибний розмір шрифта редактора. Значення повинно бути цілим числом.",
@@ -489,7 +489,7 @@
       "newSketch": "Новий скетч"
     },
     "theme": {
-      "currentThemeNotFound": "Не вдалося знайти поточну вибрану тему: {0}. Arduino IDE вибрала вбудовану тему, сумісну з відсутньою.",
+      "currentThemeNotFound": "Не вдалося знайти поточну вибрану тему: {0}. BetterIDE вибрала вбудовану тему, сумісну з відсутньою.",
       "dark": "Темна",
       "deprecated": "{0} (застарілий)",
       "hc": "Темна. Високий контраст",

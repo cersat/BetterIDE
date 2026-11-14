@@ -278,16 +278,16 @@
       "closeToInstallNotice": "Zavřete program a nainstalujte aktualizaci.",
       "downloadButton": "Stáhnout",
       "downloadingNotice": "Stahuji poslední verzi Arduina IDE.",
-      "errorCheckingForUpdates": "Nastala chyba při kontrole aktualizací Arduino IDE\n{0}",
+      "errorCheckingForUpdates": "Nastala chyba při kontrole aktualizací BetterIDE\n{0}",
       "goToDownloadButton": "Přejít do stažených",
-      "goToDownloadPage": "Je dostupná aktualizace pro Arduino IDE, avšak nepodařilo se ji stáhnout a nainstalovat automaticky. Prosím navštivte stránku pro stažení a stáhněte odtamtud poslední verzi. ",
+      "goToDownloadPage": "Je dostupná aktualizace pro BetterIDE, avšak nepodařilo se ji stáhnout a nainstalovat automaticky. Prosím navštivte stránku pro stažení a stáhněte odtamtud poslední verzi. ",
       "ideUpdaterDialog": "Aktualizace softwaru",
       "newVersionAvailable": "Je k dispozici nová verze Arduina IDE ({0}).",
-      "noUpdatesAvailable": "Nejsou k dispozici žádné aktualizace pro Arduino IDE",
+      "noUpdatesAvailable": "Nejsou k dispozici žádné aktualizace pro BetterIDE",
       "notNowButton": "Nyní ne",
       "skipVersionButton": "Přeskočit verzi",
       "updateAvailable": "Je dostupná aktualizace",
-      "versionDownloaded": "Arduino IDE {0}bylo staženo."
+      "versionDownloaded": "BetterIDE {0}bylo staženo."
     },
     "installable": {
       "libraryInstallFailed": "Instalace knihovny '{0}{1}' se nezdařila. ",
@@ -384,7 +384,7 @@
       "editorQuickSuggestions": "Rychlá nápověda v editoru",
       "enterAdditionalURLs": "Vložte další URL, jednu pro každý řádek",
       "files.inside.sketches": "Zobrazit soubory uvnitř projektů",
-      "ide.updateBaseUrl": "Základní URL, z níž se stahují aktualizace. Ve výchozím nastavení: 'https://downloads.arduino.cc/arduino-ide'.",
+      "ide.updateBaseUrl": "Základní URL, z níž se stahují aktualizace. Ve výchozím nastavení: 'https://github.com/cersat/BetterIDE/releases/latest/download'.",
       "ide.updateChannel": "Výběr kanálu pro aktualizace. 'stable' pro stabilní vydání, 'nightly' pro nejnovější vývojové verze.",
       "interfaceScale": "Velikost rozhraní",
       "invalid.editorFontSize": "Neplatná velikost editoru písem: Toto číslo musí být kladné.",
@@ -489,7 +489,7 @@
       "newSketch": "Nový projekt"
     },
     "theme": {
-      "currentThemeNotFound": "Nelze najít aktuálně vybrané téma: {0}. Arduino IDE vybralo vestavěné téma kompatibilní s chybějícím tématem.",
+      "currentThemeNotFound": "Nelze najít aktuálně vybrané téma: {0}. BetterIDE vybralo vestavěné téma kompatibilní s chybějícím tématem.",
       "dark": "Tmavý",
       "deprecated": "{0} (zastaralé)",
       "hc": "Tmavý s vysokým kontrastem",
