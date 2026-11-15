@@ -229,6 +229,143 @@ index 4249e10..e49a53e 100644
  		DoNotExpandBuildProperties:    showProperties == arguments.ShowPropertiesUnexpanded,
  		Jobs:                          jobs,
  	}
+diff --git a/internal/locales/data/ar.po b/internal/locales/data/ar.po
+index 73a45da..af31d84 100644
+--- a/internal/locales/data/ar.po
++++ b/internal/locales/data/ar.po
+@@ -715,7 +715,7 @@ msgstr "جار تحميل المكتبة %s"
+ 
+ #: commands/instances.go:56
+ msgid "Downloading missing tool %s"
+-msgstr "جار تنزيل الاداة الناقصة"
++msgstr "جار تنزيل الاداة الناقصة %s"
+ 
+ #: internal/arduino/cores/packagemanager/install_uninstall.go:56
+ msgid "Downloading packages"
+@@ -727,7 +727,7 @@ msgstr "جار تحميل المنصة %s"
+ 
+ #: internal/arduino/cores/packagemanager/profiles.go:186
+ msgid "Downloading tool %s"
+-msgstr "جار تحميل الاداة"
++msgstr "جار تحميل الاداة %s"
+ 
+ #: internal/cli/core/download.go:36 internal/cli/core/download.go:37
+ msgid "Downloads one or more cores and corresponding tool dependencies."
+@@ -1551,7 +1551,7 @@ msgstr "المكتبة مثبتة"
+ 
+ #: internal/cli/lib/search.go:205
+ msgid "License: %s"
+-msgstr "رخصة"
++msgstr "رخصة: %s"
+ 
+ #: internal/arduino/builder/builder.go:446
+ msgid "Linking everything together..."
+diff --git a/internal/locales/data/be.po b/internal/locales/data/be.po
+index d5b235a..d29cc98 100644
+--- a/internal/locales/data/be.po
++++ b/internal/locales/data/be.po
+@@ -1966,7 +1966,7 @@ msgstr ""
+ 
+ #: commands/service_upload.go:515
+ msgid "Performing 1200-bps touch reset on serial port %s"
+-msgstr "Выкананне сэнсарнага скіду з хуткасцю 1200 біт/с на паслядоўным порце"
++msgstr "Выкананне сэнсарнага скіду з хуткасцю 1200 біт/с на паслядоўным порце %s"
+ 
+ #: commands/service_platform_install.go:97
+ #: commands/service_platform_install.go:119
+@@ -3302,7 +3302,7 @@ msgstr "для канкрэтнай версіі."
+ 
+ #: pkg/fqbn/fqbn.go:68
+ msgid "fqbn's field %s contains an invalid character"
+-msgstr "поле FQBN утрымлівае недапушчальны знак"
++msgstr "поле FQBN %s утрымлівае недапушчальны знак"
+ 
+ #: internal/inventory/inventory.go:67
+ msgid "generating installation.id"
+@@ -3326,7 +3326,7 @@ msgstr "атрыманне інфармацыі пра архіў: %s"
+ #: internal/arduino/resources/helpers.go:39
+ #: internal/arduino/resources/install.go:65
+ msgid "getting archive path: %s"
+-msgstr "атрыманне шляху да архіва: %"
++msgstr "атрыманне шляху да архіва: %s"
+ 
+ #: internal/arduino/cores/packagemanager/package_manager.go:329
+ msgid "getting build properties for board %[1]s: %[2]s"
+@@ -3806,7 +3806,7 @@ msgstr "чытанне загалоўкаў бібліятэкі: %s"
+ 
+ #: internal/arduino/libraries/libraries.go:116
+ msgid "reading library headers"
+-msgstr "чытанне загалоўкаў бібліятэкі: %s"
++msgstr "чытанне загалоўкаў бібліятэкі"
+ 
+ #: internal/arduino/libraries/libraries.go:223
+ msgid "reading library source directory: %s"
+diff --git a/internal/locales/data/fr.po b/internal/locales/data/fr.po
+index 0c641fc..cc7547f 100644
+--- a/internal/locales/data/fr.po
++++ b/internal/locales/data/fr.po
+@@ -3798,7 +3798,7 @@ msgstr "extension de croquis inconnue '%s' "
+ 
+ #: internal/arduino/resources/checksums.go:61
+ msgid "unsupported hash algorithm: %s"
+-msgstr "algorithme de hachage non supporté"
++msgstr "algorithme de hachage non supporté : %s"
+ 
+ #: internal/arduino/cores/packagemanager/package_manager.go:523
+ msgid "updating platform metadata: %s"
+diff --git a/internal/locales/data/ru.po b/internal/locales/data/ru.po
+index 7d27d0a..08ba908 100644
+--- a/internal/locales/data/ru.po
++++ b/internal/locales/data/ru.po
+@@ -1553,7 +1553,7 @@ msgstr "Библиотека %s не найдена"
+ 
+ #: commands/cmderrors/cmderrors.go:483
+ msgid "Library '%s' not found"
+-msgstr "Библиотека '%s' %s не найдена"
++msgstr "Библиотека '%s' не найдена"
+ 
+ #: internal/arduino/builder/internal/detector/detector.go:627
+ msgid ""
+@@ -1959,7 +1959,7 @@ msgstr ""
+ 
+ #: commands/service_upload.go:515
+ msgid "Performing 1200-bps touch reset on serial port %s"
+-msgstr "Выполнение сенсорного сброса 1200 бит/с на последовательном порту"
++msgstr "Выполнение сенсорного сброса 1200 бит/с на последовательном порту %s"
+ 
+ #: commands/service_platform_install.go:97
+ #: commands/service_platform_install.go:119
+@@ -2993,7 +2993,7 @@ msgstr "Версии: %s"
+ 
+ #: internal/arduino/cores/packagemanager/install_uninstall.go:145
+ msgid "WARNING cannot configure platform: %s"
+-msgstr "ВНИМАНИЕ: невозможно настроить платформу"
++msgstr "ВНИМАНИЕ: невозможно настроить платформу: %s"
+ 
+ #: internal/arduino/cores/packagemanager/install_uninstall.go:324
+ msgid "WARNING cannot configure tool: %s"
+@@ -3710,7 +3710,7 @@ msgstr "открытие boards.txt"
+ 
+ #: internal/arduino/security/signatures.go:82
+ msgid "opening signature file: %s"
+-msgstr "открывается файл сигнатуры:"
++msgstr "открывается файл сигнатуры: %s"
+ 
+ #: internal/arduino/security/signatures.go:78
+ msgid "opening target file: %s"
+diff --git a/internal/locales/data/zh_TW.po b/internal/locales/data/zh_TW.po
+index e12fe8b..b5146fb 100644
+--- a/internal/locales/data/zh_TW.po
++++ b/internal/locales/data/zh_TW.po
+@@ -3301,7 +3301,7 @@ msgstr "無效的連接埠設定值 %s : %s"
+ 
+ #: internal/cli/monitor/monitor.go:182
+ msgid "invalid port configuration: %s=%s"
+-msgstr "無效的連接埠設定: %s"
++msgstr "無效的連接埠設定: %s=%s"
+ 
+ #: commands/service_sketch_new.go:86
+ msgid ""
 diff --git a/rpc/cc/arduino/cli/commands/v1/compile.pb.go b/rpc/cc/arduino/cli/commands/v1/compile.pb.go
 index d06b097..53ddd01 100644
 --- a/rpc/cc/arduino/cli/commands/v1/compile.pb.go
