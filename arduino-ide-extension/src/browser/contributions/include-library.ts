@@ -173,16 +173,13 @@ export class IncludeLibrary extends SketchContribution {
     if (!CurrentSketch.isValid(sketch)) {
       return;
     }
-    // If the current editor is one of the additional files from the sketch, we use that.
-    // Otherwise, we pick the editor of the main sketch file.
+    // The includes go to the file of the current (last active) editor, whichever file it is: in BetterIDE, every
+    // file open in a tab, also another `.ino` or a file outside of the sketch, can be compiled or included from.
+    // Without an editor, they go to the main sketch file.
     let codeEditor: monaco.editor.IStandaloneCodeEditor | undefined;
     const editor = this.editorManager.currentEditor?.editor;
-    if (editor instanceof MonacoEditor) {
-      if (
-        sketch.additionalFileUris.some((uri) => uri === editor.uri.toString())
-      ) {
-        codeEditor = editor.getControl();
-      }
+    if (editor instanceof MonacoEditor && !editor.document.readOnly) {
+      codeEditor = editor.getControl();
     }
 
     if (!codeEditor) {

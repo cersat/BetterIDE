@@ -374,6 +374,8 @@ import { DebugToolBar } from '@theia/debug/lib/browser/view/debug-toolbar-widget
 
 import { TestViewContribution as TheiaTestViewContribution } from '@theia/test/lib/browser/view/test-view-contribution';
 import { TestViewContribution } from './theia/test/test-view-contribution';
+import { FilesystemSaveableService } from './theia/filesystem/filesystem-saveable-service';
+import { FilesystemSaveableService as TheiaFilesystemSaveableService } from '@theia/filesystem/lib/browser/filesystem-saveable-service';
 
 // Hack to fix copy/cut/paste issue after electron version update in Theia.
 // https://github.com/eclipse-theia/theia/issues/12487
@@ -627,6 +629,9 @@ export default new ContainerModule((bind, unbind, isBound, rebind) => {
   // Decorator customizations
   bind(TabBarDecoratorService).toSelf().inSingletonScope();
   rebind(TheiaTabBarDecoratorService).toService(TabBarDecoratorService);
+  // Save As of a single file (see SaveAsSketch).
+  bind(FilesystemSaveableService).toSelf().inSingletonScope();
+  rebind(TheiaFilesystemSaveableService).toService(FilesystemSaveableService);
 
   // Problem markers
   bind(ProblemManager).toSelf().inSingletonScope();

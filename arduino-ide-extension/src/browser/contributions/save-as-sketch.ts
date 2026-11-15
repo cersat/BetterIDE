@@ -7,11 +7,13 @@ import { ApplicationError } from '@theia/core/lib/common/application-error';
 import { nls } from '@theia/core/lib/common/nls';
 import { inject, injectable } from '@theia/core/shared/inversify';
 import { EditorManager } from '@theia/editor/lib/browser/editor-manager';
+import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog/file-dialog-service';
 import { WorkspaceInput } from '@theia/workspace/lib/browser/workspace-service';
 import { SketchesError } from '../../common/protocol';
 import { StartupTasks } from '../../electron-common/startup-task';
 import { ArduinoMenus } from '../menu/arduino-menus';
 import { CurrentSketch } from '../sketches-service-client-impl';
+import { FilesystemSaveableService } from '../theia/filesystem/filesystem-saveable-service';
 import { CloudSketchContribution } from './cloud-contribution';
 import {
   Command,
@@ -34,11 +36,21 @@ export class SaveAsSketch extends CloudSketchContribution {
   private readonly shell: ApplicationShell;
   @inject(WindowService)
   private readonly windowService: WindowService;
+  @inject(FilesystemSaveableService)
+  private readonly saveableService: FilesystemSaveableService;
+  @inject(FileDialogService)
+  private readonly fileDialogService: FileDialogService;
 
   override registerCommands(registry: CommandRegistry): void {
     registry.registerCommand(SaveAsSketch.Commands.SAVE_AS_SKETCH, {
       execute: async (args) => {
         try {
+          // From the menu or the keybinding (no options), with a tab active that is not the main file of the
+          // sketch: Save As of that file. The main file, and the other contributions (with options): Save As
+          // of the whole sketch.
+          if (!args && (await this.isOtherFileActive())) {
+            return await this.saveFileAs();
+          }
           return await this.saveAs(args);
         } catch (err) {
           let message = String(err);
@@ -76,6 +88,53 @@ export class SaveAsSketch extends CloudSketchContribution {
       command: SaveAsSketch.Commands.SAVE_AS_SKETCH.id,
       keybinding: 'CtrlCmd+Shift+S',
     });
+  }
+
+  private async isOtherFileActive(): Promise<boolean> {
+    const editor = this.editorManager.currentEditor;
+    if (!editor) {
+      return false;
+    }
+    const sketch = await this.sketchServiceClient.currentSketch();
+    return (
+      !CurrentSketch.isValid(sketch) ||
+      editor.getResourceUri()?.toString() !== sketch.mainFileUri
+    );
+  }
+
+  /**
+   * Saves the file of the current editor under a name picked by the user, in the folder of the file by default,
+   * and opens the new file in its tab. The original file keeps its saved content.
+   * Resolves `true` if the file was saved.
+   */
+  private async saveFileAs(): Promise<boolean> {
+    const widget = this.editorManager.currentEditor;
+    if (!widget || !this.saveableService.canSaveAs(widget)) {
+      return false;
+    }
+    const uri = widget.getResourceUri();
+    if (!uri) {
+      return false;
+    }
+    const folder = await this.fileService
+      .resolve(uri.parent)
+      .catch(() => undefined);
+    const target = await this.fileDialogService.showSaveDialog(
+      {
+        title: nls.localizeByDefault('Save As...'),
+        inputValue: uri.path.base,
+      },
+      folder
+    );
+    if (!target) {
+      return false;
+    }
+    if (target.isEqual(uri)) {
+      await Saveable.save(widget);
+      return true;
+    }
+    await this.saveableService.saveTo(widget, target);
+    return true;
   }
 
   /**
