@@ -122,6 +122,22 @@ const properties: ArduinoPreferenceSchemaProperties = {
     ),
     default: 'None',
   },
+  'arduino.compile.hideErrorNotifications': {
+    type: 'boolean',
+    description: nls.localize(
+      'arduino/preferences/compile.hideErrorNotifications',
+      'True to not show a pop-up notification when the compilation fails: the errors are only in the output. False by default.'
+    ),
+    default: false,
+  },
+  'arduino.debug.hideWhenUnavailable': {
+    type: 'boolean',
+    description: nls.localize(
+      'arduino/preferences/debug.hideWhenUnavailable',
+      'True to hide the debug button and the "Optimize for Debugging" menu item when the selected board cannot be debugged. False by default.'
+    ),
+    default: false,
+  },
   'arduino.upload.verbose': {
     type: 'boolean',
     description: nls.localize(
@@ -324,6 +340,8 @@ export interface ArduinoConfiguration {
   'arduino.compile.experimental': boolean;
   'arduino.compile.revealRange': ErrorRevealStrategy;
   'arduino.compile.warnings': CompilerWarnings;
+  'arduino.compile.hideErrorNotifications': boolean;
+  'arduino.debug.hideWhenUnavailable': boolean;
   'arduino.upload.verbose': boolean;
   'arduino.upload.verify': boolean;
   'arduino.upload.autoVerify': boolean;

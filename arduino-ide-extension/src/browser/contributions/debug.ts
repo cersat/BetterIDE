@@ -146,6 +146,12 @@ export class Debug
         this.updateMessage();
       }
     });
+    this.preferences.onPreferenceChanged(({ preferenceName }) => {
+      if (preferenceName === 'arduino.debug.hideWhenUnavailable') {
+        // Re-renders the toolbar item.
+        this.didChangeMessageEmitter.fire(this._message);
+      }
+    });
     this.notificationCenter.onPlatformDidInstall(() => this.updateMessage());
     this.notificationCenter.onPlatformDidUninstall(() => this.updateMessage());
     this.boardsDataStore.onDidChange((event) => {
@@ -170,16 +176,28 @@ export class Debug
     this.boardsServiceProvider.ready.then(() => this.updateMessage());
   }
 
+  /**
+   * `true` when debugging is not available and the user chose to not see it then.
+   */
+  private get hiddenBecauseUnavailable(): boolean {
+    return (
+      !!this.message && this.preferences['arduino.debug.hideWhenUnavailable']
+    );
+  }
+
   override registerCommands(registry: CommandRegistry): void {
     registry.registerCommand(Debug.Commands.START_DEBUGGING, {
       execute: () => this.startDebug(),
       isVisible: (widget) =>
-        ArduinoToolbar.is(widget) && widget.side === 'left',
+        ArduinoToolbar.is(widget) &&
+        widget.side === 'left' &&
+        !this.hiddenBecauseUnavailable,
       isEnabled: () => !this.message,
     });
     registry.registerCommand(Debug.Commands.TOGGLE_OPTIMIZE_FOR_DEBUG, {
       execute: () => this.toggleCompileForDebug(),
       isToggled: () => this.compileForDebug,
+      isVisible: () => !this.hiddenBecauseUnavailable,
     });
     registry.registerCommand(Debug.Commands.IS_OPTIMIZE_FOR_DEBUG, {
       execute: () => this.compileForDebug,

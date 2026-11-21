@@ -101,18 +101,30 @@ export class SettingsComponent extends React.Component<
     return (
       <Tabs>
         <TabList>
-          <Tab>{nls.localize('vscode/settingsTree/settings', 'Settings')}</Tab>
+          <Tab>
+            {nls.localize('arduino/preferences/tab.general', 'General')}
+          </Tab>
+          <Tab>{nls.localize('arduino/preferences/tab.editor', 'Editor')}</Tab>
+          <Tab>
+            {nls.localize(
+              'arduino/preferences/tab.build',
+              'Compile and Upload'
+            )}
+          </Tab>
+          <Tab>{nls.localize('arduino/preferences/tab.boards', 'Boards')}</Tab>
           <Tab>{nls.localize('arduino/preferences/network', 'Network')}</Tab>
         </TabList>
-        <TabPanel>{this.renderSettings()}</TabPanel>
+        <TabPanel>{this.renderGeneral()}</TabPanel>
+        <TabPanel>{this.renderEditor()}</TabPanel>
+        <TabPanel>{this.renderBuild()}</TabPanel>
+        <TabPanel>{this.renderBoards()}</TabPanel>
         <TabPanel>{this.renderNetwork()}</TabPanel>
       </Tabs>
     );
   }
 
-  protected renderSettings(): React.ReactNode {
+  protected renderGeneral(): React.ReactNode {
     const scalePercentage = 100 + this.state.interfaceScale * 20;
-
     return (
       <div className="content noselect">
         {nls.localize(
@@ -166,12 +178,6 @@ export class SettingsComponent extends React.Component<
           <div className="column">
             <div className="flex-line">
               {nls.localize(
-                'arduino/preferences/editorFontSize',
-                'Editor font size'
-              ) + ':'}
-            </div>
-            <div className="flex-line">
-              {nls.localize(
                 'arduino/preferences/interfaceScale',
                 'Interface scale'
               ) + ':'}
@@ -188,31 +194,8 @@ export class SettingsComponent extends React.Component<
                 'Language'
               ) + ':'}
             </div>
-            <div className="flex-line">
-              {nls.localize(
-                'arduino/preferences/showVerbose',
-                'Show verbose output during'
-              )}
-            </div>
-            <div className="flex-line">
-              {nls.localize(
-                'arduino/preferences/compilerWarnings',
-                'Compiler warnings'
-              )}
-            </div>
           </div>
           <div className="column">
-            <div className="flex-line">
-              <SettingsStepInput
-                key={`font-size-stepper-${String(this.state.editorFontSize)}`}
-                initialValue={this.state.editorFontSize}
-                setSettingsStateValue={this.setFontSize}
-                step={fontSizeStep}
-                maxValue={maxFontSize}
-                minValue={minFontSize}
-                classNames={{ input: 'theia-input small' }}
-              />
-            </div>
             <div className="flex-line">
               <label className="flex-line">
                 <input
@@ -267,50 +250,60 @@ export class SettingsComponent extends React.Component<
                 )
               </span>
             </div>
-            <div className="flex-line">
-              <label className="flex-line">
-                <input
-                  type="checkbox"
-                  checked={this.state.verboseOnCompile}
-                  onChange={this.verboseOnCompileDidChange}
-                />
-                {nls.localize('arduino/preferences/compile', 'compile')}
-              </label>
-              <label className="flex-line">
-                <input
-                  type="checkbox"
-                  checked={this.state.verboseOnUpload}
-                  onChange={this.verboseOnUploadDidChange}
-                />
-                {nls.localize('arduino/preferences/upload', 'upload')}
-              </label>
-            </div>
-            <div className="flex-line">
-              <select
-                className="theia-select"
-                value={this.state.compilerWarnings}
-                onChange={this.compilerWarningsDidChange}
-              >
-                {CompilerWarningLiterals.map((value) => (
-                  <option key={value} value={value}>
-                    {CompilerWarnings.labelOf(value)}
-                  </option>
-                ))}
-              </select>
-            </div>
           </div>
         </div>
         <label className="flex-line">
           <input
             type="checkbox"
-            checked={this.state.verifyAfterUpload}
-            onChange={this.verifyAfterUploadDidChange}
+            checked={this.state.showCloudSketches === true}
+            onChange={this.showCloudSketchesDidChange}
           />
           {nls.localize(
-            'arduino/preferences/verifyAfterUpload',
-            'Verify code after upload'
+            'arduino/preferences/showCloudSketches',
+            'Show cloud sketches'
           )}
         </label>
+        <label className="flex-line">
+          <input
+            type="checkbox"
+            checked={this.state.checkForUpdates === true}
+            onChange={this.checkForUpdatesDidChange}
+          />
+          {nls.localize(
+            'arduino/preferences/offerUpdates',
+            'Offer updates on startup'
+          )}
+        </label>
+      </div>
+    );
+  }
+
+  protected renderEditor(): React.ReactNode {
+    return (
+      <div className="content noselect">
+        <div className="column-container">
+          <div className="column">
+            <div className="flex-line">
+              {nls.localize(
+                'arduino/preferences/editorFontSize',
+                'Editor font size'
+              ) + ':'}
+            </div>
+          </div>
+          <div className="column">
+            <div className="flex-line">
+              <SettingsStepInput
+                key={`font-size-stepper-${String(this.state.editorFontSize)}`}
+                initialValue={this.state.editorFontSize}
+                setSettingsStateValue={this.setFontSize}
+                step={fontSizeStep}
+                maxValue={maxFontSize}
+                minValue={minFontSize}
+                classNames={{ input: 'theia-input small' }}
+              />
+            </div>
+          </div>
+        </div>
         <label className="flex-line">
           <input
             type="checkbox"
@@ -366,28 +359,102 @@ export class SettingsComponent extends React.Component<
             'Auto-close brackets and quotes'
           )}
         </label>
+      </div>
+    );
+  }
+
+  protected renderBuild(): React.ReactNode {
+    return (
+      <div className="content noselect">
+        <div className="column-container">
+          <div className="column">
+            <div className="flex-line">
+              {nls.localize(
+                'arduino/preferences/showVerbose',
+                'Show verbose output during'
+              )}
+            </div>
+            <div className="flex-line">
+              {nls.localize(
+                'arduino/preferences/compilerWarnings',
+                'Compiler warnings'
+              )}
+            </div>
+          </div>
+          <div className="column">
+            <div className="flex-line">
+              <label className="flex-line">
+                <input
+                  type="checkbox"
+                  checked={this.state.verboseOnCompile}
+                  onChange={this.verboseOnCompileDidChange}
+                />
+                {nls.localize('arduino/preferences/compile', 'compile')}
+              </label>
+              <label className="flex-line">
+                <input
+                  type="checkbox"
+                  checked={this.state.verboseOnUpload}
+                  onChange={this.verboseOnUploadDidChange}
+                />
+                {nls.localize('arduino/preferences/upload', 'upload')}
+              </label>
+            </div>
+            <div className="flex-line">
+              <select
+                className="theia-select"
+                value={this.state.compilerWarnings}
+                onChange={this.compilerWarningsDidChange}
+              >
+                {CompilerWarningLiterals.map((value) => (
+                  <option key={value} value={value}>
+                    {CompilerWarnings.labelOf(value)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
         <label className="flex-line">
           <input
             type="checkbox"
-            checked={this.state.checkForUpdates === true}
-            onChange={this.checkForUpdatesDidChange}
+            checked={this.state.verifyAfterUpload}
+            onChange={this.verifyAfterUploadDidChange}
           />
           {nls.localize(
-            'arduino/preferences/offerUpdates',
-            'Offer updates on startup'
+            'arduino/preferences/verifyAfterUpload',
+            'Verify code after upload'
           )}
         </label>
         <label className="flex-line">
           <input
             type="checkbox"
-            checked={this.state.showCloudSketches === true}
-            onChange={this.showCloudSketchesDidChange}
+            checked={this.state.hideCompileErrorNotifications === true}
+            onChange={this.hideCompileErrorNotificationsDidChange}
           />
           {nls.localize(
-            'arduino/preferences/showCloudSketches',
-            'Show cloud sketches'
+            'arduino/preferences/hideCompileErrorNotifications',
+            'Do not show pop-up messages when the compilation fails'
           )}
         </label>
+        <label className="flex-line">
+          <input
+            type="checkbox"
+            checked={this.state.hideDebugWhenUnavailable === true}
+            onChange={this.hideDebugWhenUnavailableDidChange}
+          />
+          {nls.localize(
+            'arduino/preferences/hideDebugWhenUnavailable',
+            'Do not show debugging when it is not available'
+          )}
+        </label>
+      </div>
+    );
+  }
+
+  protected renderBoards(): React.ReactNode {
+    return (
+      <div className="content noselect">
         <div className="flex-line">
           {nls.localize(
             'arduino/preferences/additionalManagerURLs',
@@ -678,7 +745,8 @@ export class SettingsComponent extends React.Component<
    */
   private setLibrariesPath(librariesPath: string): void {
     const isDefault =
-      librariesPath === Settings.librariesFolder({ ...this.state, librariesPath: '' });
+      librariesPath ===
+      Settings.librariesFolder({ ...this.state, librariesPath: '' });
     this.setState({ librariesPath: isDefault ? '' : librariesPath });
   }
 
@@ -704,6 +772,18 @@ export class SettingsComponent extends React.Component<
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
     this.setState({ checkForUpdates: event.target.checked });
+  };
+
+  protected hideCompileErrorNotificationsDidChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    this.setState({ hideCompileErrorNotifications: event.target.checked });
+  };
+
+  protected hideDebugWhenUnavailableDidChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    this.setState({ hideDebugWhenUnavailable: event.target.checked });
   };
 
   protected showCloudSketchesDidChange = (

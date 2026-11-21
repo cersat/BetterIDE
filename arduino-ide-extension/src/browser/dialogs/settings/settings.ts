@@ -28,6 +28,7 @@ import { ElectronCommands } from '@theia/core/lib/electron-browser/menu/electron
 import { DefaultTheme } from '@theia/application-package/lib/application-props';
 import { FrontendApplicationConfigProvider } from '@theia/core/lib/browser/frontend-application-config-provider';
 import type { FileStat } from '@theia/filesystem/lib/common/files';
+import { HostedPluginSupport } from '../../hosted/hosted-plugin-support';
 
 export const WINDOW_SETTING = 'window';
 export const EDITOR_SETTING = 'editor';
@@ -53,6 +54,8 @@ export const AUTO_CLOSING_QUOTES_SETTING = `${EDITOR_SETTING}.autoClosingQuotes`
 export const CHECK_FOR_UPDATES_SETTING = `${ARDUINO_SETTING}.checkForUpdates`;
 export const SHOW_CLOUD_SKETCHES_SETTING = `${ARDUINO_SETTING}.cloud.enabled`;
 export const LIBRARIES_PATH_SETTING = `${ARDUINO_SETTING}.libraries.path`;
+export const HIDE_COMPILE_ERROR_NOTIFICATIONS_SETTING = `${COMPILE_SETTING}.hideErrorNotifications`;
+export const HIDE_DEBUG_WHEN_UNAVAILABLE_SETTING = `${ARDUINO_SETTING}.debug.hideWhenUnavailable`;
 
 export interface Settings {
   editorFontSize: number; // `editor.fontSize`
@@ -76,6 +79,8 @@ export interface Settings {
   checkForUpdates: boolean; // `arduino.checkForUpdates`
   showCloudSketches: boolean; // `arduino.cloud.enabled`
   librariesPath: string; // `arduino.libraries.path`, empty is the default `<sketchbook>/libraries`
+  hideCompileErrorNotifications: boolean; // `arduino.compile.hideErrorNotifications`
+  hideDebugWhenUnavailable: boolean; // `arduino.debug.hideWhenUnavailable`
 
   sketchbookPath: string; // CLI
   additionalUrls: AdditionalUrls; // CLI
@@ -128,6 +133,9 @@ export class SettingsService {
   @inject(AsyncLocalizationProvider)
   protected readonly localizationProvider: AsyncLocalizationProvider;
 
+  @inject(HostedPluginSupport)
+  private readonly hostedPluginSupport: HostedPluginSupport;
+
   @inject(CommandService)
   protected commandService: CommandService;
 
@@ -153,6 +161,10 @@ export class SettingsService {
       this._settings = deepClone(settings);
       this.loaded = deepClone(settings);
       this.ready.resolve();
+      // The language packs are VS Code extensions: their languages are known only once the plugins are deployed,
+      // which can be after the settings were loaded (the first start, a slow disk). Then the list is read again.
+      await this.hostedPluginSupport.didStart;
+      await this.refreshLanguages();
     });
     this.preferenceService.onPreferenceChanged(async (event) => {
       await this.ready.promise;
@@ -190,6 +202,8 @@ export class SettingsService {
       checkForUpdates,
       showCloudSketches,
       librariesPath,
+      hideCompileErrorNotifications,
+      hideDebugWhenUnavailable,
       cliConfig,
     ] = await Promise.all([
       ['en', ...(await this.localizationProvider.getAvailableLanguages())],
@@ -235,6 +249,14 @@ export class SettingsService {
       this.preferenceService.get<boolean>(CHECK_FOR_UPDATES_SETTING, true),
       this.preferenceService.get<boolean>(SHOW_CLOUD_SKETCHES_SETTING, true),
       this.preferenceService.get<string>(LIBRARIES_PATH_SETTING, ''),
+      this.preferenceService.get<boolean>(
+        HIDE_COMPILE_ERROR_NOTIFICATIONS_SETTING,
+        false
+      ),
+      this.preferenceService.get<boolean>(
+        HIDE_DEBUG_WHEN_UNAVAILABLE_SETTING,
+        false
+      ),
       this.configService.getConfiguration(),
     ]);
     const {
@@ -268,6 +290,8 @@ export class SettingsService {
       checkForUpdates,
       showCloudSketches,
       librariesPath,
+      hideCompileErrorNotifications,
+      hideDebugWhenUnavailable,
       additionalUrls,
       sketchbookPath,
       network,
@@ -305,6 +329,23 @@ export class SettingsService {
       ),
       'OK'
     );
+  }
+
+  private async refreshLanguages(): Promise<void> {
+    const languages = [
+      'en',
+      ...(await this.localizationProvider.getAvailableLanguages()),
+    ];
+    if (
+      JSON.stringify(languages) === JSON.stringify(this._settings.languages)
+    ) {
+      return;
+    }
+    this._settings.languages = languages;
+    if (this.loaded) {
+      this.loaded.languages = deepClone(languages);
+    }
+    this.onDidChangeEmitter.fire(this._settings);
   }
 
   async settings(): Promise<Settings> {
@@ -398,6 +439,8 @@ export class SettingsService {
       checkForUpdates,
       showCloudSketches,
       librariesPath,
+      hideCompileErrorNotifications,
+      hideDebugWhenUnavailable,
     } = this._settings;
     const [cliConfig, sketchDirUri] = await Promise.all([
       this.configService.getConfiguration(),
@@ -475,6 +518,14 @@ export class SettingsService {
       this.savePreference(CHECK_FOR_UPDATES_SETTING, checkForUpdates),
       this.savePreference(SHOW_CLOUD_SKETCHES_SETTING, showCloudSketches),
       this.savePreference(LIBRARIES_PATH_SETTING, librariesPath),
+      this.savePreference(
+        HIDE_COMPILE_ERROR_NOTIFICATIONS_SETTING,
+        hideCompileErrorNotifications
+      ),
+      this.savePreference(
+        HIDE_DEBUG_WHEN_UNAVAILABLE_SETTING,
+        hideDebugWhenUnavailable
+      ),
       this.configService.setConfiguration(updatedConfig),
     ]);
     this.onDidChangeEmitter.fire(this._settings);

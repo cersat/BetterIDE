@@ -24,7 +24,7 @@ BetterIDE is a fork of the [Arduino IDE 2.x](https://github.com/arduino/arduino-
 
 ## Download
 
-Builds are published on the [Releases](../../releases) page. Every push to `main` produces a new one.
+Builds are published on the [Releases](../../releases) page, one release per version.
 
 | System | File | Notes |
 | --- | --- | --- |
@@ -34,7 +34,7 @@ Builds are published on the [Releases](../../releases) page. Every push to `main
 | Linux | `…_Linux_64bit.AppImage` | `chmod +x` it and run, add `--no-sandbox` if the sandbox is not set up |
 | Linux | `…_Linux_64bit.zip` | unpack and run `betteride` |
 
-The Windows and Linux builds are made by [GitHub Actions](.github/workflows/build.yml). The version looks like `2.3.11-build.N`, where `N` grows with every build.
+The Windows and Linux builds are made by [GitHub Actions](.github/workflows/build.yml). BetterIDE has its own versions, independent of the Arduino IDE: the version is in `package.json` (and `electron-app/package.json`, `arduino-ide-extension/package.json`), it grows with every change of the application, and the release of a version is tagged `v<version>`. Local builds are marked as `-snapshot-<commit>`.
 
 ## FastPins
 

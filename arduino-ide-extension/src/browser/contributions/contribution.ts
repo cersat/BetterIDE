@@ -36,6 +36,8 @@ import { MessageType } from '@theia/core/lib/common/message-service-protocol';
 import { nls } from '@theia/core/lib/common/nls';
 import { MaybePromise, isObject } from '@theia/core/lib/common/types';
 import URI from '@theia/core/lib/common/uri';
+import { FileUri } from '@theia/core/lib/common/file-uri';
+import { isWindows } from '@theia/core/lib/common/os';
 import {
   inject,
   injectable,
@@ -191,7 +193,9 @@ export abstract class SketchContribution extends Contribution {
           Sketch.isSketchFile(uri);
         if (
           Saveable.isDirty(editor) &&
-          (Sketch.isInSketch(uri, sketch) || isActiveMainFile)
+          (Sketch.isInSketch(uri, sketch) ||
+            isInSketchFolder(uri, sketch) ||
+            isActiveMainFile)
         ) {
           override[uri.toString()] = editor.editor.document.getText();
         }
@@ -251,11 +255,18 @@ export abstract class CoreServiceContribution extends SketchContribution {
    */
   protected compileTarget(sketch: Sketch): CompileTarget {
     const activeUri = this.editorManager.currentEditor?.editor.uri;
-    if (activeUri && activeUri.scheme === 'file' && Sketch.isSketchFile(activeUri)) {
+    if (
+      activeUri &&
+      activeUri.scheme === 'file' &&
+      Sketch.isSketchFile(activeUri)
+    ) {
       const mainFileUri = activeUri.toString();
+      // By folder, not by the URIs the backend listed: those can be spelled differently (for example the drive
+      // letter on Windows) and do not list an `.ino` created since the sketch was loaded.
       const inSketch =
         mainFileUri === sketch.mainFileUri ||
-        sketch.otherSketchFileUris.includes(mainFileUri);
+        sketch.otherSketchFileUris.includes(mainFileUri) ||
+        isInSketchFolder(activeUri, sketch);
       return { mainFileUri, mainFileOnly: !inSketch, uploadable: true };
     }
     return {
@@ -263,6 +274,20 @@ export abstract class CoreServiceContribution extends SketchContribution {
       mainFileOnly: false,
       uploadable: this.isActiveFileUploadable(),
     };
+  }
+
+  /**
+   * Compiling needs a board with an FQBN (its platform installed).
+   */
+  protected hasSelectedFqbn(): boolean {
+    return !!this.boardsServiceProvider.boardsConfig.selectedBoard?.fqbn;
+  }
+
+  /**
+   * Uploading needs a port, besides the board.
+   */
+  protected hasSelectedPort(): boolean {
+    return !!this.boardsServiceProvider.boardsConfig.selectedPort;
   }
 
   /**
@@ -292,6 +317,13 @@ export abstract class CoreServiceContribution extends SketchContribution {
         .getChannel('Arduino')
         .appendLine(userAbort, OutputChannelSeverity.Warning);
       return;
+    }
+    if (
+      CoreError.is(error) &&
+      error.code === CoreError.Codes.Verify &&
+      this.preferences['arduino.compile.hideErrorNotifications']
+    ) {
+      return; // The errors are in the output.
     }
     this.tryToastErrorMessage(error);
   }
@@ -405,6 +437,22 @@ export namespace Contribution {
     bind(TabBarToolbarContribution).toService(serviceIdentifier);
     bind(FrontendApplicationContribution).toService(serviceIdentifier);
   }
+}
+
+/**
+ * `true` if the file is directly in the folder of the sketch.
+ */
+export function isInSketchFolder(uri: URI, sketch: Sketch): boolean {
+  const normalize = (fileUri: URI): string => {
+    const path = FileUri.fsPath(fileUri)
+      .replace(/\\/g, '/')
+      .replace(/\/+$/, '');
+    return isWindows ? path.toLowerCase() : path;
+  };
+  if (uri.scheme !== 'file') {
+    return false;
+  }
+  return normalize(uri.parent) === normalize(new URI(sketch.uri));
 }
 
 export interface CompileTarget {

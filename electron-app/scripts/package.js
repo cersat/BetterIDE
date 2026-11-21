@@ -82,12 +82,11 @@ async function getVersion() {
       `Could not read version from root package.json. Version was: '${version}'.`
     );
   }
+  // BetterIDE's own versions: a release (the CI builds of `main`) is exactly the version of the root `package.json`,
+  // which grows with every change of the application. Local builds are marked as snapshots.
   if (!isRelease) {
     if (isNightly) {
       version = `${version}-nightly-${await timestamp()}`;
-    } else if (process.env.BUILD_NUMBER) {
-      // Increases with every CI build, so the updater can tell which build is newer.
-      version = `${version}-build.${process.env.BUILD_NUMBER}`;
     } else {
       version = `${version}-snapshot-${await currentCommitish()}`;
     }

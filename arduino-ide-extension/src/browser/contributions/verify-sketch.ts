@@ -74,23 +74,32 @@ export class VerifySketch
   private verifyProgress: VerifyProgress = 'idle';
   private _compileSummary: CompileSummary | undefined;
 
+  override onStart(): void {
+    // Verify is not available without a board (FQBN).
+    this.boardsServiceProvider.onBoardsConfigDidChange(() => {
+      this.onDidChangeEmitter.fire();
+      this.menuManager.update();
+    });
+  }
+
   override registerCommands(registry: CommandRegistry): void {
     registry.registerCommand(VerifySketch.Commands.VERIFY_SKETCH, {
       execute: (params?: VerifySketchParams) => this.verifySketch(params),
-      isEnabled: () => this.verifyProgress === 'idle',
+      isEnabled: () => this.verifyProgress === 'idle' && this.hasSelectedFqbn(),
     });
     registry.registerCommand(VerifySketch.Commands.VERIFY_SKETCH_CLEAN, {
       execute: () => this.verifySketch({ clean: true }),
-      isEnabled: () => this.verifyProgress === 'idle',
+      isEnabled: () => this.verifyProgress === 'idle' && this.hasSelectedFqbn(),
     });
     registry.registerCommand(VerifySketch.Commands.EXPORT_BINARIES, {
       execute: () => this.verifySketch({ exportBinaries: true }),
-      isEnabled: () => this.verifyProgress === 'idle',
+      isEnabled: () => this.verifyProgress === 'idle' && this.hasSelectedFqbn(),
     });
     registry.registerCommand(VerifySketch.Commands.VERIFY_SKETCH_TOOLBAR, {
       isVisible: (widget) =>
         ArduinoToolbar.is(widget) && widget.side === 'left',
-      isEnabled: () => this.verifyProgress !== 'explicit',
+      isEnabled: () =>
+        this.verifyProgress !== 'explicit' && this.hasSelectedFqbn(),
       // toggled only when verify is running, but not toggled when automatic verify is running before the upload
       // https://github.com/arduino/arduino-ide/pull/1750#pullrequestreview-1214762975
       isToggled: () => this.verifyProgress === 'explicit',

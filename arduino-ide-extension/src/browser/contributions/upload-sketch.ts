@@ -32,6 +32,11 @@ export class UploadSketch extends CoreServiceContribution {
       this.onDidChangeEmitter.fire();
       this.menuManager.update();
     });
+    // Nor without a board (FQBN) and a port.
+    this.boardsServiceProvider.onBoardsConfigDidChange(() => {
+      this.onDidChangeEmitter.fire();
+      this.menuManager.update();
+    });
   }
 
   override registerCommands(registry: CommandRegistry): void {
@@ -41,7 +46,7 @@ export class UploadSketch extends CoreServiceContribution {
           this.uploadSketch();
         }
       },
-      isEnabled: () => !this.uploadInProgress && this.isActiveFileUploadable(),
+      isEnabled: () => this.canUpload(),
     });
     registry.registerCommand(UploadSketch.Commands.UPLOAD_WITH_CONFIGURATION, {
       execute: async () => {
@@ -49,26 +54,36 @@ export class UploadSketch extends CoreServiceContribution {
           this.uploadSketch();
         }
       },
-      isEnabled: () =>
-        !this.uploadInProgress &&
-        this.isActiveFileUploadable() &&
-        this.userFields.isRequired(),
+      isEnabled: () => this.canUpload() && this.userFields.isRequired(),
     });
     registry.registerCommand(
       UploadSketch.Commands.UPLOAD_SKETCH_USING_PROGRAMMER,
       {
         execute: () => this.uploadSketch(true),
-        isEnabled: () => !this.uploadInProgress && this.isActiveFileUploadable(),
+        // A programmer does not always need a port (for example a USBasp).
+        isEnabled: () =>
+          !this.uploadInProgress &&
+          this.isActiveFileUploadable() &&
+          this.hasSelectedFqbn(),
       }
     );
     registry.registerCommand(UploadSketch.Commands.UPLOAD_SKETCH_TOOLBAR, {
       isVisible: (widget) =>
         ArduinoToolbar.is(widget) && widget.side === 'left',
-      isEnabled: () => !this.uploadInProgress && this.isActiveFileUploadable(),
+      isEnabled: () => this.canUpload(),
       isToggled: () => this.uploadInProgress,
       execute: () =>
         registry.executeCommand(UploadSketch.Commands.UPLOAD_SKETCH.id),
     });
+  }
+
+  private canUpload(): boolean {
+    return (
+      !this.uploadInProgress &&
+      this.isActiveFileUploadable() &&
+      this.hasSelectedFqbn() &&
+      this.hasSelectedPort()
+    );
   }
 
   override registerMenus(registry: MenuModelRegistry): void {
